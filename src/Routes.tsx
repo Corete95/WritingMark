@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 
-const Nav = loadable(() => import('./components/Nav'));
+const Nav = loadable(() => import('./components/Nav/Nav'));
 const NavTab = loadable(() => import('./pages/NavTab/NavTab'));
 const Category = loadable(() => import('./pages/Category/Category'));
 const ListDetail = loadable(() => import('./pages/ListDetail/ListDetail'));
