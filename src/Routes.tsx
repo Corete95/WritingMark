@@ -31,7 +31,9 @@ const Routes = () => {
         <Nav />
         <Switch>
           <Route exact path="/" component={NavTab} />
-          <Route path="/Category" component={Category} />
+          <Route exact path="/hot" component={NavTab} />
+          <Route exact path="/Introduction" component={NavTab} />
+          <Route path="/Category/:path" component={Category} />
           <Route path="/EditInformation" component={EditInformation} />
           <Route path="/FindPassword" component={FindPassword} />
           <Route path="/ListDetail" component={ListDetail} />

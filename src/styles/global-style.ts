@@ -7,4 +7,7 @@ export const GlobalStyle = createGlobalStyle`
   *{
         box-sizing:border-box;
     }
+a:link { color: black; text-decoration: none;}
+ a:visited { color: black; text-decoration: none;}
+ a:hover { color: black; text-decoration: none;}
 `;
