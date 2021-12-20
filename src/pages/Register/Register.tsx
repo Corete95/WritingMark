@@ -1,6 +1,7 @@
 import useInput from 'hooks/useInput';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
+import SocialKakao from '../../components/Kakao/SocialKakao';
 
 const Register = () => {
   const [email, onChangeEmail] = useInput('');
@@ -78,6 +79,9 @@ const Register = () => {
           <ButtonDiv>
             <Button type="submit">가입하기</Button>
           </ButtonDiv>
+          <ButtonDiv>
+            <SocialKakao />
+          </ButtonDiv>
         </LoginForm>
       </RegisterContainer>
     </Container>
@@ -134,7 +138,7 @@ const Button = styled.button`
   width: 100%;
   height: 50px;
   line-height: 50px;
-  max-width: 150px;
+  max-width: 190px;
   font-size: 14px;
   color: white;
   background: red;

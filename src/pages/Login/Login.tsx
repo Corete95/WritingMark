@@ -2,6 +2,7 @@ import useInput from 'hooks/useInput';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import SocialKakao from 'components/Kakao/SocialKakao';
 
 interface Props {
   color: string;
@@ -51,6 +52,9 @@ const Login = () => {
             >
               회원가입 하기
             </ButtonLink>
+          </ButtonDiv>
+          <ButtonDiv>
+            <SocialKakao />
           </ButtonDiv>
         </LoginForm>
       </LoginContainer>
@@ -127,7 +131,7 @@ const Button = styled.button<Props>`
   width: 100%;
   height: 50px;
   line-height: 50px;
-  max-width: 150px;
+  max-width: 190px;
   font-size: 14px;
   color: ${(props) => props.color};
   background: ${(props) => props.background};
@@ -140,7 +144,7 @@ const ButtonLink = styled(Link)<Props>`
   width: 100%;
   height: 50px;
   line-height: 50px;
-  max-width: 150px;
+  max-width: 190px;
   font-size: 14px;
   color: ${(props) => props.color};
   background: ${(props) => props.background};

@@ -1,5 +1,6 @@
 export const API = '';
 
+export const KAKAO_KEY = 'c54587e1e09ef1e3b86b7a35f071b555';
 export const NAV_CATEGORY = [
   { id: 1, name: '신규', path: '/' },
   {
