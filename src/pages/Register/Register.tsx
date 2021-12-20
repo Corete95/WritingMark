@@ -1,7 +1,7 @@
 import useInput from 'hooks/useInput';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import SocialKakao from '../../components/Kakao/SocialKakao';
+import SocialKakao from 'components/Kakao/SocialKakao';
 
 const Register = () => {
   const [email, onChangeEmail] = useInput('');
@@ -30,18 +30,17 @@ const Register = () => {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!passwordError && email && password) {
-        alert('회원가입 가능');
+        return alert('회원가입 가능');
       }
     },
     [email, nickname, password, passwordCheck, passwordError],
   );
-  console.log(email, nickname, password, passwordCheck);
-  console.log(passwordError);
+
   return (
     <Container>
       <RegisterContainer>
         <h1>회원가입</h1>
-        <LoginForm onSubmit={onSubmit}>
+        <RegisterForm onSubmit={onSubmit}>
           <InputDiv>
             <Label>닉네임</Label>
             <Input
@@ -82,7 +81,7 @@ const Register = () => {
           <ButtonDiv>
             <SocialKakao />
           </ButtonDiv>
-        </LoginForm>
+        </RegisterForm>
       </RegisterContainer>
     </Container>
   );
@@ -105,7 +104,7 @@ const RegisterContainer = styled.div`
     margin-bottom: 40px;
   }
 `;
-const LoginForm = styled.form`
+const RegisterForm = styled.form`
   ${({ theme }) => theme.media.mobile`
     margin:0px 16px;
     margin-bottom: 20px;
