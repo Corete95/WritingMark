@@ -119,5 +119,14 @@ const NavigationCategory = styled.div`
     margin: 14px 0px;
     font-size: 16px;
   }
+  a:link {
+    color: black;
+  }
+  a:visited {
+    color: black;
+  }
+  a:hover {
+    color: black;
+  }
 `;
 export default Navigation;

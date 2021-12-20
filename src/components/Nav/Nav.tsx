@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Navigation from './Navigation';
 
@@ -23,7 +23,9 @@ const Nav: FC = () => {
           </IconMenu>
           <Logo onClick={goToMain}>글갈피</Logo>
           <IconMenu>
-            <img src="/images/member.png" />
+            <Link to="/login">
+              <img src="/images/member.png" />
+            </Link>
           </IconMenu>
         </TopNav>
       </ContainerNav>
