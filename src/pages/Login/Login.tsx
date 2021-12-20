@@ -88,6 +88,7 @@ const InputDiv = styled.div`
   margin-bottom: 20px;
 `;
 const Label = styled.label`
+  font-size: 14px;
   margin-bottom: 6px;
 `;
 const Input = styled.input`
