@@ -73,6 +73,7 @@ const LoginContainer = styled.div`
   margin: 0 auto;
   max-width: 400px;
   h1 {
+    font-weight: bold;
     text-align: center;
     font-size: 20px;
     line-height: 32px;

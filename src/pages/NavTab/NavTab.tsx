@@ -1,10 +1,10 @@
-import React, { FC, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import { NAV_CATEGORY } from '../../Config';
+import React, { FC, useState } from "react";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+import { NAV_CATEGORY } from "../../Config";
 
 const NavTab: FC = () => {
-  const [isActivatedCategory, setIsActivatedCategory] = useState('신규');
+  const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const history = useHistory();
 
   const handleCategory = (cateory: string, path: string) => {
@@ -19,7 +19,7 @@ const NavTab: FC = () => {
             <div
               key={category.id}
               className={
-                isActivatedCategory === category.name ? 'activeOn' : ''
+                isActivatedCategory === category.name ? "activeOn" : ""
               }
               onClick={() => {
                 handleCategory(category.name, category.path);

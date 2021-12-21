@@ -2,7 +2,7 @@ import baseStyled, {
   css,
   CSSProp,
   ThemedStyledInterface,
-} from 'styled-components';
+} from "styled-components";
 
 const sizes: { [key: string]: number } = {
   mobile: 320,
@@ -26,7 +26,7 @@ const media: Media = {
 
 Object.keys(sizes).reduce((acc: Media, label: string) => {
   switch (label) {
-    case 'desktop':
+    case "desktop":
       acc.desktop = (...args: BackQuoteArgs) =>
         css`
           @media only screen and (min-width: ${sizes.desktop}px) {
@@ -34,7 +34,7 @@ Object.keys(sizes).reduce((acc: Media, label: string) => {
           }
         `;
       break;
-    case 'tablet':
+    case "tablet":
       acc.tablet = (...args: BackQuoteArgs) =>
         css`
           @media only screen and (max-width: ${sizes.desktop}px) and (min-width: ${sizes.tablet}px) {
@@ -42,7 +42,7 @@ Object.keys(sizes).reduce((acc: Media, label: string) => {
           }
         `;
       break;
-    case 'mobile':
+    case "mobile":
       acc.mobile = (...args: BackQuoteArgs) =>
         css`
           @media only screen and (max-width: ${sizes.tablet}px) {
@@ -57,8 +57,8 @@ Object.keys(sizes).reduce((acc: Media, label: string) => {
 }, media);
 
 const colors = {
-  white: '#ffffff',
-  black: '#000000',
+  white: "#ffffff",
+  black: "#000000",
 };
 
 const secondaryColors = {};

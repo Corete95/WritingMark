@@ -1,8 +1,8 @@
-import React, { FC, useCallback } from 'react';
-import { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import Navigation from './Navigation';
+import React, { FC, useCallback } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Navigation from "./Navigation";
 
 const Nav: FC = () => {
   const [showNavigation, setShowNavigation] = useState(false);
@@ -12,7 +12,7 @@ const Nav: FC = () => {
   }, []);
 
   const goToMain = () => {
-    window.location.replace('/');
+    window.location.replace("/");
   };
   return (
     <>

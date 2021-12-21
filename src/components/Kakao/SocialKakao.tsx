@@ -1,23 +1,24 @@
-import React, { useEffect } from 'react';
-import { KAKAO_KEY } from 'Config';
-import styled from 'styled-components';
+import React from "react";
+import { KAKAO_KEY } from "Config";
+import styled from "styled-components";
 const { Kakao } = window;
 
 const SocialKakao = () => {
   const loginWithKakao = () => {
+    Kakao.isInitialized();
     window.Kakao.Auth.login({
       success: function (authObj: any) {
         fetch(`${KAKAO_KEY}`, {
-          method: 'GET',
+          method: "GET",
           headers: { Authorization: authObj.access_token },
         })
           .then((res) => res.json())
           .then((res) => {
-            localStorage.setItem('access_token', res.TOKEN);
-            alert('로그인되었습니다.');
+            localStorage.setItem("access_token", res.TOKEN);
+            alert("로그인되었습니다.");
           });
       },
-      fail: function (err: any) {
+      fail: function (err: string) {
         alert(JSON.stringify(err));
       },
     });

@@ -1,13 +1,13 @@
-import useInput from 'hooks/useInput';
-import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
-import SocialKakao from 'components/Kakao/SocialKakao';
+import useInput from "hooks/useInput";
+import React, { useCallback, useState } from "react";
+import styled from "styled-components";
+import SocialKakao from "components/Kakao/SocialKakao";
 
 const Register = () => {
-  const [email, onChangeEmail] = useInput('');
-  const [nickname, onChangeNickname] = useInput('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
+  const [email, onChangeEmail] = useInput("");
+  const [nickname, onChangeNickname] = useInput("");
+  const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
 
   const onChangePassword = useCallback(
@@ -30,7 +30,7 @@ const Register = () => {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!passwordError && email && password) {
-        return alert('회원가입 가능');
+        return alert("회원가입 가능");
       }
     },
     [email, nickname, password, passwordCheck, passwordError],
@@ -98,6 +98,7 @@ const RegisterContainer = styled.div`
   margin: 0 auto;
   max-width: 400px;
   h1 {
+    font-weight: bold;
     text-align: center;
     font-size: 20px;
     line-height: 32px;

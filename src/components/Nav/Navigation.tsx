@@ -1,7 +1,7 @@
-import React, { FC, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { NAVIGATION_CATEGORY } from '../../Config';
+import React, { FC, useCallback } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { NAVIGATION_CATEGORY } from "../../Config";
 
 interface Props {
   show: boolean;
@@ -19,6 +19,7 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
   if (!show) {
     return null;
   }
+
   return (
     <NavigationModal onClick={onCloseModal}>
       <Container onClick={stopPropagation}>
@@ -60,7 +61,7 @@ const Container = styled.div`
   width: 400px;
   padding: 20px 20px;
   background-color: #fff;
-  animation: 0.7s ${(props: any) => (props.show ? 'showOut' : 'showUp')}
+  animation: 0.7s ${(props: any) => (props.show ? "showOut" : "showUp")}
     forwards;
 
   @keyframes showUp {
