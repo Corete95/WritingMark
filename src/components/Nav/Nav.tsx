@@ -22,6 +22,7 @@ const Nav: FC = () => {
             <img src="/images/menu.png" />
           </IconMenu>
           <Logo onClick={goToMain}>글갈피</Logo>
+          <Link to="/MyPage">프로필</Link>
           <IconMenu>
             <Link to="/login">
               <img src="/images/member.png" />
@@ -49,7 +50,7 @@ const TopNav = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 6px 15px;
+  margin: 6px 0px;
 `;
 const IconMenu = styled.div`
   cursor: pointer;

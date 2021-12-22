@@ -1,27 +1,27 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import loadable from '@loadable/component';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import loadable from "@loadable/component";
 
-const Nav = loadable(() => import('./components/Nav/Nav'));
-const NavTab = loadable(() => import('./pages/NavTab/NavTab'));
-const Category = loadable(() => import('./pages/Category/Category'));
-const ListDetail = loadable(() => import('./pages/ListDetail/ListDetail'));
-const Login = loadable(() => import('./pages/Login/Login'));
-const MyPage = loadable(() => import('./pages/MyPage/MyPage'));
-const Register = loadable(() => import('./pages/Register/Register'));
-const Search = loadable(() => import('./pages/Search/Search'));
-const Writing = loadable(() => import('./pages/Writing/Writing'));
+const Nav = loadable(() => import("./components/Nav/Nav"));
+const NavTab = loadable(() => import("./pages/NavTab/NavTab"));
+const Category = loadable(() => import("./pages/Category/Category"));
+const ListDetail = loadable(() => import("./pages/ListDetail/ListDetail"));
+const Login = loadable(() => import("./pages/Login/Login"));
+const MyPage = loadable(() => import("./pages/MyPage/MyPage"));
+const Register = loadable(() => import("./pages/Register/Register"));
+const Search = loadable(() => import("./pages/Search/Search"));
+const Writing = loadable(() => import("./pages/Writing/Writing"));
 const EditInformation = loadable(
-  () => import('./pages/EditInformation/EditInformation'),
+  () => import("./pages/EditInformation/EditInformation"),
 );
 const FindPassword = loadable(
-  () => import('./pages/FindPassword/FindPassword'),
+  () => import("./pages/FindPassword/FindPassword"),
 );
 const Introduction = loadable(
-  () => import('./pages/Introduction/Introduction'),
+  () => import("./pages/Introduction/Introduction"),
 );
 const PageNotFound = loadable(
-  () => import('./pages/PageNotFound/PageNotFound'),
+  () => import("./pages/PageNotFound/PageNotFound"),
 );
 
 const Routes = () => {
