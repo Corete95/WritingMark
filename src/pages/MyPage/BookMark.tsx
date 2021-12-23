@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { BOOKMARK_CATEGORY } from "Config";
 import axios from "axios";
+import ListBox from "components/ListBox/ListBox";
 
 const BookMark: FC = () => {
   const [bookMarkCategory, setBookMarkCategory] = useState("내가 쓴 글");
@@ -18,6 +19,7 @@ const BookMark: FC = () => {
     setBookMarkCategory(cateory);
     setQueryString(queryString);
   };
+  console.log(test);
   return (
     <>
       <BookMarkContainer>
@@ -35,19 +37,24 @@ const BookMark: FC = () => {
           );
         })}
       </BookMarkContainer>
-      <div>
+      <ListBoxContainer>
         {test.length &&
           test.map((test: any) => {
             return (
-              <>
-                <div key={test.id}>
-                  <span>{test.id}</span>
-                  <span>{test.name}</span>
-                </div>
-              </>
+              <ListBox
+                key={test.id}
+                id={test.id}
+                name={test.name}
+                img={test.img}
+                time={test.time}
+                contents={test.contents}
+                contents_img={test.contents_img}
+                bookmark={test.bookmark}
+                comments={test.comments}
+              />
             );
           })}
-      </div>
+      </ListBoxContainer>
     </>
   );
 };
@@ -59,7 +66,7 @@ const BookMarkContainer = styled.div`
   span {
     flex: 1;
     text-align: center;
-    font-size: 25px;
+    font-size: 18px;
     padding: 10px 5px;
     color: gray;
     cursor: pointer;
@@ -70,5 +77,9 @@ const BookMarkContainer = styled.div`
       border-bottom: 0px;
     }
   }
+`;
+
+const ListBoxContainer = styled.div`
+  margin-top: 25px;
 `;
 export default BookMark;

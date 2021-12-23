@@ -1,5 +1,5 @@
 import useInput from "hooks/useInput";
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
@@ -13,7 +13,6 @@ const Login = () => {
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
 
-  console.log(email, password);
   return (
     <Container>
       <LoginContainer>
