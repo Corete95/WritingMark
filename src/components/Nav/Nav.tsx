@@ -45,6 +45,7 @@ const ContainerNav = styled.header`
   margin: 0 auto;
   max-width: 640px;
   min-width: 320px;
+  background-color: #fff;
 `;
 const TopNav = styled.div`
   display: flex;

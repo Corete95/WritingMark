@@ -15,7 +15,9 @@ const MyPage = () => {
       <h1>회원 정보</h1>
       <MyPageContainer>
         <ProfileImg>
-          <img src="5.png" />
+          <div>
+            <img src="5.png" />
+          </div>
         </ProfileImg>
         <ProfileInformation>
           <span>김정현님 </span>
@@ -51,7 +53,7 @@ const Container = styled.div`
     font-weight: bold;
     font-size: 20px;
     line-height: 32px;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
   }
 `;
 
@@ -64,23 +66,37 @@ const MyPageContainer = styled.div`
   `}
 `;
 const ProfileImg = styled.div`
-  width: 130px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  /* width: 130px;
   min-width: 130px;
   height: 130px;
   border-radius: 70%;
   overflow: hidden;
-  margin-right: 60px;
+  margin-right: 60px; */
   ${({ theme }) => theme.media.mobile`
   margin-right: 15px;
   `}
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  div {
+    width: 130px;
+    min-width: 130px;
+    height: 130px;
+    border-radius: 70%;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 `;
 
 const ProfileInformation = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
   margin: auto 0;
   ${({ theme }) => theme.media.mobile`
    text-align:center;
@@ -88,10 +104,10 @@ const ProfileInformation = styled.div`
   span {
     font-size: 25px;
     font-weight: bold;
-    line-height: 28px;
+    line-height: 14px;
     ${({ theme }) => theme.media.mobile`
    font-size: 21px;
-   line-height: 24px;
+   line-height: 10px;
   `}
   }
 `;

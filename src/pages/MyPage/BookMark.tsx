@@ -60,9 +60,11 @@ const BookMark: FC = () => {
 };
 
 const BookMarkContainer = styled.div`
-  margin-top: 50px;
+  margin-top: 100px;
   display: flex;
-
+  ${({ theme }) => theme.media.mobile`
+  margin-top: 50px;
+  `}
   span {
     flex: 1;
     text-align: center;

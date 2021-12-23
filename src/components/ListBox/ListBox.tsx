@@ -50,9 +50,6 @@ const ListBox: FC<Props> = ({
             <span className="comments">댓글{comments}개 </span>
           </span>
         </div>
-        <div className="link">
-          <pre>asdasdasdas sdadad</pre>
-        </div>
       </TopBottom>
     </ListBoxContainer>
   );
@@ -81,6 +78,12 @@ const TopBottom = styled.div`
     }
     .comments {
       margin-left: 7px;
+    }
+  }
+
+  .link {
+    img {
+      width: 20px;
     }
   }
 `;
@@ -128,17 +131,18 @@ const BoxCenter = styled.div`
   border: 1px solid #c4c4c4;
   margin: 7px 0px;
   max-height: 150px;
+  min-height: 150px;
   img {
     width: 30%;
   }
 `;
 const ContentsText = styled.div`
   width: 70%;
-  padding: 20px 23px;
+  margin: 20px 23px;
   overflow: hidden;
   text-overflow: ellipsis;
   ${({ theme }) => theme.media.mobile`
-   padding: 10px 14px;
+   margin: 11px 14px;
   `}
 `;
 
