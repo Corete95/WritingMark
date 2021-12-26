@@ -3,14 +3,15 @@ import styled from "styled-components";
 import { BOOKMARK_CATEGORY } from "Config";
 import axios from "axios";
 import ListBox from "components/ListBox/ListBox";
+import { IListBox } from "typings/db";
 
 const BookMark: FC = () => {
   const [bookMarkCategory, setBookMarkCategory] = useState("내가 쓴 글");
-  const [test, setTest] = useState([]);
+  const [test, setTest] = useState<IListBox[]>([]);
   const [queryString, setQueryString] = useState("test.json");
 
   useEffect(() => {
-    axios(`http://localhost:3000/data/${queryString}`).then((res: any) => {
+    axios(`http://localhost:3000/data/${queryString}`).then((res) => {
       setTest(res.data);
     });
   }, [queryString]);
@@ -39,7 +40,7 @@ const BookMark: FC = () => {
       </BookMarkContainer>
       <ListBoxContainer>
         {test.length &&
-          test.map((test: any) => {
+          test.map((test) => {
             return (
               <ListBox
                 key={test.id}

@@ -61,6 +61,7 @@ const IconMenu = styled.div`
 `;
 const Logo = styled.span`
   font-size: 20px;
+  cursor: pointer;
 `;
 
 export default Nav;

@@ -22,7 +22,7 @@ const ListBox: FC<Props> = ({
   comments,
 }) => {
   return (
-    <ListBoxContainer>
+    <ListBoxContainer key={id}>
       <TopBottom>
         <ImgName>
           <div className="imgDiv">
@@ -141,8 +141,9 @@ const ContentsText = styled.div`
   margin: 20px 23px;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 23px;
   ${({ theme }) => theme.media.mobile`
-   margin: 11px 14px;
+   margin: 8px 14px;
   `}
 `;
 
