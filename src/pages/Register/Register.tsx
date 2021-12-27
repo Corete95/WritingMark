@@ -1,78 +1,85 @@
-import useInput from "hooks/useInput";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
+import { useForm, SubmitHandler } from "react-hook-form";
 
+interface Formvalues {
+  nickname: string;
+  email: string;
+  password: string;
+  passwordCheck: string;
+}
 const Register = () => {
-  const [email, onChangeEmail] = useInput("");
-  const [nickname, onChangeNickname] = useInput("");
-  const [password, setPassword] = useState("");
-  const [passwordCheck, setPasswordCheck] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+    watch,
+  } = useForm<Formvalues>();
 
-  const onChangePassword = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
-      setPasswordError(e.target.value !== passwordCheck);
-    },
-    [passwordCheck],
-  );
-
-  const onChangePasswordCheck = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPasswordCheck(e.target.value);
-      setPasswordError(e.target.value !== password);
-    },
-    [password],
-  );
-
-  const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!passwordError && email && password) {
-        return alert("회원가입 가능");
-      }
-    },
-    [email, nickname, password, passwordCheck, passwordError],
-  );
-
+  const onSubmit: SubmitHandler<Formvalues> = (data) => {
+    const { nickname, email, password, passwordCheck } = data;
+    alert(JSON.stringify(data));
+    console.log("결과", data);
+  };
+  console.log(watch());
   return (
     <Container>
       <RegisterContainer>
         <h1>회원가입</h1>
-        <RegisterForm onSubmit={onSubmit}>
+        <RegisterForm onSubmit={handleSubmit(onSubmit)}>
           <InputDiv>
             <Label>닉네임</Label>
             <Input
               type="text"
-              placeholder="미 입력시 랜덤 생성 합니다."
-              value={nickname}
-              onChange={onChangeNickname}
+              {...register("nickname")}
+              placeholder="미 입력시 랜덤 생성 됩니다."
             />
           </InputDiv>
           <InputDiv>
             <Label>이메일</Label>
-            <Input type="email" value={email} onChange={onChangeEmail} />
+            <Input
+              {...register("email", {
+                required: "필수 응답 항목입니다.",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
+                  message: "이메일 형식이 아닙니다.",
+                },
+              })}
+            />
+            {errors.email && <Error>{errors.email.message}</Error>}
           </InputDiv>
           <InputDiv>
             <Label>비밀번호</Label>
             <Input
               type="password"
-              placeholder="6자 이상 입력해주세요."
-              value={password}
-              onChange={onChangePassword}
+              {...register("password", {
+                required: "필수 응답 항목입니다.",
+                minLength: {
+                  value: 6,
+                  message: "비밀번호는 6자 이상이여야 합니다,",
+                },
+              })}
             />
+            {errors.password && <Error>{errors.password.message}</Error>}
           </InputDiv>
           <InputDiv>
             <Label>비밀번호 확인</Label>
             <Input
               type="password"
-              placeholder="비밀번호를 다시 입력해주세요."
-              value={passwordCheck}
-              onChange={onChangePasswordCheck}
+              {...register("passwordCheck", {
+                required: "필수 응답 항목입니다.",
+                validate: {
+                  matchesPreviousPassword: (value) => {
+                    const { password } = getValues();
+                    return password === value || "비밀번호가 맞지않습니다.";
+                  },
+                },
+              })}
             />
-            {passwordError && passwordCheck.length > 6 && (
-              <Error>비밀번호가 일치하지 않습니다.</Error>
+            {errors.passwordCheck && (
+              <Error>{errors.passwordCheck.message}</Error>
             )}
           </InputDiv>
           <ButtonDiv>
@@ -147,7 +154,7 @@ const Button = styled.button`
 `;
 const Error = styled.span`
   font-size: 12px;
-  margin-top: 15px;
+  margin-top: 7px;
   color: red;
 `;
 export default Register;
