@@ -23,6 +23,6 @@ const LoadingContainer = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  margin-right: 20px;
+  margin-right: 30px;
 `;
 export default Loading;

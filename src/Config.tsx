@@ -28,3 +28,12 @@ export const BOOKMARK_CATEGORY = [
   { id: 1, name: "내가 쓴 글", queryString: "test.json" },
   { id: 2, name: "내 찜목록", queryString: "test1.json" },
 ];
+
+export const CATEGORY_OPTIONS = [
+  { id: 1, value: "web-novel", label: "웹소설 · 웹툰" },
+  { id: 2, value: "essay", label: "에세이" },
+  { id: 3, value: "novel", label: "소설" },
+  { id: 4, value: "poetry", label: "시" },
+  { id: 5, value: "knowledge", label: "지식" },
+  { id: 6, value: "etc", label: "깍두기" },
+];

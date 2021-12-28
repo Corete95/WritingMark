@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { NAVIGATION_CATEGORY } from "../../Config";
+import { NAVIGATION_CATEGORY } from "Config";
 
 interface Props {
   show: boolean;

@@ -1,9 +1,9 @@
 import Loading from "components/Loading";
 import useInput from "hooks/useInput";
-import React, { FC, useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
-const EditInformation: FC = () => {
+const EditInformation = () => {
   const [imgFile, setImgFile] = useState(null);
   const [loading, setLoading] = useState<boolean | null>(null);
   const [imgSrc, setImgSrc] = useState<string>("/images/profile.png");
@@ -60,6 +60,7 @@ const EditInformation: FC = () => {
   console.log("password:", password);
   console.log("Newpassword:", newPassword);
   console.log("NewpasswordCheck:", newPasswordCheck);
+  console.log("img:", imgSrc);
   return (
     <Container>
       <InformationContaniner>
@@ -113,11 +114,18 @@ const EditInformation: FC = () => {
                 value={newPasswordCheck}
                 onChange={onChangeNewPasswordCheck}
               />
-              {newPasswordError && <Error>비밀번호가 일치하지 않습니다.</Error>}
+              {newPasswordError && newPasswordCheck.length > 6 && (
+                <Error>비밀번호가 일치하지 않습니다.</Error>
+              )}
             </InputDiv>
             <Button>변경하기</Button>
           </InputUpload>
         </InformationForm>
+        <MemberSecession>
+          <h2 className="secessionText">회원 탈퇴</h2>
+          <p>탈퇴 시 작성한 글 및 댓글이 모두 삭제되며 복구되지 않습니다.</p>
+          <button>탈퇴하기</button>
+        </MemberSecession>
       </InformationContaniner>
     </Container>
   );
@@ -168,6 +176,7 @@ const UploadButton = styled.div`
     width: 130px;
     height: 32px;
     margin-bottom: 15px;
+    cursor: pointer;
   }
 `;
 
@@ -207,5 +216,36 @@ const Error = styled.span`
   font-size: 12px;
   margin-top: 15px;
   color: red;
+`;
+
+const MemberSecession = styled.div`
+  margin: 30px 0px;
+  border-top: 2px solid black;
+  text-align: center;
+  ${({ theme }) => theme.media.mobile`
+    width: 91%;
+    margin: 30px auto;
+  `}
+  .secessionText {
+    margin-top: 30px;
+    font-size: 23px;
+    font-weight: bold;
+  }
+  p {
+    margin: 10px 0px;
+    font-size: 14px;
+
+    ${({ theme }) => theme.media.mobile`
+    font-size: 12px;
+  `}
+  }
+  button {
+    width: 100px;
+    height: 30px;
+    color: white;
+    background-color: red;
+    border: 1px solid red;
+    cursor: pointer;
+  }
 `;
 export default EditInformation;
