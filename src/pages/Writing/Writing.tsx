@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Select from "react-select";
 import { CATEGORY_OPTIONS } from "Config";
+import TextInformation from "./TextInformation";
+import useInput from "hooks/useInput";
 
 interface SelectProps {
   id: number;
@@ -11,8 +13,12 @@ interface SelectProps {
 type SelectValue = SelectProps | SelectProps[] | null | undefined;
 
 const Writing = () => {
-  const [select, setSelect] = useState<SelectValue>(null);
-  const [imgUrl, setImgUrl] = useState<string>();
+  const [select, setSelect] = useState<any>(null);
+  const [imgUrl, setImgUrl] = useState<string>("");
+  const [informationCheck, setInformationCheck] = useState(false);
+  const [contents, onChangeContents] = useInput("");
+  const [title, onChangeTitle] = useInput("");
+  const [url, onChangeUrl] = useInput("");
   const ImgInput = useRef<HTMLInputElement>(null);
 
   const selectHandleChange = (selectedOption: SelectValue) => {
@@ -20,7 +26,9 @@ const Writing = () => {
   };
   const imageUploadBtn = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    if (ImgInput.current) ImgInput.current.click();
+    if (ImgInput.current) {
+      ImgInput.current.click();
+    }
   };
 
   const imageHandler = (e: any) => {
@@ -33,8 +41,27 @@ const Writing = () => {
       return;
     }
   };
+  const deleteImg = () => {
+    const check = confirm("이미지를 삭제 하시겠습니까?");
+    if (check == true) {
+      setImgUrl("");
+    }
+  };
 
-  console.log(imgUrl);
+  const informationCheckHandler = () => {
+    setInformationCheck(!informationCheck);
+  };
+
+  const test = () => {
+    if (select === null) return alert("카테고리를 설정해주세요!");
+
+    console.log(select.value);
+    console.log(contents);
+    console.log(imgUrl);
+    console.log(title);
+    console.log(url);
+  };
+
   return (
     <Container>
       <Category>
@@ -50,7 +77,11 @@ const Writing = () => {
       </Category>
       <Contents>
         <h1>내용</h1>
-        <textarea></textarea>
+        <textarea
+          // wrap="hard"
+          value={contents}
+          onChange={onChangeContents}
+        ></textarea>
         <ImgUpload>
           <img src="/images/camera.png" onClick={imageUploadBtn} />
           <input
@@ -60,12 +91,21 @@ const Writing = () => {
             onChange={imageHandler}
           />
           {imgUrl && (
-            <Test img={imgUrl}>
-              <p>삭제</p>
-            </Test>
+            <DeleteImg img={imgUrl}>
+              <p onClick={deleteImg}>&times;</p>
+            </DeleteImg>
           )}
         </ImgUpload>
       </Contents>
+      <TextInformation
+        informationCheckHandler={informationCheckHandler}
+        informationCheck={informationCheck}
+        title={title}
+        onChangeTitle={onChangeTitle}
+        url={url}
+        onChangeUrl={onChangeUrl}
+      />
+      <Button onClick={test}>글쓰기</Button>
     </Container>
   );
 };
@@ -93,7 +133,7 @@ const Category = styled.div`
     text-align: center;
     font-size: 18px;
     ${({ theme }) => theme.media.mobile`
-   margin-left:20px;
+      margin-left:20px;
   `}
   }
 `;
@@ -111,6 +151,7 @@ const Contents = styled.div`
     height: 300px;
     padding: 20px 20px;
     font-size: 14px;
+    resize: none;
   }
 `;
 
@@ -120,6 +161,7 @@ const ImgUpload = styled.div`
   img {
     width: 40px;
     height: 40px;
+    margin-right: 20px;
     cursor: pointer;
   }
   input {
@@ -127,10 +169,32 @@ const ImgUpload = styled.div`
   }
 `;
 
-const Test = styled.div<{ img: any }>`
-  width: 50px;
-  height: 50px;
-  background-size: cover;
+const DeleteImg = styled.div<{ img: string }>`
+  width: 40px;
+  height: 40px;
+  background-size: contain;
   background-image: url(${(props) => props.img});
+
+  p {
+    float: right;
+    position: relative;
+    left: 7px;
+    bottom: 8px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+  }
+`;
+
+const Button = styled.button`
+  float: right;
+  margin-top: 30px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  background-color: red;
+  border: 1px solid red;
+  cursor: pointer;
 `;
 export default Writing;
