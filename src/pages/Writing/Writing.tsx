@@ -172,7 +172,8 @@ const ImgUpload = styled.div`
 const DeleteImg = styled.div<{ img: string }>`
   width: 40px;
   height: 40px;
-  background-size: contain;
+  background-repeat: no-repeat;
+  background-size: cover;
   background-image: url(${(props) => props.img});
 
   p {

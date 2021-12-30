@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 interface Props {
@@ -21,8 +22,20 @@ const ListBox: FC<Props> = ({
   bookmark,
   comments,
 }) => {
+  const history = useHistory();
+
+  const stopPropagation = useCallback(
+    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      e.stopPropagation();
+    },
+    [],
+  );
+
   return (
-    <ListBoxContainer key={id}>
+    <ListBoxContainer
+      key={id}
+      onClick={() => history.push(`/ListDetail/${id}`)}
+    >
       <TopBottom>
         <ImgName>
           <div className="imgDiv">
@@ -44,7 +57,7 @@ const ListBox: FC<Props> = ({
       </BoxCenter>
       <TopBottom>
         <div className="likeComments">
-          <img src="/images/bookmarkfull.png" />
+          <img src="/images/bookmarkfull.png" onClick={stopPropagation} />
           <span>
             글갈피 {bookmark}개
             <span className="comments">댓글{comments}개 </span>
@@ -59,6 +72,7 @@ const ListBoxContainer = styled.div`
   width: 100%;
   height: auto;
   margin-bottom: 40px;
+  cursor: pointer;
 `;
 
 const TopBottom = styled.div`

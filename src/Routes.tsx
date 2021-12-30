@@ -36,7 +36,7 @@ const Routes = () => {
           <Route path="/Category/:path" component={Category} />
           <Route path="/EditInformation" component={EditInformation} />
           <Route path="/FindPassword" component={FindPassword} />
-          <Route path="/ListDetail" component={ListDetail} />
+          <Route path="/ListDetail/:id" component={ListDetail} />
           <Route path="/MyPage" component={MyPage} />
           <Route path="/Login" component={Login} />
           <Route path="/Register" component={Register} />

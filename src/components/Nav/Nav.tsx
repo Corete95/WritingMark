@@ -46,6 +46,9 @@ const ContainerNav = styled.header`
   max-width: 640px;
   min-width: 320px;
   background-color: #fff;
+  ${({ theme }) => theme.media.mobile`
+    margin:0px 16px;
+  `}
 `;
 const TopNav = styled.div`
   display: flex;
