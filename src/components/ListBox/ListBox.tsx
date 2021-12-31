@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { IListBox } from "typings/db";
 
 interface Props {
   id: number;
@@ -11,6 +12,8 @@ interface Props {
   contents_img: string;
   bookmark: number;
   comments: number;
+  // changeBookmark(id: number): void;
+  changeBookmark?: any;
 }
 const ListBox: FC<Props> = ({
   id,
@@ -21,6 +24,7 @@ const ListBox: FC<Props> = ({
   contents_img,
   bookmark,
   comments,
+  changeBookmark,
 }) => {
   const history = useHistory();
 
@@ -32,10 +36,7 @@ const ListBox: FC<Props> = ({
   );
 
   return (
-    <ListBoxContainer
-      key={id}
-      onClick={() => history.push(`/ListDetail/${id}`)}
-    >
+    <ListBoxContainer key={id}>
       <TopBottom>
         <ImgName>
           <div className="imgDiv">
@@ -51,14 +52,14 @@ const ListBox: FC<Props> = ({
           <span className="delete">삭제</span>
         </EditDelete>
       </TopBottom>
-      <BoxCenter>
+      <BoxCenter onClick={() => history.push(`/ListDetail/${id}`)}>
         <ContentsText>{contents}</ContentsText>
         <img src={contents_img} />
       </BoxCenter>
       <TopBottom>
         <div className="likeComments">
           <img src="/images/bookmarkfull.png" onClick={stopPropagation} />
-          <span>
+          <span onClick={() => changeBookmark(id)}>
             글갈피 {bookmark}개
             <span className="comments">댓글{comments}개 </span>
           </span>

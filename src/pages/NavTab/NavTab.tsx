@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { NAV_CATEGORY } from "Config";
 
-const NavTab: FC = () => {
+const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const history = useHistory();
 

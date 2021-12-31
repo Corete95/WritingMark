@@ -1,26 +1,20 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
 import { IListBox } from "typings/db";
 import ListBox from "components/ListBox/ListBox";
+import { DataContext } from "context/DataContext";
 
 const Category: FC<IListBox> = () => {
-  const test = useParams<Record<string, string | undefined>>();
-  const [listData, setListData] = useState<IListBox[]>([]);
-
-  useEffect(() => {
-    axios("http://localhost:3000/data/test.json").then((res) => {
-      setListData(res.data);
-    });
-  }, []);
+  const params = useParams<Record<string, string | undefined>>();
+  const { listData, setListData, changeBookmark } = useContext(DataContext);
 
   return (
     <Container>
-      {test.path}
+      {params.path}
       <WritingButton to="/Writing">글쓰기</WritingButton>
       <ListContainer>
-        {listData.map((list) => {
+        {listData.map((list: IListBox) => {
           return (
             <ListBox
               key={list.id}
@@ -32,6 +26,7 @@ const Category: FC<IListBox> = () => {
               contents_img={list.contents_img}
               bookmark={list.bookmark}
               comments={list.comments}
+              changeBookmark={changeBookmark}
             />
           );
         })}

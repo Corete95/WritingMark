@@ -20,7 +20,7 @@ const BookMark: FC = () => {
     setBookMarkCategory(cateory);
     setQueryString(queryString);
   };
-  console.log(test);
+
   return (
     <>
       <BookMarkContainer>
