@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { NAV_CATEGORY } from "Config";
 
 const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const history = useHistory();
-
+  const params = useParams<Record<string, string | undefined>>();
   const handleCategory = (cateory: string, path: string) => {
     setIsActivatedCategory(cateory);
     history.push(path);
   };
+  console.log(params.path);
   return (
     <ContainerNavTab>
       <BottomNav>

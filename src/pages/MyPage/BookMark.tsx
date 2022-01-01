@@ -1,18 +1,19 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { BOOKMARK_CATEGORY } from "Config";
 import axios from "axios";
 import ListBox from "components/ListBox/ListBox";
 import { IListBox } from "typings/db";
+import { DataContext } from "context/DataContext";
 
 const BookMark: FC = () => {
   const [bookMarkCategory, setBookMarkCategory] = useState("내가 쓴 글");
-  const [test, setTest] = useState<IListBox[]>([]);
   const [queryString, setQueryString] = useState("test.json");
+  const { listData, setListData, changeBookmark } = useContext(DataContext);
 
   useEffect(() => {
     axios(`http://localhost:3000/data/${queryString}`).then((res) => {
-      setTest(res.data);
+      setListData(res.data);
     });
   }, [queryString]);
 
@@ -39,22 +40,22 @@ const BookMark: FC = () => {
         })}
       </BookMarkContainer>
       <ListBoxContainer>
-        {test.length &&
-          test.map((test) => {
-            return (
-              <ListBox
-                key={test.id}
-                id={test.id}
-                name={test.name}
-                img={test.img}
-                time={test.time}
-                contents={test.contents}
-                contents_img={test.contents_img}
-                bookmark={test.bookmark}
-                comments={test.comments}
-              />
-            );
-          })}
+        {listData.map((list: IListBox) => {
+          return (
+            <ListBox
+              key={list.id}
+              id={list.id}
+              name={list.name}
+              img={list.img}
+              time={list.time}
+              contents={list.contents}
+              contents_img={list.contents_img}
+              bookmark={list.bookmark}
+              comments={list.comments}
+              changeBookmark={changeBookmark}
+            />
+          );
+        })}
       </ListBoxContainer>
     </>
   );
