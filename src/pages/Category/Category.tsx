@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
@@ -14,7 +14,7 @@ const Category: FC<IListBox> = () => {
       {params.path}
       <WritingButton to="/Writing">글쓰기</WritingButton>
       <ListContainer>
-        {listData.map((list: IListBox) => {
+        {listData?.map((list: IListBox) => {
           return (
             <ListBox
               key={list.id}

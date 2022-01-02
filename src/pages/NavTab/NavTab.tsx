@@ -31,6 +31,7 @@ const NavTab = () => {
           );
         })}
       </BottomNav>
+      <div>asd</div>
     </ContainerNavTab>
   );
 };

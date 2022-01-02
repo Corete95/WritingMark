@@ -8,14 +8,13 @@ import { DataContext } from "context/DataContext";
 
 const BookMark: FC = () => {
   const [bookMarkCategory, setBookMarkCategory] = useState("내가 쓴 글");
-  const [queryString, setQueryString] = useState("test.json");
-  const { listData, setListData, changeBookmark } = useContext(DataContext);
+  const { listData, changeBookmark, setQueryString } = useContext(DataContext);
 
-  useEffect(() => {
-    axios(`http://localhost:3000/data/${queryString}`).then((res) => {
-      setListData(res.data);
-    });
-  }, [queryString]);
+  // useEffect(() => {
+  //   axios(`http://localhost:3000/data/${queryString}`).then((res) => {
+  //     setListData(res.data);
+  //   });
+  // }, [queryString]);
 
   const handleCategory = (cateory: string, queryString: string) => {
     setBookMarkCategory(cateory);
