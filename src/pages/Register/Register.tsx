@@ -2,6 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
 import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
+import { API } from "Config";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useHistory } from "react-router-dom";
 
 interface Formvalues {
   nickname: string;
@@ -17,13 +22,39 @@ const Register = () => {
     formState: { errors },
     watch,
   } = useForm<Formvalues>();
+  const history = useHistory();
 
   const onSubmit: SubmitHandler<Formvalues> = (data) => {
-    const { nickname, email, password, passwordCheck } = data;
-    alert(JSON.stringify(data));
-    console.log("결과", data);
+    const { nickname, email, password } = data;
+    axios
+      .post(`${API}/user/register`, { email, nickname, password })
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("회원가입을 축하드려요!", {
+            position: "bottom-center",
+            autoClose: 1500,
+          });
+          setTimeout(() => {
+            history.push("/login");
+          }, 1500);
+        } else {
+          toast.error(res.data.message, {
+            position: "bottom-center",
+          });
+        }
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message, {
+          position: "bottom-center",
+        });
+        console.log(
+          "회원가입 통신이 원활하지 않습니다.",
+          err.response.data.message,
+        );
+      });
   };
-  console.log(watch());
+
+  //console.log(watch());
   return (
     <Container>
       <RegisterContainer>
@@ -57,8 +88,8 @@ const Register = () => {
               {...register("password", {
                 required: "필수 응답 항목입니다.",
                 minLength: {
-                  value: 6,
-                  message: "비밀번호는 6자 이상이여야 합니다,",
+                  value: 7,
+                  message: "비밀번호는 7자 이상이여야 합니다,",
                 },
               })}
             />
@@ -90,6 +121,7 @@ const Register = () => {
           </ButtonDiv>
         </RegisterForm>
       </RegisterContainer>
+      <ToastContainer />
     </Container>
   );
 };

@@ -1,4 +1,4 @@
-export const API = "";
+export const API = "http://172.30.1.42:8080";
 
 export const KAKAO_KEY = "c54587e1e09ef1e3b86b7a35f071b555";
 export const NAV_CATEGORY = [
