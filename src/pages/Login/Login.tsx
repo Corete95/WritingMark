@@ -1,23 +1,52 @@
 import useInput from "hooks/useInput";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useCallback } from "react";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
+import axios, { AxiosResponse } from "axios";
+import { API } from "Config";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Props {
   color: string;
   background: string;
   border: string;
 }
+
+interface LoginProps {
+  status: string;
+  token: string;
+}
 const Login = () => {
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
+  const history = useHistory();
+
+  const loginHandler = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      axios
+        .post<LoginProps>(`${API}/user/login`, { email, password })
+        .then((res) => {
+          console.log(res);
+          if (res.data.status === "success")
+            localStorage.setItem("token", res.data.token);
+          alert("로그인 성공!");
+          history.push("/");
+        })
+        .catch((err) => {
+          console.log(err.response);
+          alert(err.response.data.message);
+        });
+    },
+    [email, password],
+  );
 
   return (
     <Container>
       <LoginContainer>
         <h1>로그인</h1>
-        <LoginForm>
+        <LoginForm onSubmit={loginHandler}>
           <InputDiv>
             <Label>이메일</Label>
             <Input type="email" value={email} onChange={onChangeEmail}></Input>

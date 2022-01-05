@@ -44,12 +44,12 @@ const Register = () => {
         }
       })
       .catch((err) => {
-        toast.error(err.response.data.message, {
+        toast.error(err.response?.data?.message, {
           position: "bottom-center",
         });
         console.log(
           "회원가입 통신이 원활하지 않습니다.",
-          err.response.data.message,
+          err.response?.data?.message,
         );
       });
   };
