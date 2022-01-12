@@ -4,7 +4,7 @@ import Select from "react-select";
 import { CATEGORY_OPTIONS } from "Config";
 import TextInformation from "./TextInformation";
 import useInput from "hooks/useInput";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { API } from "Config";
 
 interface SelectProps {
@@ -16,16 +16,25 @@ type SelectValue = SelectProps | SelectProps[] | null | undefined;
 
 const Writing = () => {
   const [select, setSelect] = useState<any>(null);
-  const [imgUrl, setImgUrl] = useState<string>("");
-  const [informationCheck, setInformationCheck] = useState(false);
+  const [image, setImage] = useState("");
   const [contents, onChangeContents] = useInput("");
   const [title, onChangeTitle] = useInput("");
   const [url, onChangeUrl] = useInput("");
+  const [imgUrl, setImgUrl] = useState<string>("");
+  const [informationCheck, setInformationCheck] = useState(false);
   const ImgInput = useRef<HTMLInputElement>(null);
+
+  const config: any = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: localStorage.getItem("token"),
+    },
+  };
 
   const selectHandleChange = (selectedOption: SelectValue) => {
     setSelect(selectedOption);
   };
+
   const imageUploadBtn = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     if (ImgInput.current) {
@@ -35,6 +44,7 @@ const Writing = () => {
 
   const imageHandler = (e: any) => {
     const imageFile = e.target.files[0];
+    setImage(imageFile);
     const fileReader = new FileReader();
     if (imageFile) {
       fileReader.readAsDataURL(imageFile);
@@ -43,6 +53,7 @@ const Writing = () => {
       return;
     }
   };
+
   const deleteImg = () => {
     const check = confirm("이미지를 삭제 하시겠습니까?");
     if (check == true) {
@@ -56,25 +67,17 @@ const Writing = () => {
 
   const test = () => {
     if (select === null) return alert("카테고리를 설정해주세요!");
-    const test = {
-      category: select.value,
-      content: contents,
-      info_title: title,
-      info_url: url,
-      info_image: imgUrl,
-    };
-    const config: any = {
-      headers: { Authorization: localStorage.getItem("token") },
-    };
-    console.log(select.value);
-    console.log(contents);
-    console.log(imgUrl);
-    console.log(title);
-    console.log(url);
+    const formData = new FormData();
+    formData.append("category", select.value);
+    formData.append("content", contents);
+    formData.append("info_title", title);
+    formData.append("info_url", url);
+    formData.append("info_image", image);
+
     axios
-      .post(`${API}/posts`, test, config)
+      .post(`${API}/posts`, formData, config)
       .then((res: any) => {
-        console.log(test);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
