@@ -20,3 +20,26 @@ export type LoginType = {
   status: string;
   token: string | undefined;
 };
+
+export type PostType = {
+  category: string;
+  content: string;
+  count: Count[];
+  createdAt: string;
+  image: Image[];
+  info_title: string;
+  info_url: string;
+  postId: number;
+  writer: string;
+  __v: number;
+  _id: string;
+};
+
+export type Image = {
+  info: string;
+  original: string;
+};
+export type Count = {
+  like: number;
+  comment: number;
+};

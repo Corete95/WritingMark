@@ -16,7 +16,6 @@ import { push } from "connected-react-router";
 import { history } from "store";
 
 const loginUserAPI = (loginData: string) => {
-  console.log(loginData, "loginData");
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +27,6 @@ const loginUserAPI = (loginData: string) => {
 function* loginUser(action: any) {
   try {
     const result: AxiosResponse = yield call(loginUserAPI, action.payload);
-    console.log(result);
     yield put(loginSuccess(result.data));
     yield put(push("/"));
     // yield location.reload();
@@ -43,15 +41,12 @@ function* watchLoginUser() {
 // Register
 
 const registerUserAPI = (req: string) => {
-  console.log(req, "req");
-
   return axios.post("user/register", req);
 };
 
 function* registerUser(action: any) {
   try {
     const result: AxiosResponse = yield call(registerUserAPI, action.payload);
-    console.log(result, "RegisterUser Data");
     yield put(registerSuccess(result.data.result));
     yield put(push("/Login"));
     yield location.reload();

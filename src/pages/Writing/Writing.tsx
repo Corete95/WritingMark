@@ -4,8 +4,8 @@ import Select from "react-select";
 import { CATEGORY_OPTIONS } from "Config";
 import TextInformation from "./TextInformation";
 import useInput from "hooks/useInput";
-import axios from "axios";
-import { API } from "Config";
+import { useDispatch } from "react-redux";
+import { POSTS_WRITE_REQUEST } from "../../redux/postTypes";
 
 interface SelectProps {
   id: number;
@@ -23,13 +23,7 @@ const Writing = () => {
   const [imgUrl, setImgUrl] = useState<string>("");
   const [informationCheck, setInformationCheck] = useState(false);
   const ImgInput = useRef<HTMLInputElement>(null);
-
-  const config: any = {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: localStorage.getItem("token"),
-    },
-  };
+  const dispatch = useDispatch();
 
   const selectHandleChange = (selectedOption: SelectValue) => {
     setSelect(selectedOption);
@@ -65,23 +59,21 @@ const Writing = () => {
     setInformationCheck(!informationCheck);
   };
 
-  const test = () => {
-    if (select === null) return alert("카테고리를 설정해주세요!");
+  const upLoad = () => {
+    if (select === null) return alert("카테고리를 설정 해주세요!");
+    if (contents === "") return alert("내용을 입력 해주세요!");
     const formData = new FormData();
     formData.append("category", select.value);
     formData.append("content", contents);
     formData.append("info_title", title);
     formData.append("info_url", url);
     formData.append("info_image", image);
-
-    axios
-      .post(`${API}/posts`, formData, config)
-      .then((res: any) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const token = localStorage.getItem("token");
+    const body = { formData };
+    dispatch({
+      type: POSTS_WRITE_REQUEST,
+      payload: { body, token },
+    });
   };
 
   return (
@@ -127,7 +119,7 @@ const Writing = () => {
         url={url}
         onChangeUrl={onChangeUrl}
       />
-      <Button onClick={test}>글쓰기</Button>
+      <Button onClick={upLoad}>글쓰기</Button>
     </Container>
   );
 };
