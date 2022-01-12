@@ -1,11 +1,10 @@
 import useInput from "hooks/useInput";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
-import axios, { AxiosResponse } from "axios";
-import { API } from "Config";
-import { toast, ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { LOGIN_REQUEST, CLEAR_ERROR_REQUEST } from "redux/types";
 
 interface Props {
   color: string;
@@ -13,31 +12,35 @@ interface Props {
   border: string;
 }
 
-interface LoginProps {
-  status: string;
-  token: string;
-}
 const Login = () => {
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
-  const history = useHistory();
+  const dispatch = useDispatch();
+  const { message } = useSelector((state: any) => state.auth);
+  const [localMsg, setLocalMsg] = useState("");
+
+  useEffect(() => {
+    try {
+      setLocalMsg(message);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [message]);
+
+  useEffect(() => {
+    dispatch({
+      type: CLEAR_ERROR_REQUEST,
+    });
+  }, [dispatch]);
 
   const loginHandler = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      axios
-        .post<LoginProps>(`${API}/user/login`, { email, password })
-        .then((res) => {
-          console.log(res);
-          if (res.data.status === "success")
-            localStorage.setItem("token", res.data.token);
-          alert("로그인 성공!");
-          history.push("/");
-        })
-        .catch((err) => {
-          console.log(err.response);
-          alert(err.response.data.message);
-        });
+      const user = { email, password };
+      dispatch({
+        type: LOGIN_REQUEST,
+        payload: user,
+      });
     },
     [email, password],
   );
@@ -66,6 +69,7 @@ const Login = () => {
             </div>
             <Link to="/FindPassword">비밀번호 찾기</Link>
           </SaveBtnDiv>
+          {localMsg ? <Error>{localMsg}</Error> : null}
           <ButtonDiv>
             <Button type="submit" color="white" background="red" border="red">
               로그인하기
@@ -180,4 +184,10 @@ const ButtonLink = styled(Link)<Props>`
   border: 1px solid ${(props) => props.border};
   cursor: pointer;
 `;
+const Error = styled.span`
+  font-size: 12px;
+  margin-top: 7px;
+  color: red;
+`;
+
 export default Login;

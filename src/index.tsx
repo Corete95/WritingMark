@@ -1,19 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { GlobalStyle } from "./styles/global-style";
-import theme from "./styles/theme";
-import { ThemeProvider } from "./styles/themed-components";
 import Routes from "./Routes";
 import { DataProvider } from "context/DataContext";
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "connected-react-router";
+import store, { history } from "./store";
 
 ReactDOM.render(
   <>
-    <GlobalStyle />
-    <ThemeProvider theme={theme}>
-      <DataProvider>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
         <Routes />
-      </DataProvider>
-    </ThemeProvider>
+      </ConnectedRouter>
+    </Provider>
   </>,
   document.getElementById("root"),
 );

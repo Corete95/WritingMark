@@ -39,7 +39,7 @@ const BookMark: FC = () => {
         })}
       </BookMarkContainer>
       <ListBoxContainer>
-        {listData.map((list: IListBox) => {
+        {listData?.map((list: IListBox) => {
           return (
             <ListBox
               key={list.id}

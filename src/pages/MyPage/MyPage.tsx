@@ -1,7 +1,9 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import BookMark from "./BookMark";
+import { API } from "Config";
 
 interface Props {
   color: string;
@@ -10,6 +12,19 @@ interface Props {
 }
 
 const MyPage = () => {
+  const [test, setTest] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${API}/user/info`)
+      .then((res: any) => {
+        setTest(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Container>
       <h1>회원 정보</h1>

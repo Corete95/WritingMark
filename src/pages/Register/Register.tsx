@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
-import { API } from "Config";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { REGISTER_REQUEST, CLEAR_ERROR_REQUEST } from "redux/types";
+import { RootReducerType } from "redux/reducers";
 
 interface Formvalues {
   nickname: string;
@@ -14,6 +15,7 @@ interface Formvalues {
   password: string;
   passwordCheck: string;
 }
+
 const Register = () => {
   const {
     register,
@@ -23,38 +25,34 @@ const Register = () => {
     watch,
   } = useForm<Formvalues>();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const [localMsg, setLocalMsg] = useState("");
+  const { message } = useSelector((state: any) => state.auth);
+  console.log(message);
+
+  useEffect(() => {
+    try {
+      setLocalMsg(message);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [message]);
+
+  useEffect(() => {
+    dispatch({
+      type: CLEAR_ERROR_REQUEST,
+    });
+  }, [dispatch]);
 
   const onSubmit: SubmitHandler<Formvalues> = (data) => {
     const { nickname, email, password } = data;
-    axios
-      .post(`${API}/user/register`, { email, nickname, password })
-      .then((res) => {
-        if (res.data.status === "success") {
-          toast.success("회원가입을 축하드려요!", {
-            position: "bottom-center",
-            autoClose: 1500,
-          });
-          setTimeout(() => {
-            history.push("/login");
-          }, 1500);
-        } else {
-          toast.error(res.data.message, {
-            position: "bottom-center",
-          });
-        }
-      })
-      .catch((err) => {
-        toast.error(err.response?.data?.message, {
-          position: "bottom-center",
-        });
-        console.log(
-          "회원가입 통신이 원활하지 않습니다.",
-          err.response?.data?.message,
-        );
-      });
+    const newUser = { nickname, email, password };
+    dispatch({
+      type: REGISTER_REQUEST,
+      payload: newUser,
+    });
   };
 
-  //console.log(watch());
   return (
     <Container>
       <RegisterContainer>
@@ -112,6 +110,7 @@ const Register = () => {
             {errors.passwordCheck && (
               <Error>{errors.passwordCheck.message}</Error>
             )}
+            {localMsg ? <Error>{localMsg}</Error> : null}
           </InputDiv>
           <ButtonDiv>
             <Button type="submit">가입하기</Button>

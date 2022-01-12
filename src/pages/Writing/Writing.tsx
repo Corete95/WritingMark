@@ -4,6 +4,8 @@ import Select from "react-select";
 import { CATEGORY_OPTIONS } from "Config";
 import TextInformation from "./TextInformation";
 import useInput from "hooks/useInput";
+import axios, { AxiosResponse } from "axios";
+import { API } from "Config";
 
 interface SelectProps {
   id: number;
@@ -54,12 +56,29 @@ const Writing = () => {
 
   const test = () => {
     if (select === null) return alert("카테고리를 설정해주세요!");
-
+    const test = {
+      category: select.value,
+      content: contents,
+      info_title: title,
+      info_url: url,
+      info_image: imgUrl,
+    };
+    const config: any = {
+      headers: { Authorization: localStorage.getItem("token") },
+    };
     console.log(select.value);
     console.log(contents);
     console.log(imgUrl);
     console.log(title);
     console.log(url);
+    axios
+      .post(`${API}/posts`, test, config)
+      .then((res: any) => {
+        console.log(test);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

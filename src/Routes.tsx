@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import loadable from "@loadable/component";
+import { GlobalStyle } from "./styles/global-style";
+import theme from "./styles/theme";
+import { ThemeProvider } from "./styles/themed-components";
 
 const Nav = loadable(() => import("./components/Nav/Nav"));
 const NavTab = loadable(() => import("./pages/NavTab/NavTab"));
@@ -27,25 +30,28 @@ const PageNotFound = loadable(
 const Routes = () => {
   return (
     <>
-      <Router>
-        <Nav />
-        <Switch>
-          <Route exact path="/" component={NavTab} />
-          <Route exact path="/hot" component={NavTab} />
-          <Route exact path="/Introduction" component={NavTab} />
-          <Route path="/Category/:path" component={Category} />
-          <Route path="/EditInformation" component={EditInformation} />
-          <Route path="/FindPassword" component={FindPassword} />
-          <Route path="/ListDetail/:id" component={ListDetail} />
-          <Route path="/MyPage" component={MyPage} />
-          <Route path="/Login" component={Login} />
-          <Route path="/Register" component={Register} />
-          <Route path="/Search" component={Search} />
-          <Route path="/Writing" component={Writing} />
-          <Route path="/Introduction" component={Introduction} />
-          <Route component={PageNotFound} />
-        </Switch>
-      </Router>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Router>
+          <Nav />
+          <Switch>
+            <Route exact path="/" component={NavTab} />
+            <Route exact path="/hot" component={NavTab} />
+            <Route exact path="/Introduction" component={NavTab} />
+            <Route path="/Category/:path" component={Category} />
+            <Route path="/EditInformation" component={EditInformation} />
+            <Route path="/FindPassword" component={FindPassword} />
+            <Route path="/ListDetail/:id" component={ListDetail} />
+            <Route path="/MyPage" component={MyPage} />
+            <Route path="/Login" component={Login} />
+            <Route path="/Register" component={Register} />
+            <Route path="/Search" component={Search} />
+            <Route path="/Writing" component={Writing} />
+            <Route path="/Introduction" component={Introduction} />
+            <Route component={PageNotFound} />
+          </Switch>
+        </Router>
+      </ThemeProvider>
     </>
   );
 };
