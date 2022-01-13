@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { NAV_CATEGORY } from "Config";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,11 +9,11 @@ import ListBox from "components/ListBox/ListBox";
 const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const [payloadCategory, setPayloadCategory] = useState("new");
+  const { posts } = useSelector((state: any) => state.post);
   const history = useHistory();
-  const params = useParams<Record<string, string | undefined>>();
   const dispatch = useDispatch();
-  const { posts, user } = useSelector((state: any) => state.post);
   const token = localStorage.getItem("token");
+
   const handleCategory = (cateory: string, path: string, payload: string) => {
     setIsActivatedCategory(cateory);
     setPayloadCategory(payload);
@@ -25,7 +25,7 @@ const NavTab = () => {
       type: POSTS_LOADING_REQUEST,
       payload: { payloadCategory, token },
     });
-  }, [payloadCategory]);
+  }, [dispatch, payloadCategory]);
 
   return (
     <ContainerNavTab>

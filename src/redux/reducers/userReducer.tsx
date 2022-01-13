@@ -4,19 +4,23 @@ import {
   USER_LOADING_FAILURE,
   UserLoadingActionsType,
 } from "../userTypes";
+import { User } from "types";
 
+type State = {
+  isAuthenticated: null;
+  isLoading: boolean;
+  user: User[];
+};
 const initialState = {
-  token: localStorage.getItem("token"),
   isAuthenticated: null,
   isLoading: false,
   user: [],
-  _id: "",
-  nickname: "",
-  role: "",
-  profileImage: "",
 };
 
-const userReducer = (state = initialState, action: UserLoadingActionsType) => {
+const userReducer = (
+  state: State = initialState,
+  action: UserLoadingActionsType,
+) => {
   switch (action.type) {
     case USER_LOADING_REQUEST:
       return {

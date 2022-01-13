@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import BookMark from "./BookMark";
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const MyPage = () => {
-  const [test, setTest] = useState();
+  const { user } = useSelector((state: any) => state.user);
 
   return (
     <Container>
@@ -18,11 +19,13 @@ const MyPage = () => {
       <MyPageContainer>
         <ProfileImg>
           <div>
-            <img src="5.png" />
+            <img
+              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${user.profileImage}`}
+            />
           </div>
         </ProfileImg>
         <ProfileInformation>
-          <span>김정현님 </span>
+          <span>{user.nickname}님 </span>
           <br />
           <span>반갑습니다</span>
           <EditBtn>
