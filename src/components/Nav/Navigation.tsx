@@ -2,6 +2,7 @@ import React, { FC, useCallback } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { NAVIGATION_CATEGORY } from "Config";
+import { useSelector } from "react-redux";
 
 interface Props {
   show: boolean;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const Navigation: FC<Props> = ({ show, onCloseModal }) => {
+  const { user } = useSelector((state: any) => state.user);
   const stopPropagation = useCallback(
     (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
       e.stopPropagation();
@@ -27,12 +29,18 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
           <span>로고</span>
         </Logo>
         <Login>
-          <span>
-            <em>로그인</em>을 해주세요!
-          </span>
+          {user != null ? (
+            <span>
+              <em>{user.nickname}</em> 님 반갑습니다!
+            </span>
+          ) : (
+            <span>
+              <em>로그인</em>을 해주세요!
+            </span>
+          )}
         </Login>
         <NavigationCategory>
-          {NAVIGATION_CATEGORY.map((category) => {
+          {NAVIGATION_CATEGORY?.map((category) => {
             return (
               <Link to={category.path} key={category.id} onClick={onCloseModal}>
                 <span>{category.name}</span>

@@ -1,18 +1,19 @@
-export const API = "http://172.30.1.37:8080";
+export const API = "http://172.30.1.50:8080";
 
 export const KAKAO_KEY = "c54587e1e09ef1e3b86b7a35f071b555";
 export const NAV_CATEGORY = [
-  { id: 1, name: "신규", path: "/" },
+  { id: 1, name: "신규", path: "/", payload: "new" },
   {
     id: 2,
     name: "인기",
     path: "/hot",
+    payload: "hot",
   },
-  {
-    id: 3,
-    name: "글갈피 소개",
-    path: "/Introduction",
-  },
+  // {
+  //   id: 3,
+  //   name: "글갈피 소개",
+  //   path: "/Introduction",
+  // },
 ];
 
 export const NAVIGATION_CATEGORY = [

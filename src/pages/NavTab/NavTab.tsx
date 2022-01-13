@@ -1,17 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { NAV_CATEGORY } from "Config";
+import { useDispatch, useSelector } from "react-redux";
+import { POSTS_LOADING_REQUEST } from "redux/postTypes";
+import ListBox from "components/ListBox/ListBox";
 
 const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
+  const [payloadCategory, setPayloadCategory] = useState("new");
   const history = useHistory();
   const params = useParams<Record<string, string | undefined>>();
-  const handleCategory = (cateory: string, path: string) => {
+  const dispatch = useDispatch();
+  const { posts, user } = useSelector((state: any) => state.post);
+  const token = localStorage.getItem("token");
+  const handleCategory = (cateory: string, path: string, payload: string) => {
     setIsActivatedCategory(cateory);
+    setPayloadCategory(payload);
     history.push(path);
   };
-  console.log(params.path);
+
+  useEffect(() => {
+    dispatch({
+      type: POSTS_LOADING_REQUEST,
+      payload: { payloadCategory, token },
+    });
+  }, [payloadCategory]);
+
   return (
     <ContainerNavTab>
       <BottomNav>
@@ -23,7 +38,7 @@ const NavTab = () => {
                 isActivatedCategory === category.name ? "activeOn" : ""
               }
               onClick={() => {
-                handleCategory(category.name, category.path);
+                handleCategory(category.name, category.path, category.payload);
               }}
             >
               <span> {category.name}</span>
@@ -31,7 +46,23 @@ const NavTab = () => {
           );
         })}
       </BottomNav>
-      <div>asd</div>
+      <PostContainer>
+        {posts?.map((list: any) => {
+          return (
+            <ListBox
+              key={list._id}
+              id={list.postId}
+              name={list.writer.nickname}
+              img={list.writer.profileImage}
+              time={list.createdAt}
+              contents={list.content}
+              contents_img={list.image?.info_image}
+              bookmark={list.count.bookmark}
+              comments={list.count.comment}
+            />
+          );
+        })}
+      </PostContainer>
     </ContainerNavTab>
   );
 };
@@ -59,5 +90,11 @@ const BottomNav = styled.div`
       border-bottom: 3px solid black;
     }
   }
+`;
+const PostContainer = styled.div`
+  margin-top: 50px;
+  ${({ theme }) => theme.media.mobile`
+    margin:50px 16px 0px 16px;
+  `}
 `;
 export default NavTab;

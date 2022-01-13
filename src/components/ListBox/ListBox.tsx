@@ -40,7 +40,9 @@ const ListBox: FC<Props> = ({
       <TopBottom>
         <ImgName>
           <div className="imgDiv">
-            <img src={img} />
+            <img
+              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${img}`}
+            />
           </div>
           <div className="nameDiv">
             <p>{name}</p>
@@ -54,7 +56,9 @@ const ListBox: FC<Props> = ({
       </TopBottom>
       <BoxCenter onClick={() => history.push(`/ListDetail/${id}`)}>
         <ContentsText>{contents}</ContentsText>
-        <img src={contents_img} />
+        <img
+          src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${contents_img}`}
+        />
       </BoxCenter>
       <TopBottom>
         <div className="likeComments">

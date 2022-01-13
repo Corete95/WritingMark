@@ -1,12 +1,13 @@
 import React, { FC, useCallback } from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Navigation from "./Navigation";
 
 const Nav: FC = () => {
   const [showNavigation, setShowNavigation] = useState(false);
-
+  const { user } = useSelector((state: any) => state.user);
   const onClickNavigation = useCallback(() => {
     setShowNavigation((prev) => !prev);
   }, []);
@@ -22,7 +23,7 @@ const Nav: FC = () => {
             <img src="/images/menu.png" />
           </IconMenu>
           <Logo onClick={goToMain}>글갈피</Logo>
-          <Link to="/MyPage">프로필</Link>
+          {user != null ? <Link to="/MyPage">프로필</Link> : ""}
           <IconMenu>
             <Link to="/login">
               <img src="/images/member.png" />

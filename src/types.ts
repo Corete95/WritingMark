@@ -43,3 +43,8 @@ export type Count = {
   like: number;
   comment: number;
 };
+export type User = {
+  nickname: string;
+  role: string;
+  _id: string;
+};
