@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { REGISTER_REQUEST, CLEAR_ERROR_REQUEST } from "redux/types";
 import { RootReducerType } from "redux/reducers";
@@ -28,7 +26,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const [localMsg, setLocalMsg] = useState("");
   const { message } = useSelector((state: any) => state.auth);
-  console.log(message);
+  const { user } = useSelector((state: any) => state.user);
 
   useEffect(() => {
     try {
@@ -53,6 +51,9 @@ const Register = () => {
     });
   };
 
+  if (user) {
+    return <Redirect to="/" />;
+  }
   return (
     <Container>
       <RegisterContainer>
@@ -120,7 +121,6 @@ const Register = () => {
           </ButtonDiv>
         </RegisterForm>
       </RegisterContainer>
-      <ToastContainer />
     </Container>
   );
 };

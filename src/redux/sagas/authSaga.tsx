@@ -29,7 +29,7 @@ function* loginUser(action: any) {
     const result: AxiosResponse = yield call(loginUserAPI, action.payload);
     yield put(loginSuccess(result.data));
     yield put(push("/"));
-    // yield location.reload();
+    yield location.reload();
   } catch (error: any) {
     yield put(loginFailure(error.response.data));
   }

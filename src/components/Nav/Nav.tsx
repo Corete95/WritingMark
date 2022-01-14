@@ -8,6 +8,7 @@ import Navigation from "./Navigation";
 const Nav: FC = () => {
   const [showNavigation, setShowNavigation] = useState(false);
   const { user } = useSelector((state: any) => state.user);
+
   const onClickNavigation = useCallback(() => {
     setShowNavigation((prev) => !prev);
   }, []);
@@ -15,6 +16,7 @@ const Nav: FC = () => {
   const goToMain = () => {
     window.location.replace("/");
   };
+
   return (
     <>
       <ContainerNav>
@@ -23,11 +25,16 @@ const Nav: FC = () => {
             <img src="/images/menu.png" />
           </IconMenu>
           <Logo onClick={goToMain}>글갈피</Logo>
-          {user != null ? <Link to="/MyPage">프로필</Link> : ""}
           <IconMenu>
-            <Link to="/login">
-              <img src="/images/member.png" />
-            </Link>
+            {user != null ? (
+              <Link to="/MyPage">
+                <img src="/images/member.png" />
+              </Link>
+            ) : (
+              <Link to="/login">
+                <img src="/images/member.png" />
+              </Link>
+            )}
           </IconMenu>
         </TopNav>
       </ContainerNav>

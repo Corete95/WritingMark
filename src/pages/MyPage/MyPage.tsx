@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import BookMark from "./BookMark";
 
@@ -12,7 +12,13 @@ interface Props {
 
 const MyPage = () => {
   const { user } = useSelector((state: any) => state.user);
+  const history = useHistory();
 
+  const LogOut = () => {
+    localStorage.removeItem("token");
+    history.push("/");
+    window.location.reload();
+  };
   return (
     <Container>
       <h1>회원 정보</h1>
@@ -34,7 +40,12 @@ const MyPage = () => {
                 회원정보 수정
               </Button>
             </Link>
-            <Button color="black" background="yellow" border="yellow">
+            <Button
+              onClick={LogOut}
+              color="black"
+              background="yellow"
+              border="yellow"
+            >
               로그아웃
             </Button>
           </EditBtn>

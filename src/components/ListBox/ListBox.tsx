@@ -55,10 +55,14 @@ const ListBox: FC<Props> = ({
         </EditDelete>
       </TopBottom>
       <BoxCenter onClick={() => history.push(`/ListDetail/${id}`)}>
-        <ContentsText>{contents}</ContentsText>
-        <img
-          src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${contents_img}`}
-        />
+        <ContentsText width={contents_img}>{contents}</ContentsText>
+        {contents_img ? (
+          <img
+            src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${contents_img}`}
+          />
+        ) : (
+          ""
+        )}
       </BoxCenter>
       <TopBottom>
         <div className="likeComments">
@@ -137,6 +141,7 @@ const ImgName = styled.div`
 const EditDelete = styled.div`
   margin: auto 0;
   color: gray;
+  font-size: 13px;
   span {
     cursor: pointer;
   }
@@ -155,8 +160,10 @@ const BoxCenter = styled.div`
     width: 30%;
   }
 `;
-const ContentsText = styled.div`
-  width: 70%;
+const ContentsText = styled.div<{ width: string }>`
+  ${({ width }) => {
+    return width ? `width:70%` : `width:100%`;
+  }};
   margin: 20px 23px;
   overflow: hidden;
   text-overflow: ellipsis;

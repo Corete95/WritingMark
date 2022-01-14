@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { NAVIGATION_CATEGORY } from "Config";
 import { useSelector } from "react-redux";
@@ -11,6 +11,8 @@ interface Props {
 
 const Navigation: FC<Props> = ({ show, onCloseModal }) => {
   const { user } = useSelector((state: any) => state.user);
+  const history = useHistory();
+
   const stopPropagation = useCallback(
     (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
       e.stopPropagation();
@@ -31,7 +33,15 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
         <Login>
           {user != null ? (
             <span>
-              <em>{user.nickname}</em> 님 반갑습니다!
+              <em
+                onClick={() => {
+                  history.push("/MyPage");
+                  onCloseModal();
+                }}
+              >
+                {user.nickname}
+              </em>
+              님 반갑습니다!
             </span>
           ) : (
             <span>
@@ -112,10 +122,10 @@ const Login = styled.div`
     font-weight: bold;
     font-size: 20px;
     line-height: 40px;
-    cursor: pointer;
 
     em {
       border-bottom: 1px solid black;
+      cursor: pointer;
     }
   }
 `;

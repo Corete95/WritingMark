@@ -17,6 +17,7 @@ const Login = () => {
   const [password, onChangePassword] = useInput("");
   const dispatch = useDispatch();
   const { message } = useSelector((state: any) => state.auth);
+  const { user } = useSelector((state: any) => state.user);
   const [localMsg, setLocalMsg] = useState("");
 
   useEffect(() => {
@@ -44,7 +45,9 @@ const Login = () => {
     },
     [email, password],
   );
-
+  if (user) {
+    return <Redirect to="/" />;
+  }
   return (
     <Container>
       <LoginContainer>
