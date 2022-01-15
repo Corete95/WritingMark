@@ -7,6 +7,9 @@ import {
   POSTS_LOADING_REQUEST,
   postLoadingSuccess,
   postLoadingFailure,
+  POSTS_LIKE_REQUEST,
+  postLikeSuccess,
+  postLikeFailure,
 } from "../postTypes";
 
 // All Posts load
@@ -25,7 +28,6 @@ const loadPostAPI = (payload: any) => {
 function* loadPosts(action: any) {
   try {
     const result: AxiosResponse = yield call(loadPostAPI, action.payload);
-    console.log(result, "loadPosts");
     yield put(postLoadingSuccess(result.data));
   } catch (error) {
     yield put(postLoadingFailure(error));
@@ -65,6 +67,39 @@ function* watchuploadPosts() {
   yield takeEvery(POSTS_WRITE_REQUEST, uploadPosts);
 }
 
+// PostLike
+const LikePostAPI = (payload: any) => {
+  const config: any = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const token = payload.token;
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+  return axios.post(`user/bookmark/${payload.id}`, {}, config);
+};
+
+function* LikePosts(action: any) {
+  try {
+    console.log("Like 전송전", action);
+    const result: AxiosResponse = yield call(LikePostAPI, action.payload);
+    console.log("Like 전송후", result);
+    yield put(postLikeSuccess(result?.data?.result));
+  } catch (error: any) {
+    yield put(postLikeFailure(error?.response?.data));
+  }
+}
+
+function* watchupLikePosts() {
+  yield takeEvery(POSTS_LIKE_REQUEST, LikePosts);
+}
+
 export default function* postSaga() {
-  yield all([fork(watchuploadPosts), fork(watchLoadPosts)]);
+  yield all([
+    fork(watchuploadPosts),
+    fork(watchLoadPosts),
+    fork(watchupLikePosts),
+  ]);
 }

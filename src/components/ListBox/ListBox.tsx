@@ -1,8 +1,10 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
-
+import { POSTS_LIKE_REQUEST } from "redux/postTypes";
+import axios from "axios";
 interface Props {
   id: number;
   name: string;
@@ -12,8 +14,7 @@ interface Props {
   contents_img: string;
   bookmark: number;
   comments: number;
-  // changeBookmark(id: number): void;
-  changeBookmark?: any;
+  userbookmark?: any;
 }
 const ListBox: FC<Props> = ({
   id,
@@ -24,16 +25,29 @@ const ListBox: FC<Props> = ({
   contents_img,
   bookmark,
   comments,
-  changeBookmark,
+  userbookmark,
 }) => {
+  const liked = userbookmark.find((v: any) => v === user?._id);
+  const [like, setLike] = useState(bookmark);
+  const [bookMarkState, setBookMarkState] = useState(liked);
+  const { user } = useSelector((state: any) => state.user);
   const history = useHistory();
+  const token = localStorage.getItem("token");
 
-  const stopPropagation = useCallback(
-    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-      e.stopPropagation();
-    },
-    [],
-  );
+  const likeChange = useCallback(() => {
+    const config: any = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    if (token) {
+      config.headers["authorization"] = token;
+    }
+    axios.post(`user/bookmark/${id}`, {}, config).then((res) => {
+      setLike((preData) => preData + 1);
+      setBookMarkState(res.data.result.userBookmark);
+    });
+  }, []);
 
   return (
     <ListBoxContainer key={id}>
@@ -66,10 +80,13 @@ const ListBox: FC<Props> = ({
       </BoxCenter>
       <TopBottom>
         <div className="likeComments">
-          <img src="/images/bookmarkfull.png" onClick={stopPropagation} />
-          <span onClick={() => changeBookmark(id)}>
-            글갈피 {bookmark}개
-            <span className="comments">댓글{comments}개 </span>
+          {bookMarkState ? (
+            <img src="/images/bookmarkfull.png" onClick={likeChange} />
+          ) : (
+            <img src="/images/bookmark.png" onClick={likeChange} />
+          )}
+          <span>
+            글갈피 {like}개<span className="comments">댓글{comments}개 </span>
           </span>
         </div>
       </TopBottom>

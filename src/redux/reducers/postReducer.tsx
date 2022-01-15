@@ -7,6 +7,10 @@ import {
   POSTS_WRITE_FAILURE,
   POSTS_WRITE_SUCCESS,
   PostWriteActionsType,
+  POSTS_LIKE_REQUEST,
+  POSTS_LIKE_SUCCESS,
+  POSTS_LIKE_FAILURE,
+  postLikeActionsType,
 } from "../postTypes";
 import { PostType, User } from "types";
 
@@ -15,18 +19,16 @@ type State = {
   loading: boolean;
   posts: PostType[];
   error: any;
-  user: User[];
 };
 const initialState = {
   isAuthenticated: null,
   loading: false,
   posts: [],
   error: "",
-  user: [],
 };
 export default function (
   state: State = initialState,
-  action: PostWriteActionsType | PostLoadingActionsType,
+  action: PostWriteActionsType | PostLoadingActionsType | postLikeActionsType,
 ) {
   switch (action.type) {
     case POSTS_LOADING_REQUEST:
@@ -36,11 +38,9 @@ export default function (
         loading: true,
       };
     case POSTS_LOADING_SUCCESS:
-      console.log("succes", action.payload);
       return {
         ...state,
         posts: [...state.posts, ...action.payload.result],
-        user: action.payload.user,
         loading: false,
       };
     case POSTS_LOADING_FAILURE:
@@ -61,6 +61,23 @@ export default function (
         loading: false,
       };
     case POSTS_WRITE_FAILURE:
+      return {
+        ...state,
+        error: action.payload.message,
+        loading: false,
+      };
+    case POSTS_LIKE_REQUEST:
+      return {
+        ...state,
+        posts: [],
+        loading: true,
+      };
+    case POSTS_LIKE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case POSTS_LIKE_FAILURE:
       return {
         ...state,
         error: action.payload.message,

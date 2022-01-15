@@ -51,7 +51,6 @@ const BookMark: FC = () => {
               contents_img={list.contents_img}
               bookmark={list.bookmark}
               comments={list.comments}
-              changeBookmark={changeBookmark}
             />
           );
         })}

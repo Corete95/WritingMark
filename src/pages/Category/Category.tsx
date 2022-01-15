@@ -26,7 +26,6 @@ const Category: FC<IListBox> = () => {
               contents_img={list.contents_img}
               bookmark={list.bookmark}
               comments={list.comments}
-              changeBookmark={changeBookmark}
             />
           );
         })}

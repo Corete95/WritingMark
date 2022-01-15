@@ -10,6 +10,7 @@ const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const [payloadCategory, setPayloadCategory] = useState("new");
   const { posts } = useSelector((state: any) => state.post);
+  const { user } = useSelector((state: any) => state.user);
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -25,7 +26,7 @@ const NavTab = () => {
       type: POSTS_LOADING_REQUEST,
       payload: { payloadCategory, token },
     });
-  }, [dispatch, payloadCategory]);
+  }, [payloadCategory]);
 
   return (
     <ContainerNavTab>
@@ -59,6 +60,7 @@ const NavTab = () => {
               contents_img={list.image?.info_image}
               bookmark={list.count.bookmark}
               comments={list.count.comment}
+              userbookmark={list?.userBookmark}
             />
           );
         })}

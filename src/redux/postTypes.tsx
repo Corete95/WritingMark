@@ -37,3 +37,22 @@ export const postWriteFailure = (error: any) => ({
 export type PostWriteActionsType =
   | ReturnType<typeof postWriteSuccess>
   | ReturnType<typeof postWriteFailure>;
+
+//// Post_Like
+export const POSTS_LIKE_REQUEST = "POST_LIKE_REQUEST";
+export const POSTS_LIKE_SUCCESS = "POST_LIKE_SUCCESS";
+export const POSTS_LIKE_FAILURE = "POST_LIKE_FAILURE";
+
+export const postLikeRequest = () => ({ type: POSTS_LIKE_REQUEST });
+export const postLikeSuccess = (result: any) => ({
+  type: POSTS_LIKE_SUCCESS,
+  payload: result,
+});
+export const postLikeFailure = (error: any) => ({
+  type: POSTS_LIKE_FAILURE,
+  payload: error,
+});
+
+export type postLikeActionsType =
+  | ReturnType<typeof postLikeSuccess>
+  | ReturnType<typeof postLikeFailure>;

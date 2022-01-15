@@ -31,6 +31,7 @@ export type PostType = {
   info_url: string;
   postId: number;
   writer: string;
+  userBookmark: any;
   __v: number;
   _id: string;
 };
