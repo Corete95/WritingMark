@@ -56,3 +56,41 @@ export const postLikeFailure = (error: any) => ({
 export type postLikeActionsType =
   | ReturnType<typeof postLikeSuccess>
   | ReturnType<typeof postLikeFailure>;
+
+//// Post_MyWrite
+export const POSTS_MYWRITE_REQUEST = "POST_MYWRITE_REQUEST";
+export const POSTS_MYWRITE_SUCCESS = "POST_MYWRITE_SUCCESS";
+export const POSTS_MYWRITE_FAILURE = "POST_MYWRITE_FAILURE";
+
+export const postMyWriteRequest = () => ({ type: POSTS_MYWRITE_REQUEST });
+export const postMyWriteSuccess = (result: PostType[]) => ({
+  type: POSTS_MYWRITE_SUCCESS,
+  payload: result,
+});
+export const postMyWriteFailure = (error: any) => ({
+  type: POSTS_MYWRITE_FAILURE,
+  payload: error,
+});
+
+export type postMyWriteActionsType =
+  | ReturnType<typeof postLikeSuccess>
+  | ReturnType<typeof postLikeFailure>;
+
+//// Post_MyWrite
+export const POSTS_MYLIKE_REQUEST = "POST_MYLIKE_REQUEST";
+export const POSTS_MYLIKE_SUCCESS = "POST_MYLIKE_SUCCESS";
+export const POSTS_MYLIKE_FAILURE = "POST_MYLIKE_FAILURE";
+
+export const postMyLikeRequest = () => ({ type: POSTS_MYLIKE_REQUEST });
+export const postMyLikeSuccess = (result: PostType[]) => ({
+  type: POSTS_MYLIKE_SUCCESS,
+  payload: result,
+});
+export const postMyLikeFailure = (error: any) => ({
+  type: POSTS_MYLIKE_FAILURE,
+  payload: error,
+});
+
+export type postMyLikeActionsType =
+  | ReturnType<typeof postLikeSuccess>
+  | ReturnType<typeof postLikeFailure>;

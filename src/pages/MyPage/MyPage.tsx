@@ -26,12 +26,12 @@ const MyPage = () => {
         <ProfileImg>
           <div>
             <img
-              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${user.profileImage}`}
+              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${user?.profileImage}`}
             />
           </div>
         </ProfileImg>
         <ProfileInformation>
-          <span>{user.nickname}님 </span>
+          <span>{user?.nickname}님 </span>
           <br />
           <span>반갑습니다</span>
           <EditBtn>

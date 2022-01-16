@@ -6,7 +6,7 @@ import { routerMiddleware } from "connected-react-router";
 import createRootReducer from "./redux/reducers/index";
 import rootSaga from "./redux/sagas";
 
-export const history = createBrowserHistory();
+export const history = createBrowserHistory({ forceRefresh: true });
 
 const sagaMiddleware = createSagaMiddleware();
 

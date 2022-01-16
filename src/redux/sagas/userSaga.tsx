@@ -20,7 +20,6 @@ const userLoadingAPI = (token: string) => {
 function* userLoading(action: any) {
   try {
     const result: AxiosResponse = yield call(userLoadingAPI, action.payload);
-    console.log("USER", result);
     yield put(userLoadingSuccess(result.data));
   } catch (error: any) {
     yield put(userLoadingFailure(error.response));

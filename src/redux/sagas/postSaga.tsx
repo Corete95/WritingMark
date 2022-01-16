@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
+import { push } from "connected-react-router";
 import {
   POSTS_WRITE_REQUEST,
   postWriteSuccess,
@@ -10,6 +11,12 @@ import {
   POSTS_LIKE_REQUEST,
   postLikeSuccess,
   postLikeFailure,
+  POSTS_MYWRITE_REQUEST,
+  postMyWriteSuccess,
+  postMyWriteFailure,
+  POSTS_MYLIKE_REQUEST,
+  postMyLikeSuccess,
+  postMyLikeFailure,
 } from "../postTypes";
 
 // All Posts load
@@ -58,6 +65,7 @@ function* uploadPosts(action: any) {
     const result: AxiosResponse = yield call(uploadPostAPI, action.payload);
     console.log("2", result);
     yield put(postWriteSuccess(result.data.result));
+    yield put(push("/"));
   } catch (error: any) {
     yield put(postWriteFailure(error.response.data));
   }
@@ -96,10 +104,70 @@ function* watchupLikePosts() {
   yield takeEvery(POSTS_LIKE_REQUEST, LikePosts);
 }
 
+// Post MyWrite
+const MyWritePostAPI = (payload: any) => {
+  const config: any = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const token = payload;
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+  return axios.get("user/posts", config);
+};
+
+function* MyWritePosts(action: any) {
+  try {
+    const result: AxiosResponse = yield call(MyWritePostAPI, action.payload);
+    yield put(postMyWriteSuccess(result.data));
+  } catch (error: any) {
+    console.log(error.response);
+    yield put(postMyWriteFailure(error?.response?.data));
+  }
+}
+
+function* watchMyWritePosts() {
+  yield takeEvery(POSTS_MYWRITE_REQUEST, MyWritePosts);
+}
+
+// Post MyLike
+const MyLikePostAPI = (payload: any) => {
+  const config: any = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const token = payload;
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+  return axios.get("user/bookmarks", config);
+};
+
+function* MyLikePosts(action: any) {
+  try {
+    console.log("MyWrite 전송전", action);
+    const result: AxiosResponse = yield call(MyLikePostAPI, action.payload);
+    console.log("MyWrite 전송후", result);
+    yield put(postMyLikeSuccess(result.data));
+  } catch (error: any) {
+    console.log(error.response);
+    yield put(postMyLikeFailure(error?.response?.data));
+  }
+}
+
+function* watchMyLikePosts() {
+  yield takeEvery(POSTS_MYLIKE_REQUEST, MyLikePosts);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchuploadPosts),
     fork(watchLoadPosts),
     fork(watchupLikePosts),
+    fork(watchMyWritePosts),
+    fork(watchMyLikePosts),
   ]);
 }

@@ -27,10 +27,11 @@ const ListBox: FC<Props> = ({
   comments,
   userbookmark,
 }) => {
-  const liked = userbookmark.find((v: any) => v === user?._id);
+  const { user } = useSelector((state: any) => state.user);
+  const liked = userbookmark?.find((v: any) => v == user?._id);
   const [like, setLike] = useState(bookmark);
   const [bookMarkState, setBookMarkState] = useState(liked);
-  const { user } = useSelector((state: any) => state.user);
+
   const history = useHistory();
   const token = localStorage.getItem("token");
 

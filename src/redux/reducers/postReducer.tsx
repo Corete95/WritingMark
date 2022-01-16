@@ -11,6 +11,14 @@ import {
   POSTS_LIKE_SUCCESS,
   POSTS_LIKE_FAILURE,
   postLikeActionsType,
+  POSTS_MYWRITE_REQUEST,
+  POSTS_MYWRITE_SUCCESS,
+  POSTS_MYWRITE_FAILURE,
+  postMyWriteActionsType,
+  POSTS_MYLIKE_REQUEST,
+  POSTS_MYLIKE_SUCCESS,
+  POSTS_MYLIKE_FAILURE,
+  postMyLikeActionsType,
 } from "../postTypes";
 import { PostType, User } from "types";
 
@@ -28,22 +36,42 @@ const initialState = {
 };
 export default function (
   state: State = initialState,
-  action: PostWriteActionsType | PostLoadingActionsType | postLikeActionsType,
+  action:
+    | PostWriteActionsType
+    | PostLoadingActionsType
+    | postLikeActionsType
+    | postMyWriteActionsType
+    | postMyLikeActionsType,
 ) {
   switch (action.type) {
     case POSTS_LOADING_REQUEST:
+    case POSTS_MYWRITE_REQUEST:
+    case POSTS_MYLIKE_REQUEST:
       return {
         ...state,
         posts: [],
         loading: true,
       };
     case POSTS_LOADING_SUCCESS:
+    case POSTS_MYWRITE_SUCCESS:
+    case POSTS_MYLIKE_SUCCESS:
+      console.log("suc", action);
       return {
         ...state,
         posts: [...state.posts, ...action.payload.result],
         loading: false,
       };
+    // case POSTS_MYWRITE_SUCCESS:
+    // case POSTS_MYLIKE_SUCCESS:
+    //   console.log("ok", action);
+    //   return {
+    //     ...state,
+    //     posts: [...state.posts, ...action.payload],
+    //     loading: false,
+    //   };
     case POSTS_LOADING_FAILURE:
+    case POSTS_MYWRITE_FAILURE:
+    case POSTS_MYLIKE_FAILURE:
       console.log("err", action);
       return {
         ...state,

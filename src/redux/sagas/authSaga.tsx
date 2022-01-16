@@ -29,7 +29,6 @@ function* loginUser(action: any) {
     const result: AxiosResponse = yield call(loginUserAPI, action.payload);
     yield put(loginSuccess(result.data));
     yield put(push("/"));
-    yield location.reload();
   } catch (error: any) {
     yield put(loginFailure(error.response.data));
   }
@@ -49,7 +48,6 @@ function* registerUser(action: any) {
     const result: AxiosResponse = yield call(registerUserAPI, action.payload);
     yield put(registerSuccess(result.data.result));
     yield put(push("/Login"));
-    yield location.reload();
   } catch (error: any) {
     yield put(registerFailure(error.response.data));
   }
