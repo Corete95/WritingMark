@@ -1,20 +1,51 @@
 import Loading from "components/Loading";
 import useInput from "hooks/useInput";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { USER_INFO_EDIT_REQUEST } from "redux/userTypes";
+import axios, { AxiosResponse } from "axios";
 
 const EditInformation = () => {
+  const dispatch = useDispatch();
+  const { test, user } = useSelector((state: any) => state.user);
   const [imgFile, setImgFile] = useState(null);
   const [loading, setLoading] = useState<boolean | null>(null);
-  const [imgSrc, setImgSrc] = useState<string>("/images/profile.png");
+  const [imgSrc, setImgSrc] = useState<string>("");
   const ImgInput = useRef<HTMLInputElement>(null);
-  const [email, onChangeEmail] = useInput("");
-  const [nickname, onChangeNickname] = useInput("");
+  const [email, onChangeEmail, setEmail] = useInput("");
+  const [nickname, onChangeNickname, setNickname] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordCheck, setNewPasswordCheck] = useState("");
   const [newPasswordError, setNewPasswordError] = useState(false);
+  const token = localStorage.getItem("token");
 
+  // useEffect(() => {
+  //   dispatch({
+  //     type: USER_INFO_EDIT_REQUEST,
+  //     payload: token,
+  //   });
+  //   setEmail(user?.email);
+  //   // setImgSrc(user?.profileImage);
+  // }, [dispatch]);
+
+  useEffect(() => {
+    const config: any = {
+      headers: {},
+    };
+    if (token) {
+      config.headers["authorization"] = token;
+    }
+    axios.get("user/info/edit", config).then((res) => {
+      setEmail(res.data.userinfo.email);
+      setNickname(res.data.userinfo.nickname);
+      setImgSrc(
+        "https://writingmark.s3.ap-northeast-2.amazonaws.com/user/" +
+          res.data.userinfo.profileImage,
+      );
+    });
+  }, []);
   const imageHandler = (e: any) => {
     setLoading(true);
     const imageFile = e.target.files[0];
@@ -57,10 +88,12 @@ const EditInformation = () => {
   );
   console.log("email:", email);
   console.log("nickname:", nickname);
-  console.log("password:", password);
-  console.log("Newpassword:", newPassword);
-  console.log("NewpasswordCheck:", newPasswordCheck);
+  // console.log("password:", password);
+  // console.log("Newpassword:", newPassword);
+  // console.log("NewpasswordCheck:", newPasswordCheck);
   console.log("img:", imgSrc);
+  console.log("User:", user);
+
   return (
     <Container>
       <InformationContaniner>
@@ -86,7 +119,11 @@ const EditInformation = () => {
             </InputDiv>
             <InputDiv>
               <Label>닉네임</Label>
-              <Input type="text" value={nickname} onChange={onChangeNickname} />
+              <Input
+                type="text"
+                value={nickname || ""}
+                onChange={onChangeNickname}
+              />
             </InputDiv>
             <InputDiv>
               <Label>현재 비밀번호</Label>

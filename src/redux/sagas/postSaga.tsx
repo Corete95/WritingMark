@@ -148,9 +148,7 @@ const MyLikePostAPI = (payload: any) => {
 
 function* MyLikePosts(action: any) {
   try {
-    console.log("MyWrite 전송전", action);
     const result: AxiosResponse = yield call(MyLikePostAPI, action.payload);
-    console.log("MyWrite 전송후", result);
     yield put(postMyLikeSuccess(result.data));
   } catch (error: any) {
     console.log(error.response);
