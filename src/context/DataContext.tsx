@@ -25,23 +25,21 @@ export const DataProvider: FC = ({ children }) => {
   // console.log("test", history);
   // console.log("1", queryString);
   // console.log("2", listData);
-  const changeBookmark = (id: number) => {
-    setListData(
-      listData?.map((data: IListBox) => {
-        if (data?.id == id) {
-          return {
-            ...data,
-            bookmark: data.bookmark + 1,
-          };
-        }
-        return data;
-      }),
-    );
-  };
+  // const changeBookmark = (id: number) => {
+  //   setListData(
+  //     listData?.map((data: IListBox) => {
+  //       if (data?.id == id) {
+  //         return {
+  //           ...data,
+  //           bookmark: data.bookmark + 1,
+  //         };
+  //       }
+  //       return data;
+  //     }),
+  //   );
+  // };
   return (
-    <DataContext.Provider
-      value={{ listData, setListData, changeBookmark, setQueryString }}
-    >
+    <DataContext.Provider value={{ listData, setListData, setQueryString }}>
       {children}
     </DataContext.Provider>
   );

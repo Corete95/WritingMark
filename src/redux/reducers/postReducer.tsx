@@ -3,6 +3,10 @@ import {
   POSTS_LOADING_SUCCESS,
   POSTS_LOADING_FAILURE,
   PostLoadingActionsType,
+  POSTS_CATEGORY_REQUEST,
+  POSTS_CATEGORY_SUCCESS,
+  POSTS_CATEGORY_FAILURE,
+  PostCategoryActionsType,
   POSTS_WRITE_REQUEST,
   POSTS_WRITE_FAILURE,
   POSTS_WRITE_SUCCESS,
@@ -20,7 +24,7 @@ import {
   POSTS_MYLIKE_FAILURE,
   postMyLikeActionsType,
 } from "../postTypes";
-import { PostType, User } from "types";
+import { PostType } from "types";
 
 type State = {
   isAuthenticated: string | null;
@@ -41,10 +45,12 @@ export default function (
     | PostLoadingActionsType
     | postLikeActionsType
     | postMyWriteActionsType
-    | postMyLikeActionsType,
+    | postMyLikeActionsType
+    | PostCategoryActionsType,
 ) {
   switch (action.type) {
     case POSTS_LOADING_REQUEST:
+    case POSTS_CATEGORY_REQUEST:
     case POSTS_MYWRITE_REQUEST:
     case POSTS_MYLIKE_REQUEST:
       return {
@@ -53,9 +59,9 @@ export default function (
         loading: true,
       };
     case POSTS_LOADING_SUCCESS:
+    case POSTS_CATEGORY_SUCCESS:
     case POSTS_MYWRITE_SUCCESS:
     case POSTS_MYLIKE_SUCCESS:
-      console.log("suc", action);
       return {
         ...state,
         posts: [...state.posts, ...action.payload.result],
@@ -70,6 +76,7 @@ export default function (
     //     loading: false,
     //   };
     case POSTS_LOADING_FAILURE:
+    case POSTS_CATEGORY_FAILURE:
     case POSTS_MYWRITE_FAILURE:
     case POSTS_MYLIKE_FAILURE:
       console.log("err", action);

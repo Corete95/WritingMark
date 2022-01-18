@@ -1,10 +1,28 @@
 export interface IListBox {
-  id: number;
-  name: string;
-  img: string;
-  time: string;
-  contents: string;
-  contents_img: string;
+  _id: number;
+  postId: number;
+  info_url: string;
+  info_title: string;
+  createdAt: string;
+  content: string;
+  category: string;
+  userBookmark: string;
+  image: Image;
+  count: Count;
+  writer: Writer;
+}
+
+export interface Count {
   bookmark: number;
-  comments: number;
+  comment: number;
+}
+
+export interface Writer {
+  nickname: string;
+  profileImage: string;
+}
+
+export interface Image {
+  info_image: string;
+  originalImageName: string;
 }

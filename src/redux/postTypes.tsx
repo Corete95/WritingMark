@@ -19,6 +19,25 @@ export type PostLoadingActionsType =
   | ReturnType<typeof postLoadingSuccess>
   | ReturnType<typeof postLoadingFailure>;
 
+//// Post_Category
+export const POSTS_CATEGORY_REQUEST = "POST_CATEGORY_REQUEST";
+export const POSTS_CATEGORY_SUCCESS = "POST_CATEGORY_SUCCESS";
+export const POSTS_CATEGORY_FAILURE = "POST_CATEGORY_FAILURE";
+
+export const postCategoryRequest = () => ({ type: POSTS_CATEGORY_REQUEST });
+export const postCategorySuccess = (result: PostType[]) => ({
+  type: POSTS_CATEGORY_SUCCESS,
+  payload: result,
+});
+export const postCategoryFailure = (error: any) => ({
+  type: POSTS_CATEGORY_FAILURE,
+  payload: error,
+});
+
+export type PostCategoryActionsType =
+  | ReturnType<typeof postCategorySuccess>
+  | ReturnType<typeof postCategoryFailure>;
+
 //// Post_Write
 export const POSTS_WRITE_REQUEST = "POST_WRITE_REQUEST";
 export const POSTS_WRITE_SUCCESS = "POST_WRITE_SUCCESS";

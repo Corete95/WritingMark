@@ -2,12 +2,15 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
 import { push } from "connected-react-router";
 import {
-  POSTS_WRITE_REQUEST,
-  postWriteSuccess,
-  postWriteFailure,
   POSTS_LOADING_REQUEST,
   postLoadingSuccess,
   postLoadingFailure,
+  POSTS_CATEGORY_REQUEST,
+  postCategorySuccess,
+  postCategoryFailure,
+  POSTS_WRITE_REQUEST,
+  postWriteSuccess,
+  postWriteFailure,
   POSTS_LIKE_REQUEST,
   postLikeSuccess,
   postLikeFailure,
@@ -45,7 +48,28 @@ function* watchLoadPosts() {
   yield takeEvery(POSTS_LOADING_REQUEST, loadPosts);
 }
 
-// PostWrite
+// Post Category
+
+const categoryPostAPI = (payload: any) => {
+  console.log(payload);
+  return axios.get(`posts/category/${payload.path}`);
+};
+
+function* categoryPosts(action: any) {
+  try {
+    const result: AxiosResponse = yield call(categoryPostAPI, action.payload);
+    console.log("result", result);
+    yield put(postCategorySuccess(result.data));
+  } catch (error) {
+    yield put(postCategoryFailure(error));
+  }
+}
+
+function* watchCategoryPosts() {
+  yield takeEvery(POSTS_CATEGORY_REQUEST, categoryPosts);
+}
+
+// Post Write
 const uploadPostAPI = (payload: any) => {
   const config: any = {
     headers: {
@@ -75,7 +99,7 @@ function* watchuploadPosts() {
   yield takeEvery(POSTS_WRITE_REQUEST, uploadPosts);
 }
 
-// PostLike
+// Post Like
 const LikePostAPI = (payload: any) => {
   const config: any = {
     headers: {
@@ -167,5 +191,6 @@ export default function* postSaga() {
     fork(watchupLikePosts),
     fork(watchMyWritePosts),
     fork(watchMyLikePosts),
+    fork(watchCategoryPosts),
   ]);
 }

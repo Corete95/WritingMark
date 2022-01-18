@@ -49,14 +49,14 @@ function* userInfoEdit(action: any) {
     console.log("전송전:", action);
     const result: AxiosResponse = yield call(userInfoEditAPI, action.payload);
     console.log("전송후:", result);
-    yield put(userLoadingSuccess(result.data));
+    yield put(userInfoEditSuccess(result.data));
   } catch (error: any) {
-    yield put(userLoadingFailure(error.response));
+    yield put(userInfoEditFailure(error.response));
   }
 }
 
 function* watchuserInfoEdit() {
-  yield takeEvery(USER_LOADING_REQUEST, userInfoEdit);
+  yield takeEvery(USER_INFO_EDIT_REQUEST, userInfoEdit);
 }
 
 export default function* userSaga() {

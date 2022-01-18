@@ -5,12 +5,12 @@ import { NAV_CATEGORY } from "Config";
 import { useDispatch, useSelector } from "react-redux";
 import { POSTS_LOADING_REQUEST } from "redux/postTypes";
 import ListBox from "components/ListBox/ListBox";
+import { IListBox } from "typings/db";
 
 const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const [payloadCategory, setPayloadCategory] = useState("new");
   const { posts } = useSelector((state: any) => state.post);
-  const { user } = useSelector((state: any) => state.user);
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -48,7 +48,7 @@ const NavTab = () => {
         })}
       </BottomNav>
       <PostContainer>
-        {posts?.map((list: any) => {
+        {posts?.map((list: IListBox) => {
           return (
             <ListBox
               key={list._id}

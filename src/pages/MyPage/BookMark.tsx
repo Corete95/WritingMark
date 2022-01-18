@@ -32,8 +32,6 @@ const BookMark: FC = () => {
     }
   }, [dispatch, bookMarkCategory]);
 
-  console.log(posts);
-  console.log(posts?.postId);
   return (
     <>
       <BookMarkContainer>
@@ -85,7 +83,7 @@ const BookMark: FC = () => {
                 />
               );
             })} */}
-        {posts?.map((list: any) => {
+        {posts?.map((list: IListBox) => {
           return (
             <ListBox
               key={list._id}

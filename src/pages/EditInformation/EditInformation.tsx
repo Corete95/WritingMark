@@ -26,8 +26,7 @@ const EditInformation = () => {
   //     type: USER_INFO_EDIT_REQUEST,
   //     payload: token,
   //   });
-  //   setEmail(user?.email);
-  //   // setImgSrc(user?.profileImage);
+  //   setEmail(user.email);
   // }, [dispatch]);
 
   useEffect(() => {
@@ -86,13 +85,12 @@ const EditInformation = () => {
     },
     [newPassword],
   );
-  console.log("email:", email);
-  console.log("nickname:", nickname);
+  // console.log("email:", email);
+  // console.log("nickname:", nickname);
   // console.log("password:", password);
   // console.log("Newpassword:", newPassword);
   // console.log("NewpasswordCheck:", newPasswordCheck);
-  console.log("img:", imgSrc);
-  console.log("User:", user);
+  // console.log("img:", imgSrc);
 
   return (
     <Container>

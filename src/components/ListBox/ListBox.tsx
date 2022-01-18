@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
 import { POSTS_LIKE_REQUEST } from "redux/postTypes";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 interface Props {
   id: number;
   name: string;
@@ -28,7 +28,7 @@ const ListBox: FC<Props> = ({
   userbookmark,
 }) => {
   const { user } = useSelector((state: any) => state.user);
-  const liked = userbookmark?.find((v: any) => v == user?._id);
+  const liked = userbookmark?.find((v: number) => v == user?._id);
   const [like, setLike] = useState(bookmark);
   const [bookMarkState, setBookMarkState] = useState(liked);
 
@@ -36,7 +36,7 @@ const ListBox: FC<Props> = ({
   const token = localStorage.getItem("token");
 
   const likeChange = useCallback(() => {
-    const config: any = {
+    const config: AxiosRequestConfig | any = {
       headers: {
         "Content-Type": "application/json",
       },

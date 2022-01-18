@@ -17,7 +17,7 @@ export const NAV_CATEGORY = [
 ];
 
 export const NAVIGATION_CATEGORY = [
-  { id: 1, name: "웹소설 · 웹툰", path: "/Category/web-novel" },
+  { id: 1, name: "웹소설 · 웹툰", path: "/Category/web-content" },
   { id: 2, name: "에세이", path: "/Category/essay" },
   { id: 3, name: "소설", path: "/Category/novel" },
   { id: 4, name: "시", path: "/Category/poetry" },
@@ -31,7 +31,7 @@ export const BOOKMARK_CATEGORY = [
 ];
 
 export const CATEGORY_OPTIONS = [
-  { id: 1, value: "web-novel", label: "웹소설 · 웹툰" },
+  { id: 1, value: "web-content", label: "웹소설 · 웹툰" },
   { id: 2, value: "essay", label: "에세이" },
   { id: 3, value: "novel", label: "소설" },
   { id: 4, value: "poetry", label: "시" },
