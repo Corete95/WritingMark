@@ -20,6 +20,7 @@ export interface Count {
 export interface Writer {
   nickname: string;
   profileImage: string;
+  _id: string;
 }
 
 export interface Image {

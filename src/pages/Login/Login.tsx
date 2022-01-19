@@ -45,9 +45,11 @@ const Login = () => {
     },
     [email, password],
   );
-  if (user) {
+
+  if (user?._id) {
     return <Redirect to="/" />;
   }
+
   return (
     <Container>
       <LoginContainer>

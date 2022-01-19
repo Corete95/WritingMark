@@ -11,15 +11,15 @@ import {
   POSTS_WRITE_REQUEST,
   postWriteSuccess,
   postWriteFailure,
-  POSTS_LIKE_REQUEST,
-  postLikeSuccess,
-  postLikeFailure,
   POSTS_MYWRITE_REQUEST,
   postMyWriteSuccess,
   postMyWriteFailure,
   POSTS_MYLIKE_REQUEST,
   postMyLikeSuccess,
   postMyLikeFailure,
+  POSTS_DELETE_REQUEST,
+  postDeleteSuccess,
+  postDeleteFailure,
 } from "../postTypes";
 
 // All Posts load
@@ -85,9 +85,7 @@ const uploadPostAPI = (payload: any) => {
 
 function* uploadPosts(action: any) {
   try {
-    console.log("1", action);
     const result: AxiosResponse = yield call(uploadPostAPI, action.payload);
-    console.log("2", result);
     yield put(postWriteSuccess(result.data.result));
     yield put(push("/"));
   } catch (error: any) {
@@ -97,35 +95,6 @@ function* uploadPosts(action: any) {
 
 function* watchuploadPosts() {
   yield takeEvery(POSTS_WRITE_REQUEST, uploadPosts);
-}
-
-// Post Like
-const LikePostAPI = (payload: any) => {
-  const config: any = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  const token = payload.token;
-  if (token) {
-    config.headers["authorization"] = token;
-  }
-  return axios.post(`user/bookmark/${payload.id}`, {}, config);
-};
-
-function* LikePosts(action: any) {
-  try {
-    console.log("Like 전송전", action);
-    const result: AxiosResponse = yield call(LikePostAPI, action.payload);
-    console.log("Like 전송후", result);
-    yield put(postLikeSuccess(result?.data?.result));
-  } catch (error: any) {
-    yield put(postLikeFailure(error?.response?.data));
-  }
-}
-
-function* watchupLikePosts() {
-  yield takeEvery(POSTS_LIKE_REQUEST, LikePosts);
 }
 
 // Post MyWrite
@@ -184,13 +153,39 @@ function* watchMyLikePosts() {
   yield takeEvery(POSTS_MYLIKE_REQUEST, MyLikePosts);
 }
 
+// Post Delete
+const DeletePostAPI = (payload: any) => {
+  const config: any = {
+    headers: {},
+  };
+  const token = payload;
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+  return axios.delete(`posts/${payload}`, config);
+};
+
+function* DeletePosts(action: any) {
+  try {
+    const result: AxiosResponse = yield call(DeletePostAPI, action.payload);
+    yield put(postDeleteSuccess(result.data));
+  } catch (error: any) {
+    console.log(error.response);
+    yield put(postDeleteFailure(error?.response?.data));
+  }
+}
+
+function* watchDeletePosts() {
+  yield takeEvery(POSTS_DELETE_REQUEST, DeletePosts);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchuploadPosts),
     fork(watchLoadPosts),
-    fork(watchupLikePosts),
     fork(watchMyWritePosts),
     fork(watchMyLikePosts),
     fork(watchCategoryPosts),
+    fork(watchDeletePosts),
   ]);
 }

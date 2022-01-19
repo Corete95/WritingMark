@@ -11,10 +11,6 @@ import {
   POSTS_WRITE_FAILURE,
   POSTS_WRITE_SUCCESS,
   PostWriteActionsType,
-  POSTS_LIKE_REQUEST,
-  POSTS_LIKE_SUCCESS,
-  POSTS_LIKE_FAILURE,
-  postLikeActionsType,
   POSTS_MYWRITE_REQUEST,
   POSTS_MYWRITE_SUCCESS,
   POSTS_MYWRITE_FAILURE,
@@ -23,6 +19,10 @@ import {
   POSTS_MYLIKE_SUCCESS,
   POSTS_MYLIKE_FAILURE,
   postMyLikeActionsType,
+  POSTS_DELETE_REQUEST,
+  POSTS_DELETE_SUCCESS,
+  POSTS_DELETE_FAILURE,
+  postDeleteActionsType,
 } from "../postTypes";
 import { PostType } from "types";
 
@@ -30,12 +30,14 @@ type State = {
   isAuthenticated: string | null;
   loading: boolean;
   posts: PostType[];
+  postDetail: PostType[];
   error: any;
 };
 const initialState = {
   isAuthenticated: null,
   loading: false,
   posts: [],
+  postDetail: [],
   error: "",
 };
 export default function (
@@ -43,10 +45,10 @@ export default function (
   action:
     | PostWriteActionsType
     | PostLoadingActionsType
-    | postLikeActionsType
     | postMyWriteActionsType
     | postMyLikeActionsType
-    | PostCategoryActionsType,
+    | PostCategoryActionsType
+    | postDeleteActionsType,
 ) {
   switch (action.type) {
     case POSTS_LOADING_REQUEST:
@@ -67,14 +69,6 @@ export default function (
         posts: [...state.posts, ...action.payload.result],
         loading: false,
       };
-    // case POSTS_MYWRITE_SUCCESS:
-    // case POSTS_MYLIKE_SUCCESS:
-    //   console.log("ok", action);
-    //   return {
-    //     ...state,
-    //     posts: [...state.posts, ...action.payload],
-    //     loading: false,
-    //   };
     case POSTS_LOADING_FAILURE:
     case POSTS_CATEGORY_FAILURE:
     case POSTS_MYWRITE_FAILURE:
@@ -85,39 +79,26 @@ export default function (
         loading: false,
       };
     case POSTS_WRITE_REQUEST:
+    case POSTS_DELETE_REQUEST:
       return {
         ...state,
         posts: [],
         loading: true,
       };
     case POSTS_WRITE_SUCCESS:
+    case POSTS_DELETE_SUCCESS:
       return {
         ...state,
         loading: false,
       };
     case POSTS_WRITE_FAILURE:
+    case POSTS_DELETE_FAILURE:
       return {
         ...state,
         error: action.payload.message,
         loading: false,
       };
-    case POSTS_LIKE_REQUEST:
-      return {
-        ...state,
-        posts: [],
-        loading: true,
-      };
-    case POSTS_LIKE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-      };
-    case POSTS_LIKE_FAILURE:
-      return {
-        ...state,
-        error: action.payload.message,
-        loading: false,
-      };
+
     default:
       return state;
   }

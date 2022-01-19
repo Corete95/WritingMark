@@ -1,33 +1,105 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 const ListDetail = () => {
+  const { user } = useSelector((state: any) => state.user);
+  const [detailData, setDetailData] = useState<any>([]);
+  const { postDetail } = useSelector((state: any) => state.post);
+  const [like, setLike] = useState(detailData.count?.bookmark);
+  const [bookMarkState, setBookMarkState] = useState(Boolean);
+  const [error, setError] = useState("");
   const id = useParams<any>();
-  console.log(id);
+  const token = localStorage.getItem("token");
+  localStorage.setItem("user_id", user._id);
+  const config: any = {
+    headers: {},
+  };
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+
+  useEffect(() => {
+    const postDetail = async () => {
+      try {
+        const result = await axios.get(`posts/${id.id}`, config);
+        setDetailData(result.data.result);
+        setLike(result.data.result.count.bookmark);
+        if (
+          result.data.result.userBookmark == localStorage.getItem("user_id")
+        ) {
+          setBookMarkState(true);
+        }
+      } catch (error: any) {
+        console.log(error.response);
+        setError(error.response.data?.message);
+      }
+    };
+    postDetail();
+  }, []);
+
+  const bookMarkLike = async () => {
+    try {
+      const result = await axios.post(`user/bookmark/${id.id}`, {}, config);
+      setLike((preData: any) => preData + 1);
+      setBookMarkState(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const bookMarkCancel = async () => {
+    try {
+      const result = await axios.delete(`user/bookmark/${id.id}`, config);
+      setLike((preData: any) => preData - 1);
+      setBookMarkState(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  if (error) {
+    return <Container>{error}</Container>;
+  }
+  console.log(detailData);
   return (
     <Container>
       <ListTop>
         <ImgName>
           <div className="imgDiv">
-            <img src="/5.png" />
+            <img
+              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${detailData.writer?.profileImage}`}
+            />
           </div>
           <div className="nameDiv">
-            <p>김정현</p>
-            <p>2022.1.1</p>
+            <p>{detailData.writer?.nickname}</p>
+            <p>{detailData.createdAt}</p>
           </div>
         </ImgName>
-        <EditDelete>
-          <span className="edit">수정</span>
-          <span className="delete">삭제</span>
-        </EditDelete>
+        {detailData.writer?._id === user._id && (
+          <EditDelete>
+            <span className="edit">수정</span>
+            <span className="delete">삭제</span>
+          </EditDelete>
+        )}
       </ListTop>
-      <ListCenter></ListCenter>
+      <ListCenter>
+        <div> {detailData.content}</div>
+        {detailData?.image ? (
+          <img
+            src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${detailData.image?.info_image}`}
+          />
+        ) : (
+          ""
+        )}
+      </ListCenter>
       <ListBottom>
         <WarningIcon>
           <img src="/images/warning.png" />
           <IconText>
-            소설 / 제목 : <span> 당신이 빛이라면</span>
+            소설 / 제목 : <span> {detailData.info_title}</span>
           </IconText>
         </WarningIcon>
         <UrlIcon>
@@ -38,9 +110,14 @@ const ListDetail = () => {
         </UrlIcon>
       </ListBottom>
       <BookmarkComments>
-        <img src="/images/bookmarkfull.png" />
+        {bookMarkState ? (
+          <img src="/images/bookmarkfull.png" onClick={bookMarkCancel} />
+        ) : (
+          <img src="/images/bookmark.png" onClick={bookMarkLike} />
+        )}
         <p>
-          글갈피 10개<span className="comments">댓글2개 </span>
+          글갈피 {like}개
+          <span className="comments">댓글{detailData.count?.comment}개 </span>
         </p>
       </BookmarkComments>
     </Container>
@@ -92,6 +169,7 @@ const EditDelete = styled.div`
   display: flex;
   align-items: end;
   color: gray;
+  font-size: 13px;
   span {
     cursor: pointer;
   }
@@ -104,6 +182,13 @@ const ListCenter = styled.div`
   min-height: 400px;
   border: 1px solid gray;
   padding: 20px 20px;
+
+  img {
+    margin-top: 40px;
+    width: 100%;
+    height: 400px;
+    object-fit: contain;
+  }
 `;
 
 const ListBottom = styled.div`

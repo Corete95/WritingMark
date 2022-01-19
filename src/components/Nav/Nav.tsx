@@ -26,7 +26,7 @@ const Nav: FC = () => {
           </IconMenu>
           <Logo onClick={goToMain}>글갈피</Logo>
           <IconMenu>
-            {user != null ? (
+            {user?._id ? (
               <Link to="/MyPage">
                 <img src="/images/member.png" />
               </Link>

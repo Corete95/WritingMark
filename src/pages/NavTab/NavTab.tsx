@@ -55,6 +55,7 @@ const NavTab = () => {
               id={list.postId}
               name={list.writer.nickname}
               img={list.writer.profileImage}
+              writerId={list.writer._id}
               time={list.createdAt}
               contents={list.content}
               contents_img={list.image?.info_image}

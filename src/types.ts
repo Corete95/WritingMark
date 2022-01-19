@@ -21,6 +21,13 @@ export type LoginType = {
   token: string | undefined;
 };
 
+export type User = {
+  nickname: string;
+  role: string;
+  _id: string;
+  profileImage: string;
+};
+
 export type PostType = {
   category: string;
   content: string;
@@ -30,23 +37,22 @@ export type PostType = {
   info_title: string;
   info_url: string;
   postId: number;
-  writer: string;
-  userBookmark: any;
+  writer: Writer[];
+  userBookmark: string;
   __v: number;
   _id: string;
 };
 
+export type Writer = {
+  nickname: string;
+  profileImage: string;
+  _id: string;
+};
 export type Image = {
-  info: string;
-  original: string;
+  info_image: string;
+  originalImageName: string;
 };
 export type Count = {
-  like: number;
+  bookmark: number;
   comment: number;
-};
-export type User = {
-  nickname: string;
-  role: string;
-  _id: string;
-  profileImage: string;
 };

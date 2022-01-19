@@ -30,6 +30,7 @@ const userReducer = (
     case USER_INFO_EDIT_REQUEST:
       return {
         ...state,
+        user: "",
         isLoading: true,
       };
     case USER_LOADING_SUCCESS:

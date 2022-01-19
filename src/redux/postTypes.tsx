@@ -57,25 +57,6 @@ export type PostWriteActionsType =
   | ReturnType<typeof postWriteSuccess>
   | ReturnType<typeof postWriteFailure>;
 
-//// Post_Like
-export const POSTS_LIKE_REQUEST = "POST_LIKE_REQUEST";
-export const POSTS_LIKE_SUCCESS = "POST_LIKE_SUCCESS";
-export const POSTS_LIKE_FAILURE = "POST_LIKE_FAILURE";
-
-export const postLikeRequest = () => ({ type: POSTS_LIKE_REQUEST });
-export const postLikeSuccess = (result: any) => ({
-  type: POSTS_LIKE_SUCCESS,
-  payload: result,
-});
-export const postLikeFailure = (error: any) => ({
-  type: POSTS_LIKE_FAILURE,
-  payload: error,
-});
-
-export type postLikeActionsType =
-  | ReturnType<typeof postLikeSuccess>
-  | ReturnType<typeof postLikeFailure>;
-
 //// Post_MyWrite
 export const POSTS_MYWRITE_REQUEST = "POST_MYWRITE_REQUEST";
 export const POSTS_MYWRITE_SUCCESS = "POST_MYWRITE_SUCCESS";
@@ -92,8 +73,8 @@ export const postMyWriteFailure = (error: any) => ({
 });
 
 export type postMyWriteActionsType =
-  | ReturnType<typeof postLikeSuccess>
-  | ReturnType<typeof postLikeFailure>;
+  | ReturnType<typeof postMyWriteSuccess>
+  | ReturnType<typeof postMyWriteFailure>;
 
 //// Post_MyWrite
 export const POSTS_MYLIKE_REQUEST = "POST_MYLIKE_REQUEST";
@@ -111,5 +92,24 @@ export const postMyLikeFailure = (error: any) => ({
 });
 
 export type postMyLikeActionsType =
-  | ReturnType<typeof postLikeSuccess>
-  | ReturnType<typeof postLikeFailure>;
+  | ReturnType<typeof postMyLikeSuccess>
+  | ReturnType<typeof postMyLikeFailure>;
+
+//// Post_Delete
+export const POSTS_DELETE_REQUEST = "POST_DELETE_REQUEST";
+export const POSTS_DELETE_SUCCESS = "POST_DELETE_SUCCESS";
+export const POSTS_DELETE_FAILURE = "POST_DELETE_FAILURE";
+
+export const postDeleteRequest = () => ({ type: POSTS_DELETE_REQUEST });
+export const postDeleteSuccess = (result: PostType[]) => ({
+  type: POSTS_DELETE_SUCCESS,
+  payload: result,
+});
+export const postDeleteFailure = (error: any) => ({
+  type: POSTS_DELETE_FAILURE,
+  payload: error,
+});
+
+export type postDeleteActionsType =
+  | ReturnType<typeof postDeleteSuccess>
+  | ReturnType<typeof postDeleteFailure>;

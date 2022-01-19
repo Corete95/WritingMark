@@ -20,6 +20,12 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
     [],
   );
 
+  const LogOut = () => {
+    localStorage.removeItem("token");
+    history.push("/");
+    window.location.reload();
+  };
+
   if (!show) {
     return null;
   }
@@ -31,7 +37,7 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
           <span>로고</span>
         </Logo>
         <Login>
-          {user != null ? (
+          {user?._id ? (
             <span>
               <em
                 onClick={() => {
@@ -45,7 +51,15 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
             </span>
           ) : (
             <span>
-              <em>로그인</em>을 해주세요!
+              <em
+                onClick={() => {
+                  history.push("/Login");
+                  onCloseModal();
+                }}
+              >
+                로그인
+              </em>
+              을 해주세요!
             </span>
           )}
         </Login>
@@ -58,6 +72,18 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
             );
           })}
         </NavigationCategory>
+        {user?._id ? (
+          <>
+            <WritingBtn to="/Writing" onClick={onCloseModal}>
+              글쓰기
+            </WritingBtn>
+            <WritingBtn to="/" onClick={LogOut}>
+              로그아웃
+            </WritingBtn>
+          </>
+        ) : (
+          ""
+        )}
       </Container>
     </NavigationModal>
   );
@@ -133,7 +159,7 @@ const NavigationCategory = styled.div`
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid #e3e5e8;
-  padding: 20px 0px;
+  padding: 0px 0px 20px 0px;
   a {
     margin: 14px 0px;
     font-size: 16px;
@@ -147,5 +173,15 @@ const NavigationCategory = styled.div`
   a:hover {
     color: black;
   }
+`;
+
+const WritingBtn = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  background-color: red;
+  margin-top: 20px;
 `;
 export default Navigation;

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
-import { POSTS_LIKE_REQUEST } from "redux/postTypes";
 import axios, { AxiosRequestConfig } from "axios";
+import { POSTS_DELETE_REQUEST } from "redux/postTypes";
+
 interface Props {
   id: number;
   name: string;
@@ -15,6 +16,7 @@ interface Props {
   bookmark: number;
   comments: number;
   userbookmark?: any;
+  writerId?: string;
 }
 const ListBox: FC<Props> = ({
   id,
@@ -26,30 +28,47 @@ const ListBox: FC<Props> = ({
   bookmark,
   comments,
   userbookmark,
+  writerId,
 }) => {
   const { user } = useSelector((state: any) => state.user);
   const liked = userbookmark?.find((v: number) => v == user?._id);
   const [like, setLike] = useState(bookmark);
   const [bookMarkState, setBookMarkState] = useState(liked);
-
   const history = useHistory();
+  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const config: any = {
+    headers: {},
+  };
+  if (token) {
+    config.headers["authorization"] = token;
+  }
 
-  const likeChange = useCallback(() => {
-    const config: AxiosRequestConfig | any = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    if (token) {
-      config.headers["authorization"] = token;
-    }
-    axios.post(`user/bookmark/${id}`, {}, config).then((res) => {
+  const bookMarkLike = async () => {
+    try {
+      const result = await axios.post(`user/bookmark/${id}`, {}, config);
       setLike((preData) => preData + 1);
-      setBookMarkState(res.data.result.userBookmark);
-    });
-  }, []);
+      setBookMarkState(result.data.result.userBookmark);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
+  const bookMarkCancel = async () => {
+    try {
+      const result = await axios.delete(`user/bookmark/${id}`, config);
+      setLike((preData) => preData - 1);
+      setBookMarkState(null);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const postDelete = () => {
+    dispatch({
+      type: POSTS_DELETE_REQUEST,
+      payload: { id, token },
+    });
+  };
   return (
     <ListBoxContainer key={id}>
       <TopBottom>
@@ -64,10 +83,14 @@ const ListBox: FC<Props> = ({
             <p>{time}</p>
           </div>
         </ImgName>
-        <EditDelete>
-          <span className="edit">수정</span>
-          <span className="delete">삭제</span>
-        </EditDelete>
+        {writerId === user?._id && (
+          <EditDelete>
+            <span className="edit">수정</span>
+            <span className="delete" onClick={postDelete}>
+              삭제
+            </span>
+          </EditDelete>
+        )}
       </TopBottom>
       <BoxCenter onClick={() => history.push(`/ListDetail/${id}`)}>
         <ContentsText width={contents_img}>{contents}</ContentsText>
@@ -82,9 +105,9 @@ const ListBox: FC<Props> = ({
       <TopBottom>
         <div className="likeComments">
           {bookMarkState ? (
-            <img src="/images/bookmarkfull.png" onClick={likeChange} />
+            <img src="/images/bookmarkfull.png" onClick={bookMarkCancel} />
           ) : (
-            <img src="/images/bookmark.png" onClick={likeChange} />
+            <img src="/images/bookmark.png" onClick={bookMarkLike} />
           )}
           <span>
             글갈피 {like}개<span className="comments">댓글{comments}개 </span>
@@ -99,7 +122,6 @@ const ListBoxContainer = styled.div`
   width: 100%;
   height: auto;
   margin-bottom: 40px;
-  cursor: pointer;
 `;
 
 const TopBottom = styled.div`
@@ -174,6 +196,7 @@ const BoxCenter = styled.div`
   margin: 7px 0px;
   max-height: 150px;
   min-height: 150px;
+  cursor: pointer;
   img {
     width: 30%;
   }
