@@ -23,6 +23,14 @@ import {
   POSTS_DELETE_SUCCESS,
   POSTS_DELETE_FAILURE,
   postDeleteActionsType,
+  POSTS_DETAIL_REQUEST,
+  POSTS_DETAIL_SUCCESS,
+  POSTS_DETAIL_FAILURE,
+  postDetailActionsType,
+  POSTS_DETAIL_EDIT_REQUEST,
+  POSTS_DETAIL_EDIT_SUCCESS,
+  POSTS_DETAIL_EDIT_FAILURE,
+  postDetailEditActionsType,
 } from "../postTypes";
 import { PostType } from "types";
 
@@ -48,7 +56,9 @@ export default function (
     | postMyWriteActionsType
     | postMyLikeActionsType
     | PostCategoryActionsType
-    | postDeleteActionsType,
+    | postDeleteActionsType
+    | postDetailActionsType
+    | postDetailEditActionsType,
 ) {
   switch (action.type) {
     case POSTS_LOADING_REQUEST:
@@ -80,22 +90,43 @@ export default function (
       };
     case POSTS_WRITE_REQUEST:
     case POSTS_DELETE_REQUEST:
+    case POSTS_DETAIL_EDIT_REQUEST:
       return {
         ...state,
-        posts: [],
+        // posts: [],
         loading: true,
       };
     case POSTS_WRITE_SUCCESS:
     case POSTS_DELETE_SUCCESS:
+    case POSTS_DETAIL_EDIT_SUCCESS:
       return {
         ...state,
         loading: false,
       };
     case POSTS_WRITE_FAILURE:
     case POSTS_DELETE_FAILURE:
+    case POSTS_DETAIL_EDIT_FAILURE:
       return {
         ...state,
         error: action.payload.message,
+        loading: false,
+      };
+    case POSTS_DETAIL_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case POSTS_DETAIL_SUCCESS:
+      console.log("saga", action);
+      return {
+        ...state,
+        postDetail: action.payload,
+        loading: false,
+      };
+    case POSTS_DETAIL_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
         loading: false,
       };
 

@@ -31,10 +31,10 @@ export const BOOKMARK_CATEGORY = [
 ];
 
 export const CATEGORY_OPTIONS = [
-  { id: 1, value: "web-content", label: "웹소설 · 웹툰" },
-  { id: 2, value: "essay", label: "에세이" },
-  { id: 3, value: "novel", label: "소설" },
-  { id: 4, value: "poetry", label: "시" },
-  { id: 5, value: "knowledge", label: "지식" },
-  { id: 6, value: "etc", label: "깍두기" },
+  { label: "웹소설 · 웹툰", value: "web-content" },
+  { value: "essay", label: "에세이" },
+  { value: "novel", label: "소설" },
+  { value: "poetry", label: "시" },
+  { value: "knowledge", label: "지식" },
+  { value: "etc", label: "깍두기" },
 ];

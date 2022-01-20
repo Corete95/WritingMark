@@ -29,7 +29,8 @@ export type User = {
 };
 
 export type PostType = {
-  category: string;
+  categoryLabel: string;
+  categoryValue: string;
   content: string;
   count: Count[];
   createdAt: string;

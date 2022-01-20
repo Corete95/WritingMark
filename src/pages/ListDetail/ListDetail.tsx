@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { POSTS_DELETE_REQUEST, POSTS_DETAIL_REQUEST } from "redux/postTypes";
 
 const ListDetail = () => {
   const { user } = useSelector((state: any) => state.user);
@@ -11,7 +12,10 @@ const ListDetail = () => {
   const [like, setLike] = useState(detailData.count?.bookmark);
   const [bookMarkState, setBookMarkState] = useState(Boolean);
   const [error, setError] = useState("");
+  const [editState, setEditState] = useState(Boolean);
   const id = useParams<any>();
+  const history = useHistory();
+  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   localStorage.setItem("user_id", user._id);
   const config: any = {
@@ -34,10 +38,17 @@ const ListDetail = () => {
         }
       } catch (error: any) {
         console.log(error.response);
-        setError(error.response.data?.message);
+        setError(error.response?.data?.message);
       }
     };
     postDetail();
+  }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: POSTS_DETAIL_REQUEST,
+      payload: { id, token },
+    });
   }, []);
 
   const bookMarkLike = async () => {
@@ -60,10 +71,18 @@ const ListDetail = () => {
     }
   };
 
+  const postDelete = () => {
+    const id = detailData.postId;
+    dispatch({
+      type: POSTS_DELETE_REQUEST,
+      payload: { id, token },
+    });
+  };
+
   if (error) {
     return <Container>{error}</Container>;
   }
-  console.log(detailData);
+
   return (
     <Container>
       <ListTop>
@@ -80,13 +99,15 @@ const ListDetail = () => {
         </ImgName>
         {detailData.writer?._id === user._id && (
           <EditDelete>
-            <span className="edit">수정</span>
-            <span className="delete">삭제</span>
+            <Link to={`/ListDetailEdit/${detailData.postId}`}>수정</Link>
+            <span className="delete" onClick={postDelete}>
+              삭제
+            </span>
           </EditDelete>
         )}
       </ListTop>
       <ListCenter>
-        <div> {detailData.content}</div>
+        <pre> {detailData.content}</pre>
         {detailData?.image ? (
           <img
             src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${detailData.image?.info_image}`}

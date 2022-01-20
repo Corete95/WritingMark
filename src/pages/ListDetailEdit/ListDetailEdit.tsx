@@ -1,29 +1,67 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Select from "react-select";
 import { CATEGORY_OPTIONS } from "Config";
-import TextInformation from "./TextInformation";
+import TextInformation from "pages/Writing/TextInformation";
 import useInput from "hooks/useInput";
-import { useDispatch } from "react-redux";
-import { POSTS_WRITE_REQUEST } from "../../redux/postTypes";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  POSTS_DETAIL_EDIT_REQUEST,
+  POSTS_DETAIL_REQUEST,
+} from "../../redux/postTypes";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 interface SelectProps {
-  id: number;
   value: string;
   label: string;
 }
 type SelectValue = SelectProps | SelectProps[] | null | undefined;
 
-const Writing = () => {
-  const [select, setSelect] = useState<any>(null);
+const ListDetailEdit = () => {
+  const { postDetail } = useSelector((state: any) => state.post);
+  const [select, setSelect] = useState<any>({ label: "", value: "" });
   const [image, setImage] = useState("");
-  const [contents, onChangeContents] = useInput("");
-  const [title, onChangeTitle] = useInput("");
-  const [url, onChangeUrl] = useInput("");
+  const [contents, onChangeContents, setContetns] = useInput("");
+  const [title, onChangeTitle, setTitle] = useInput("");
+  const [url, onChangeUrl, setUrl] = useInput("");
   const [imgUrl, setImgUrl] = useState<string>("");
-  const [informationCheck, setInformationCheck] = useState(false);
+  const [informationCheck, setInformationCheck] = useState(true);
   const ImgInput = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
+  const id = useParams<any>();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const config: any = {
+      headers: {},
+    };
+    if (token) {
+      config.headers["authorization"] = token;
+    }
+    const postDetail = async () => {
+      try {
+        const result = await axios.get(`posts/${id.id}`, config);
+        setSelect({
+          label: result.data.result.categoryLabel,
+          value: result.data.result.categoryValue,
+        });
+        setContetns(result.data.result.content);
+        setImgUrl(
+          result.data.result.image
+            ? "https://writingmark.s3.ap-northeast-2.amazonaws.com/post/" +
+                result.data.result?.image?.info_image
+            : "",
+        );
+        setImage(result.data.result.image?.info_image);
+        setTitle(result.data.result.info_title);
+        setUrl(result.data.result.info_url);
+      } catch (error: any) {
+        console.log(error.response);
+      }
+    };
+    postDetail();
+  }, []);
 
   const selectHandleChange = (selectedOption: SelectValue) => {
     setSelect(selectedOption);
@@ -46,13 +84,13 @@ const Writing = () => {
     } else {
       return;
     }
-    e.target.value = "";
   };
 
   const deleteImg = () => {
     const check = confirm("이미지를 삭제 하시겠습니까?");
-    if (check == true) {
+    if (check === true) {
       setImgUrl("");
+      setImage("");
     }
   };
 
@@ -70,19 +108,24 @@ const Writing = () => {
     formData.append("info_title", title);
     formData.append("info_url", url);
     formData.append("info_image", image);
-    const token = localStorage.getItem("token");
-    const body = { formData };
+    const body = { formData, id };
+
     dispatch({
-      type: POSTS_WRITE_REQUEST,
+      type: POSTS_DETAIL_EDIT_REQUEST,
       payload: { body, token },
     });
   };
-
+  // console.log("select", select);
+  // console.log("contents", contents);
+  // console.log("title", title);
+  // console.log("url", url);
+  // console.log("image", image);
   return (
     <Container>
       <Category>
         <h1>카테고리</h1>
         <Select
+          defaultValue={select}
           options={CATEGORY_OPTIONS}
           onChange={selectHandleChange}
           value={select}
@@ -121,7 +164,7 @@ const Writing = () => {
         url={url}
         onChangeUrl={onChangeUrl}
       />
-      <Button onClick={upLoad}>글쓰기</Button>
+      <Button onClick={upLoad}>수정하기</Button>
     </Container>
   );
 };
@@ -214,4 +257,4 @@ const Button = styled.button`
   border: 1px solid red;
   cursor: pointer;
 `;
-export default Writing;
+export default ListDetailEdit;

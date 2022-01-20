@@ -113,3 +113,43 @@ export const postDeleteFailure = (error: any) => ({
 export type postDeleteActionsType =
   | ReturnType<typeof postDeleteSuccess>
   | ReturnType<typeof postDeleteFailure>;
+
+//// Post_Detail
+export const POSTS_DETAIL_REQUEST = "POST_DETAIL_REQUEST";
+export const POSTS_DETAIL_SUCCESS = "POST_DETAIL_SUCCESS";
+export const POSTS_DETAIL_FAILURE = "POST_DETAIL_FAILURE";
+
+export const postDetailRequest = () => ({ type: POSTS_DETAIL_REQUEST });
+export const postDetailSuccess = (result: PostType[]) => ({
+  type: POSTS_DETAIL_SUCCESS,
+  payload: result,
+});
+export const postDetailFailure = (error: any) => ({
+  type: POSTS_DETAIL_FAILURE,
+  payload: error,
+});
+
+export type postDetailActionsType =
+  | ReturnType<typeof postDetailSuccess>
+  | ReturnType<typeof postDetailFailure>;
+
+//// Post_Detail_Edit
+export const POSTS_DETAIL_EDIT_REQUEST = "POST_DETAIL_EDIT_REQUEST";
+export const POSTS_DETAIL_EDIT_SUCCESS = "POST_DETAIL_EDIT_SUCCESS";
+export const POSTS_DETAIL_EDIT_FAILURE = "POST_DETAIL_EDIT_FAILURE";
+
+export const postDetailEditRequest = () => ({
+  type: POSTS_DETAIL_EDIT_REQUEST,
+});
+export const postDetailEditSuccess = (result: PostType[]) => ({
+  type: POSTS_DETAIL_EDIT_SUCCESS,
+  payload: result,
+});
+export const postDetailEditFailure = (error: any) => ({
+  type: POSTS_DETAIL_EDIT_FAILURE,
+  payload: error,
+});
+
+export type postDetailEditActionsType =
+  | ReturnType<typeof postDetailEditSuccess>
+  | ReturnType<typeof postDetailEditFailure>;

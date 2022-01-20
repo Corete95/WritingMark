@@ -31,7 +31,7 @@ const BookMark: FC = () => {
       });
     }
   }, [dispatch, bookMarkCategory]);
-
+  console.log(posts);
   return (
     <>
       <BookMarkContainer>
@@ -83,6 +83,7 @@ const BookMark: FC = () => {
                 />
               );
             })} */}
+        {posts.length === 0 && <NoPosts>게시글이 없습니다.</NoPosts>}
         {posts?.map((list: IListBox) => {
           return (
             <ListBox
@@ -130,10 +131,10 @@ const BookMarkContainer = styled.div`
 const ListBoxContainer = styled.div`
   margin-top: 25px;
 `;
+
+const NoPosts = styled.div`
+  text-align: center;
+  font-size: 20px;
+  margin-top: 80px;
+`;
 export default BookMark;
-function dispatch(arg0: {
-  type: any;
-  payload: { payloadCategory: any; token: any };
-}) {
-  throw new Error("Function not implemented.");
-}

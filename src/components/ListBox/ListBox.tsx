@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
 import axios, { AxiosRequestConfig } from "axios";
@@ -63,6 +63,7 @@ const ListBox: FC<Props> = ({
       console.log(err);
     }
   };
+
   const postDelete = () => {
     dispatch({
       type: POSTS_DELETE_REQUEST,
@@ -85,7 +86,7 @@ const ListBox: FC<Props> = ({
         </ImgName>
         {writerId === user?._id && (
           <EditDelete>
-            <span className="edit">수정</span>
+            <Link to={`/ListDetailEdit/${id}`}>수정</Link>
             <span className="delete" onClick={postDelete}>
               삭제
             </span>
@@ -198,6 +199,7 @@ const BoxCenter = styled.div`
   min-height: 150px;
   cursor: pointer;
   img {
+    padding: 5px 5px;
     width: 30%;
   }
 `;

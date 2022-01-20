@@ -1,4 +1,6 @@
 export interface IListBox {
+  categoryLabel: string;
+  categoryValue: string;
   _id: number;
   postId: number;
   info_url: string;

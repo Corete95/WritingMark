@@ -9,6 +9,9 @@ const Nav = loadable(() => import("./components/Nav/Nav"));
 const NavTab = loadable(() => import("./pages/NavTab/NavTab"));
 const Category = loadable(() => import("./pages/Category/Category"));
 const ListDetail = loadable(() => import("./pages/ListDetail/ListDetail"));
+const ListDetailEdit = loadable(
+  () => import("./pages/ListDetailEdit/ListDetailEdit"),
+);
 const Login = loadable(() => import("./pages/Login/Login"));
 const MyPage = loadable(() => import("./pages/MyPage/MyPage"));
 const Register = loadable(() => import("./pages/Register/Register"));
@@ -42,6 +45,7 @@ const Routes = () => {
             <Route path="/EditInformation" component={EditInformation} />
             <Route path="/FindPassword" component={FindPassword} />
             <Route path="/ListDetail/:id" component={ListDetail} />
+            <Route path="/ListDetailEdit/:id/" component={ListDetailEdit} />
             <Route path="/MyPage" component={MyPage} />
             <Route path="/Login" component={Login} />
             <Route path="/Register" component={Register} />

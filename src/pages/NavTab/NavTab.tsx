@@ -26,7 +26,7 @@ const NavTab = () => {
       type: POSTS_LOADING_REQUEST,
       payload: { payloadCategory, token },
     });
-  }, [payloadCategory]);
+  }, [dispatch, payloadCategory]);
 
   return (
     <ContainerNavTab>

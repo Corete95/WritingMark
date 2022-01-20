@@ -123,6 +123,7 @@ const EditInformation = () => {
                 onChange={onChangeNickname}
               />
             </InputDiv>
+            <Button profile={true}>프로필 변경하기</Button>
             <InputDiv>
               <Label>현재 비밀번호</Label>
               <Input
@@ -153,12 +154,12 @@ const EditInformation = () => {
                 <Error>비밀번호가 일치하지 않습니다.</Error>
               )}
             </InputDiv>
-            <Button>변경하기</Button>
+            <Button profile={false}>비밀번호 변경하기</Button>
           </InputUpload>
         </InformationForm>
         <MemberSecession>
           <h2 className="secessionText">회원 탈퇴</h2>
-          <p>탈퇴 시 작성한 글 및 댓글이 모두 삭제되며 복구되지 않습니다.</p>
+          <p>탈퇴 시 회원정보가 삭제되며 복구되지 않습니다.</p>
           <button>탈퇴하기</button>
         </MemberSecession>
       </InformationContaniner>
@@ -240,12 +241,15 @@ const Input = styled.input`
   border: 1px solid #ddd;
   padding: 10px 15px;
 `;
-const Button = styled.button`
+const Button = styled.button<{ profile: boolean }>`
   width: 100%;
   height: 30px;
   background-color: red;
   border: 1px solid red;
   color: white;
+  ${({ profile }) => {
+    return profile ? `margin-bottom:25px` : "";
+  }}
 `;
 const Error = styled.span`
   font-size: 12px;

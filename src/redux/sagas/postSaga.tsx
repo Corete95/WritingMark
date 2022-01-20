@@ -20,6 +20,12 @@ import {
   POSTS_DELETE_REQUEST,
   postDeleteSuccess,
   postDeleteFailure,
+  POSTS_DETAIL_REQUEST,
+  postDetailSuccess,
+  postDetailFailure,
+  POSTS_DETAIL_EDIT_REQUEST,
+  postDetailEditSuccess,
+  postDetailEditFailure,
 } from "../postTypes";
 
 // All Posts load
@@ -87,7 +93,7 @@ function* uploadPosts(action: any) {
   try {
     const result: AxiosResponse = yield call(uploadPostAPI, action.payload);
     yield put(postWriteSuccess(result.data.result));
-    yield put(push("/"));
+    yield put(push(`/ListDetail/${result.data.result.postId}`));
   } catch (error: any) {
     yield put(postWriteFailure(error.response.data));
   }
@@ -158,17 +164,18 @@ const DeletePostAPI = (payload: any) => {
   const config: any = {
     headers: {},
   };
-  const token = payload;
+  const token = payload.token;
   if (token) {
     config.headers["authorization"] = token;
   }
-  return axios.delete(`posts/${payload}`, config);
+  return axios.delete(`posts/${payload.id}`, config);
 };
 
 function* DeletePosts(action: any) {
   try {
     const result: AxiosResponse = yield call(DeletePostAPI, action.payload);
     yield put(postDeleteSuccess(result.data));
+    yield location.replace("");
   } catch (error: any) {
     console.log(error.response);
     yield put(postDeleteFailure(error?.response?.data));
@@ -179,6 +186,66 @@ function* watchDeletePosts() {
   yield takeEvery(POSTS_DELETE_REQUEST, DeletePosts);
 }
 
+// Post Detail
+const DetailPostAPI = (payload: any) => {
+  const config: any = {
+    headers: {},
+  };
+  const token = payload.token;
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+  return axios.get(`posts/${payload.id.id}`, config);
+};
+
+function* DetailPosts(action: any) {
+  try {
+    const result: AxiosResponse = yield call(DetailPostAPI, action.payload);
+    yield put(postDetailSuccess(result.data.result));
+  } catch (error: any) {
+    console.log(error.response);
+    yield put(postDetailFailure(error?.response?.data));
+  }
+}
+
+function* watchDetailPosts() {
+  yield takeEvery(POSTS_DETAIL_REQUEST, DetailPosts);
+}
+
+// Post Detail Edit
+const DetailEditPostAPI = (payload: any) => {
+  const config: any = {
+    headers: {},
+  };
+  const token = payload.token;
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+  console.log("pay", payload);
+  return axios.patch(
+    `posts/${payload.body.id.id}`,
+    payload.body.formData,
+    config,
+  );
+};
+
+function* DetailEditPosts(action: any) {
+  try {
+    console.log("edit action", action);
+    const result: AxiosResponse = yield call(DetailEditPostAPI, action.payload);
+    console.log("edit Result", result);
+    yield put(postDetailEditSuccess(result.data.result));
+    yield put(push(`/ListDetail/${result.data.postId}`));
+  } catch (error: any) {
+    console.log(error.response);
+    yield put(postDetailEditFailure(error?.response?.data));
+  }
+}
+
+function* watchDetailEditPosts() {
+  yield takeEvery(POSTS_DETAIL_EDIT_REQUEST, DetailEditPosts);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchuploadPosts),
@@ -187,5 +254,7 @@ export default function* postSaga() {
     fork(watchMyLikePosts),
     fork(watchCategoryPosts),
     fork(watchDeletePosts),
+    fork(watchDetailPosts),
+    fork(watchDetailEditPosts),
   ]);
 }
