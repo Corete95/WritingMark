@@ -186,8 +186,17 @@ const EditDelete = styled.div`
   span {
     cursor: pointer;
   }
-  .edit {
-    margin-right: 13px;
+  .delete {
+    margin-left: 6px;
+  }
+  a:link {
+    color: gray;
+  }
+  a:visited {
+    color: gray;
+  }
+  a:hover {
+    color: gray;
   }
 `;
 
@@ -199,7 +208,6 @@ const BoxCenter = styled.div`
   min-height: 150px;
   cursor: pointer;
   img {
-    padding: 5px 5px;
     width: 30%;
   }
 `;

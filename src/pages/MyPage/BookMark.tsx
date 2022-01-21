@@ -50,57 +50,29 @@ const BookMark: FC = () => {
         })}
       </BookMarkContainer>
       <ListBoxContainer>
-        {/* {bookMarkCategory === "내가 쓴 글"
-          ? posts?.map((list: any) => {
-              return (
-                <ListBox
-                  key={list._id}
-                  id={list.postId}
-                  name={list.writer?.nickname}
-                  img={list.writer?.profileImage}
-                  time={list.createdAt}
-                  contents={list.content}
-                  contents_img={list.image?.info_image}
-                  bookmark={list.count?.bookmark}
-                  comments={list.count?.comment}
-                  userbookmark={list?.userBookmark}
-                />
-              );
-            })
-          : posts?.map((list: any) => {
-              return (
-                <ListBox
-                  key={list.postId?._id}
-                  id={list.postId?.postId}
-                  name={list.postId?.writer?.nickname}
-                  img={list.postId?.writer?.profileImage}
-                  time={list.postId?.createdAt}
-                  contents={list.postId?.content}
-                  contents_img={list.postId?.image?.info_image}
-                  bookmark={list.postId?.count?.bookmark}
-                  comments={list.postId?.count?.comment}
-                  userbookmark={list.postId?.userBookmark}
-                />
-              );
-            })} */}
-        {posts.length === 0 && <NoPosts>게시글이 없습니다.</NoPosts>}
-        {posts?.map((list: IListBox) => {
-          return (
-            <ListBox
-              key={list._id}
-              id={list.postId}
-              name={list.writer?.nickname}
-              img={list.writer.profileImage}
-              writerId={list.writer._id}
-              time={list.createdAt}
-              contents={list.content}
-              contents_img={list.image?.info_image}
-              bookmark={list.count.bookmark}
-              comments={list.count.comment}
-              userbookmark={list?.userBookmark}
-            />
-          );
-        })}
+        {/* {posts.length === 0 && <NoPosts>게시글이 없습니다.</NoPosts>} */}
+
+        {posts.length !== 0 ? (
+          posts?.map((list: IListBox) => {
+            return (
+              <ListBox
+                key={list._id}
+                id={list.postId}
+                name={list.writer?.nickname}
+                img={list.writer.profileImage}
+                writerId={list.writer._id}
+                time={list.createdAt}
+                contents={list.content}
+                contents_img={list.image?.info_image}
+                bookmark={list.count.bookmark}
+                comments={list.count.comment}
+                userbookmark={list?.userBookmark}
+              />
+            );
+          })
+        ) : (
+          <NoPosts>게시글이 없습니다.</NoPosts>
+        )}
       </ListBoxContainer>
     </>
   );
