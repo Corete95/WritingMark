@@ -17,7 +17,7 @@ const ListDetail = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
-  localStorage.setItem("user_id", user._id);
+  localStorage.setItem("user_id", user?._id);
   const config: any = {
     headers: {},
   };
@@ -97,7 +97,7 @@ const ListDetail = () => {
             <p>{detailData.createdAt}</p>
           </div>
         </ImgName>
-        {detailData.writer?._id === user._id && (
+        {detailData.writer?._id === user?._id && (
           <EditDelete>
             <Link to={`/ListDetailEdit/${detailData.postId}`}>수정</Link>
             <span className="delete" onClick={postDelete}>
