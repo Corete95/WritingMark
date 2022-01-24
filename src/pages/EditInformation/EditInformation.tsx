@@ -37,7 +37,7 @@ const InformationContaniner = styled.div`
     text-align: center;
     font-size: 20px;
     line-height: 32px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
 `;
 

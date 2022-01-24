@@ -1,22 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { POSTS_DELETE_REQUEST, POSTS_DETAIL_REQUEST } from "redux/postTypes";
-
+import Comment from "components/Comment/Comment";
 const ListDetail = () => {
   const { user } = useSelector((state: any) => state.user);
   const [detailData, setDetailData] = useState<any>([]);
-  const { postDetail } = useSelector((state: any) => state.post);
   const [like, setLike] = useState(detailData.count?.bookmark);
   const [bookMarkState, setBookMarkState] = useState(Boolean);
   const [error, setError] = useState("");
-  const [editState, setEditState] = useState(Boolean);
+  const [commentValue, setCommentValue] = useState("");
+  const [commentData, setCommentData] = useState<any>([]);
   const id = useParams<any>();
-  const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const max_length = 50;
   localStorage.setItem("user_id", user?._id);
   const config: any = {
     headers: {},
@@ -45,10 +45,15 @@ const ListDetail = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({
-      type: POSTS_DETAIL_REQUEST,
-      payload: { id, token },
-    });
+    const commentData = async () => {
+      try {
+        const result = await axios.get("http://localhost:3000/data/test.json");
+        setCommentData(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    commentData();
   }, []);
 
   const bookMarkLike = async () => {
@@ -77,6 +82,52 @@ const ListDetail = () => {
       type: POSTS_DELETE_REQUEST,
       payload: { id, token },
     });
+  };
+
+  const chatLimit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    let text = e.currentTarget.value;
+    const text_length = text.length;
+
+    if (text_length > max_length) {
+      alert(max_length + "이상 입력 불가능합니다!");
+      text = text.substr(0, max_length);
+      e.currentTarget.value = text;
+      setCommentValue(e.currentTarget.value);
+    }
+  };
+
+  const commentValueChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentValue(e.target.value);
+  };
+
+  const addComment = () => {
+    setCommentData(
+      commentData.concat({
+        id: commentData.length + 1,
+        contents: commentValue,
+      }),
+    );
+    setCommentValue("");
+  };
+
+  const editComment = (
+    id: number,
+    editComment: string,
+    editState: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => {
+    setCommentData(
+      commentData.map((comment: any) => {
+        if (comment.id === id) {
+          return {
+            ...comment,
+            contents: editComment,
+          };
+        } else {
+          return comment;
+        }
+      }),
+    );
+    editState(false);
   };
 
   if (error) {
@@ -141,6 +192,34 @@ const ListDetail = () => {
           <span className="comments">댓글{detailData.count?.comment}개 </span>
         </p>
       </BookmarkComments>
+      <CommentCantainer>
+        <CommentInputButton>
+          <TextareaORValue>
+            <textarea
+              value={commentValue}
+              onKeyUp={chatLimit}
+              onChange={commentValueChange}
+            />
+            <p>
+              {commentValue.length}/<span>{max_length}</span>
+            </p>
+          </TextareaORValue>
+          <button onClick={addComment}> 댓글 입력</button>
+        </CommentInputButton>
+        {commentData.map((comment: any) => {
+          return (
+            <Comment
+              key={comment.id}
+              id={comment.id}
+              name={comment.name}
+              time={comment.time}
+              img={comment.img}
+              comment={comment.contents}
+              editComment={editComment}
+            />
+          );
+        })}
+      </CommentCantainer>
     </Container>
   );
 };
@@ -256,6 +335,33 @@ const BookmarkComments = styled.div`
   }
   .comments {
     margin-left: 7px;
+  }
+`;
+const CommentCantainer = styled.div`
+  margin-top: 30px;
+`;
+const CommentInputButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+
+  button {
+    background-color: white;
+    border: none;
+    cursor: pointer;
+  }
+`;
+const TextareaORValue = styled.div`
+  width: 90%;
+  textarea {
+    padding: 5px 5px;
+    font-size: 16px;
+    width: 100%;
+    resize: none;
+  }
+  p {
+    font-size: 13px;
+    float: right;
   }
 `;
 export default ListDetail;

@@ -34,7 +34,7 @@ const PasswordEdit = () => {
       console.log("test123", data);
     } catch (error: any) {
       console.log("err", error.response);
-      setPasswordError(error.response.data?.message);
+      setPasswordError(error.response?.data?.message);
     }
   };
   return (
@@ -117,6 +117,7 @@ const Button = styled.button`
   background-color: red;
   border: 1px solid red;
   color: white;
+  cursor: pointer;
 `;
 
 const Error = styled.span`

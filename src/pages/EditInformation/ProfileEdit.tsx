@@ -189,7 +189,7 @@ const UploadButton = styled.div`
 `;
 
 const InputUpload = styled.div`
-  margin-top: 40px;
+  margin-top: 20px;
 `;
 
 const InputDiv = styled.div`
@@ -216,6 +216,7 @@ const Button = styled.button`
   border: 1px solid red;
   color: white;
   margin-bottom: 25px;
+  cursor: pointer;
 `;
 const Error = styled.span`
   font-size: 12px;
