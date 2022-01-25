@@ -90,12 +90,14 @@ const ProfileEdit: FC = () => {
       formData.append("email", email);
       formData.append("nickname", test);
       formData.append("user_profile", profileImg);
-      console.log("1111", email, nickname);
+      for (const hihi of formData.values()) {
+        console.log("정보", hihi); // 이미지 객체의 정보
+      }
       const result = await axios.patch("user/info/edit", formData, config);
 
       console.log("data", result);
     } catch (error: any) {
-      console.log("test", error.response);
+      console.log("error", error.response);
       setProfileError(error.response.data?.message);
     }
   };
@@ -169,6 +171,7 @@ const ImgUpload = styled.div`
     height: 150px;
     border-radius: 50%;
     margin-right: 30px;
+    image-rendering: -webkit-optimize-contrast;
   }
 `;
 const UploadButton = styled.div`

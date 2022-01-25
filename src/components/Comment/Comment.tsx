@@ -12,8 +12,17 @@ interface Props {
     comment: string,
     editState: React.Dispatch<React.SetStateAction<boolean>>,
   ) => void;
+  deleteComment: (id: number) => void;
 }
-const Comment: FC<Props> = ({ id, img, comment, name, time, editComment }) => {
+const Comment: FC<Props> = ({
+  id,
+  img,
+  comment,
+  name,
+  time,
+  editComment,
+  deleteComment,
+}) => {
   const [editState, setEditState] = useState(false);
   const [editComments, setEditComments] = useState(comment);
 
@@ -31,7 +40,7 @@ const Comment: FC<Props> = ({ id, img, comment, name, time, editComment }) => {
             <span className="edit" onClick={() => setEditState(true)}>
               수정
             </span>
-            <span>삭제</span>
+            <span onClick={() => deleteComment(id)}>삭제</span>
           </EditDelete>
         </UserCommentTop>
         <CommentTitle>
@@ -95,6 +104,7 @@ const EditDelete = styled.div`
   }
 `;
 const CommentTitle = styled.div`
+  font-size: 14px;
   margin-top: 15px;
   pre {
     white-space: break-spaces;

@@ -28,6 +28,7 @@ const NavTab = () => {
     });
   }, [dispatch, payloadCategory]);
 
+  console.log(posts);
   return (
     <ContainerNavTab>
       <BottomNav>
@@ -53,9 +54,9 @@ const NavTab = () => {
             <ListBox
               key={list._id}
               id={list.postId}
-              name={list.writer.nickname}
-              img={list.writer.profileImage}
-              writerId={list.writer._id}
+              name={list.writer?.nickname}
+              img={list.writer?.profileImage}
+              writerId={list.writer?._id}
               time={list.createdAt}
               contents={list.content}
               contents_img={list.image?.info_image}

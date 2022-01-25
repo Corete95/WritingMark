@@ -11,6 +11,7 @@ const ListDetail = () => {
   const [like, setLike] = useState(detailData.count?.bookmark);
   const [bookMarkState, setBookMarkState] = useState(Boolean);
   const [error, setError] = useState("");
+  const [commentCount, setCommentCount] = useState(Number);
   const [commentValue, setCommentValue] = useState("");
   const [commentData, setCommentData] = useState<any>([]);
   const id = useParams<any>();
@@ -30,6 +31,7 @@ const ListDetail = () => {
       try {
         const result = await axios.get(`posts/${id.id}`, config);
         setDetailData(result.data.result);
+        setCommentCount(result.data.result.count.comment);
         setLike(result.data.result.count.bookmark);
         if (
           result.data.result.userBookmark == localStorage.getItem("user_id")
@@ -47,10 +49,10 @@ const ListDetail = () => {
   useEffect(() => {
     const commentData = async () => {
       try {
-        const result = await axios.get("http://localhost:3000/data/test.json");
-        setCommentData(result.data);
-      } catch (error) {
-        console.log(error);
+        const result = await axios.get(`post/${id.id}/comments`, config);
+        setCommentData(result.data.result);
+      } catch (error: any) {
+        console.log(error.response);
       }
     };
     commentData();
@@ -100,34 +102,67 @@ const ListDetail = () => {
     setCommentValue(e.target.value);
   };
 
-  const addComment = () => {
-    setCommentData(
-      commentData.concat({
-        id: commentData.length + 1,
-        contents: commentValue,
-      }),
-    );
-    setCommentValue("");
+  const addComment = async () => {
+    try {
+      const result = await axios.post(
+        `post/${id.id}/comment`,
+        { content: commentValue },
+        config,
+      );
+      const addData = [...commentData];
+      addData.unshift(result.data.result);
+      setCommentData([...addData]);
+      setCommentCount((pre) => pre + 1);
+      setCommentValue("");
+    } catch (error: any) {
+      console.log(error.response);
+    }
   };
 
-  const editComment = (
-    id: number,
+  const editComment = async (
+    writerId: number,
     editComment: string,
     editState: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
-    setCommentData(
-      commentData.map((comment: any) => {
-        if (comment.id === id) {
-          return {
-            ...comment,
-            contents: editComment,
-          };
-        } else {
-          return comment;
-        }
-      }),
-    );
-    editState(false);
+    try {
+      const result = await axios.patch(
+        `post/${id.id}/comment/${writerId}`,
+        { content: editComment },
+        config,
+      );
+      console.log(result);
+      setCommentData(
+        commentData.map((comment: any) => {
+          if (comment._id === writerId) {
+            return {
+              ...comment,
+              content: editComment,
+            };
+          } else {
+            return comment;
+          }
+        }),
+      );
+      editState(false);
+    } catch (error: any) {
+      console.log(error.response);
+    }
+  };
+
+  const deleteComment = async (writerId: number) => {
+    try {
+      const result = await axios.delete(
+        `post/${id.id}/comment/${writerId}`,
+        config,
+      );
+      console.log(result);
+      setCommentCount((pre) => pre - 1);
+      setCommentData(
+        commentData.filter((comment: any) => comment._id !== writerId),
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (error) {
@@ -188,8 +223,7 @@ const ListDetail = () => {
           <img src="/images/bookmark.png" onClick={bookMarkLike} />
         )}
         <p>
-          글갈피 {like}개
-          <span className="comments">댓글{detailData.count?.comment}개 </span>
+          글갈피 {like}개<span className="comments">댓글{commentCount}개 </span>
         </p>
       </BookmarkComments>
       <CommentCantainer>
@@ -209,13 +243,14 @@ const ListDetail = () => {
         {commentData.map((comment: any) => {
           return (
             <Comment
-              key={comment.id}
-              id={comment.id}
-              name={comment.name}
-              time={comment.time}
-              img={comment.img}
-              comment={comment.contents}
+              key={comment._id}
+              id={comment._id}
+              name={comment.writer?.nickname}
+              time={comment.createdAt}
+              img={comment.writer?.profileImage}
+              comment={comment.content}
               editComment={editComment}
+              deleteComment={deleteComment}
             />
           );
         })}
@@ -354,13 +389,13 @@ const CommentInputButton = styled.div`
 const TextareaORValue = styled.div`
   width: 90%;
   textarea {
-    padding: 5px 5px;
-    font-size: 16px;
+    padding: 8px 8px;
+    font-size: 14px;
     width: 100%;
     resize: none;
   }
   p {
-    font-size: 13px;
+    font-size: 12px;
     float: right;
   }
 `;

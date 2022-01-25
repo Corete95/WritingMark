@@ -70,6 +70,7 @@ const ListBox: FC<Props> = ({
       payload: { id, token },
     });
   };
+
   return (
     <ListBoxContainer key={id}>
       <TopBottom>
