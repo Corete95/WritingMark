@@ -21,6 +21,26 @@ export type LoginActionsType =
   | ReturnType<typeof loginSuccess>
   | ReturnType<typeof loginFailure>;
 
+//// Kakao_login
+export const KAKAO_LOGIN_REQUEST = "KAKAO_LOGIN_REQUEST" as const;
+export const KAKAO_LOGIN_SUCCESS = "KAKAO_LOGIN_SUCCESS" as const;
+export const KAKAO_LOGIN_FAILURE = "KAKAO_LOGIN_FAILURE" as const;
+
+export const kakaoLoginRequest = () => ({ type: KAKAO_LOGIN_REQUEST });
+export const kakaoLoginSuccess = (result: UsersType) => ({
+  type: KAKAO_LOGIN_SUCCESS,
+  payload: result,
+});
+export const kakaoLoginFailure = (error: UsersErrorType) => ({
+  type: KAKAO_LOGIN_FAILURE,
+  payload: error,
+});
+
+export type KakaoLoginActionsType =
+  | ReturnType<typeof kakaoLoginRequest>
+  | ReturnType<typeof kakaoLoginSuccess>
+  | ReturnType<typeof kakaoLoginFailure>;
+
 //// register
 export const REGISTER_REQUEST = "REGISTER_REQUEST" as const;
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS" as const;

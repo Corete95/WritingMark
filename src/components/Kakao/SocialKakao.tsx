@@ -1,23 +1,38 @@
 import React from "react";
 import { KAKAO_KEY } from "Config";
 import styled from "styled-components";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { KAKAO_LOGIN_REQUEST } from "redux/types";
 const { Kakao } = window;
 
 const SocialKakao = () => {
+  const dispatch = useDispatch();
+
   const loginWithKakao = () => {
     Kakao.isInitialized();
     window.Kakao.Auth.login({
       success: function (authObj: any) {
         console.log("authObj", authObj);
-        fetch(`${KAKAO_KEY}`, {
-          method: "GET",
-          headers: { Authorization: authObj.access_token },
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            localStorage.setItem("access_token", res.TOKEN);
-            alert("로그인되었습니다.");
-          });
+        // fetch(`${KAKAO_KEY}`, {
+        //   method: "GET",
+        //   headers: { Authorization: authObj.access_token },
+        // })
+        //   .then((res) => res.json())
+        //   .then((res) => {
+        //     console.log(res);
+        //   });
+
+        // axios
+        //   .get("/user/kakao", {
+        //     headers: { Authorization: authObj.access_token },
+        //   })
+        //   .then((res) => console.log(res))
+        //   .catch((error) => console.log(error.response));
+        dispatch({
+          type: KAKAO_LOGIN_REQUEST,
+          payload: authObj.access_token,
+        });
       },
       fail: function (err: string) {
         alert(JSON.stringify(err));
@@ -26,7 +41,7 @@ const SocialKakao = () => {
   };
 
   return (
-    <KakaoBtn id="custom-login-btn" onClick={loginWithKakao}>
+    <KakaoBtn id="custom-login-btn" onClick={() => loginWithKakao()}>
       <div className="kakaoImg"></div>
       <div className="text">카카오톡 시작하기</div>
     </KakaoBtn>

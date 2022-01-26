@@ -4,17 +4,19 @@ import {
   LOGIN_REQUEST,
   loginSuccess,
   loginFailure,
+  KAKAO_LOGIN_REQUEST,
+  kakaoLoginSuccess,
+  kakaoLoginFailure,
   REGISTER_REQUEST,
   registerSuccess,
   registerFailure,
   CLEAR_ERROR_REQUEST,
   clearErrorSuccess,
   clearErrorFailure,
-  RegisterActionsType,
 } from "../types";
 import { push } from "connected-react-router";
-import { history } from "store";
 
+//Login
 const loginUserAPI = (loginData: string) => {
   const config = {
     headers: {
@@ -37,6 +39,36 @@ function* loginUser(action: any) {
 function* watchLoginUser() {
   yield takeEvery(LOGIN_REQUEST, loginUser);
 }
+
+//Kakao_Login
+const kakaoLoginUserAPI = (payload: any) => {
+  const config: any = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const token = payload;
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+  console.log("payload", payload);
+  return axios.get("user/kakao", config);
+};
+
+function* kakaoLoginUser(action: any) {
+  try {
+    const result: AxiosResponse = yield call(kakaoLoginUserAPI, action.payload);
+    yield put(kakaoLoginSuccess(result.data));
+    yield put(push("/"));
+  } catch (error: any) {
+    yield put(kakaoLoginFailure(error.response.data));
+  }
+}
+
+function* watchKakaoLoginUser() {
+  yield takeEvery(KAKAO_LOGIN_REQUEST, kakaoLoginUser);
+}
+
 // Register
 
 const registerUserAPI = (req: string) => {
@@ -76,6 +108,7 @@ function* watchclearError() {
 export default function* authSaga() {
   yield all([
     fork(watchLoginUser),
+    fork(watchKakaoLoginUser),
     fork(watchregisterUser),
     fork(watchclearError),
   ]);

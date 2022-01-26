@@ -3,6 +3,10 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   LoginActionsType,
+  KAKAO_LOGIN_REQUEST,
+  KAKAO_LOGIN_SUCCESS,
+  KAKAO_LOGIN_FAILURE,
+  KakaoLoginActionsType,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
@@ -43,11 +47,16 @@ const initialState = {
 
 const authReducer = (
   state: State = initialState,
-  action: LoginActionsType | RegisterActionsType | clearErrorActionsType,
+  action:
+    | LoginActionsType
+    | RegisterActionsType
+    | clearErrorActionsType
+    | KakaoLoginActionsType,
 ) => {
   switch (action.type) {
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
+    case KAKAO_LOGIN_REQUEST:
       return {
         ...state,
         message: "",
@@ -55,6 +64,7 @@ const authReducer = (
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
+    case KAKAO_LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
       console.log("SUCCESS", action.payload);
       return {
@@ -71,6 +81,7 @@ const authReducer = (
       };
     case LOGIN_FAILURE:
     case REGISTER_FAILURE:
+    case KAKAO_LOGIN_FAILURE:
       console.log("err", action.payload.message);
       localStorage.removeItem("token");
       return {

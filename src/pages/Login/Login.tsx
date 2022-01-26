@@ -67,13 +67,6 @@ const Login = () => {
               onChange={onChangePassword}
             ></Input>
           </InputDiv>
-          <SaveBtnDiv>
-            <div>
-              <input type="checkbox" id="check" />
-              <label htmlFor="check">로그인 유지</label>
-            </div>
-            <Link to="/FindPassword">비밀번호 찾기</Link>
-          </SaveBtnDiv>
           {localMsg ? <Error>{localMsg}</Error> : null}
           <ButtonDiv>
             <Button type="submit" color="white" background="red" border="red">
