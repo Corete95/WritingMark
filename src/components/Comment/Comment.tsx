@@ -25,16 +25,31 @@ const Comment: FC<Props> = ({
 }) => {
   const [editState, setEditState] = useState(false);
   const [editComments, setEditComments] = useState(comment);
+  const max_length = 5;
+
+  const chatLimit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    let text = e.currentTarget.value;
+    const text_length = text.length;
+
+    if (text_length - 1 > max_length) {
+      alert(max_length + "이상 입력 불가능합니다!");
+      text = text.substr(0, max_length);
+      e.currentTarget.value = text;
+      setEditComments(e.currentTarget.value);
+    }
+  };
 
   return (
     <CommentDiv>
       <UserImg>
-        <img src={img} />
+        <img
+          src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${img}`}
+        />
       </UserImg>
       <UserComment>
         <UserCommentTop>
           <NameCreatedAt>
-            <p>{name}</p> <span>{time}</span>
+            <p>{name}</p> <span>{time.slice(0, 16)}</span>
           </NameCreatedAt>
           <EditDelete>
             <span className="edit" onClick={() => setEditState(true)}>
@@ -48,6 +63,7 @@ const Comment: FC<Props> = ({
             <>
               <textarea
                 value={editComments}
+                onKeyUp={chatLimit}
                 onChange={(e) => setEditComments(e.target.value)}
               />
               <button

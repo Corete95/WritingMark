@@ -136,11 +136,7 @@ const ListDetailEdit = () => {
       </Category>
       <Contents>
         <h1>내용</h1>
-        <textarea
-          // wrap="hard"
-          value={contents}
-          onChange={onChangeContents}
-        ></textarea>
+        <textarea value={contents} onChange={onChangeContents}></textarea>
         <ImgUpload>
           <img src="/images/camera.png" onClick={imageUploadBtn} />
           <input

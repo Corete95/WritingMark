@@ -31,9 +31,9 @@ const PasswordEdit = () => {
       }
       const { password, newPassword, newPasswordCheck } = data;
       const result = await axios.patch("user/info/password", data, config);
-      console.log("test123", data);
+      window.location.replace("/Mypage");
     } catch (error: any) {
-      console.log("err", error.response);
+      console.log("패스워드 Error", error.response);
       setPasswordError(error.response?.data?.message);
     }
   };
@@ -87,6 +87,7 @@ const PasswordEdit = () => {
             <Error>{errors.newPasswordCheck.message}</Error>
           )}
         </InputDiv>
+        {<Error>{passwordError}</Error>}
         <Button>비밀번호 변경하기</Button>
       </PasswordForm>
     </>

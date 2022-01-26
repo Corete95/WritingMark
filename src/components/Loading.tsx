@@ -19,7 +19,6 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: gray;
   width: 150px;
   height: 150px;
   border-radius: 50%;

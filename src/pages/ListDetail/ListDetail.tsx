@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { POSTS_DELETE_REQUEST, POSTS_DETAIL_REQUEST } from "redux/postTypes";
 import Comment from "components/Comment/Comment";
 const ListDetail = () => {
@@ -61,7 +61,7 @@ const ListDetail = () => {
   const bookMarkLike = async () => {
     try {
       const result = await axios.post(`user/bookmark/${id.id}`, {}, config);
-      setLike((preData: any) => preData + 1);
+      setLike((preData: number) => preData + 1);
       setBookMarkState(true);
     } catch (err) {
       console.log(err);
@@ -71,7 +71,7 @@ const ListDetail = () => {
   const bookMarkCancel = async () => {
     try {
       const result = await axios.delete(`user/bookmark/${id.id}`, config);
-      setLike((preData: any) => preData - 1);
+      setLike((preData: number) => preData - 1);
       setBookMarkState(false);
     } catch (err) {
       console.log(err);
@@ -104,6 +104,7 @@ const ListDetail = () => {
 
   const addComment = async () => {
     try {
+      if (commentValue === "") return alert("댓글을 입력해주세요!");
       const result = await axios.post(
         `post/${id.id}/comment`,
         { content: commentValue },
@@ -193,7 +194,7 @@ const ListDetail = () => {
         )}
       </ListTop>
       <ListCenter>
-        <pre> {detailData.content}</pre>
+        <pre>{detailData.content}</pre>
         {detailData?.image ? (
           <img
             src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${detailData.image?.info_image}`}
@@ -308,10 +309,20 @@ const EditDelete = styled.div`
   span {
     cursor: pointer;
   }
-  .edit {
-    margin-right: 13px;
+  .delete {
+    margin-left: 6px;
+  }
+  a:link {
+    color: gray;
+  }
+  a:visited {
+    color: gray;
+  }
+  a:hover {
+    color: gray;
   }
 `;
+
 const ListCenter = styled.div`
   margin-top: 20px;
   min-height: 400px;

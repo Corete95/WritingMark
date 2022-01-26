@@ -90,10 +90,10 @@ const Login = () => {
               회원가입 하기
             </ButtonLink>
           </ButtonDiv>
-          <ButtonDiv>
-            <SocialKakao />
-          </ButtonDiv>
         </LoginForm>
+        <ButtonDiv>
+          <SocialKakao />
+        </ButtonDiv>
       </LoginContainer>
     </Container>
   );

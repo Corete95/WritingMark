@@ -8,6 +8,7 @@ const SocialKakao = () => {
     Kakao.isInitialized();
     window.Kakao.Auth.login({
       success: function (authObj: any) {
+        console.log("authObj", authObj);
         fetch(`${KAKAO_KEY}`, {
           method: "GET",
           headers: { Authorization: authObj.access_token },

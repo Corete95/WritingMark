@@ -50,29 +50,25 @@ const BookMark: FC = () => {
         })}
       </BookMarkContainer>
       <ListBoxContainer>
-        {/* {posts.length === 0 && <NoPosts>게시글이 없습니다.</NoPosts>} */}
+        {posts.length === 0 && <NoPosts>게시글이 없습니다.</NoPosts>}
 
-        {posts.length !== 0 ? (
-          posts?.map((list: IListBox) => {
-            return (
-              <ListBox
-                key={list._id}
-                id={list.postId}
-                name={list.writer?.nickname}
-                img={list.writer?.profileImage}
-                writerId={list.writer?._id}
-                time={list.createdAt}
-                contents={list.content}
-                contents_img={list.image?.info_image}
-                bookmark={list.count.bookmark}
-                comments={list.count.comment}
-                userbookmark={list?.userBookmark}
-              />
-            );
-          })
-        ) : (
-          <NoPosts>게시글이 없습니다.</NoPosts>
-        )}
+        {posts?.map((list: IListBox) => {
+          return (
+            <ListBox
+              key={list._id}
+              id={list.postId}
+              name={list.writer?.nickname}
+              img={list.writer?.profileImage}
+              writerId={list.writer?._id}
+              time={list.createdAt}
+              contents={list.content}
+              contents_img={list.image?.info_image}
+              bookmark={list.count.bookmark}
+              comments={list.count.comment}
+              userbookmark={list?.userBookmark}
+            />
+          );
+        })}
       </ListBoxContainer>
     </>
   );

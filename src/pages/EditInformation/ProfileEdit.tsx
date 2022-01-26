@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Loading from "components/Loading";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 interface Formvalues {
   nickname: string;
@@ -23,6 +24,7 @@ const ProfileEdit: FC = () => {
   const [profileImg, setProfileImg] = useState("");
   const ImgInput = useRef<HTMLInputElement>(null);
   const [profileError, setProfileError] = useState("");
+  const history = useHistory();
   const token = localStorage.getItem("token");
   const config: any = {
     headers: {},
@@ -96,6 +98,7 @@ const ProfileEdit: FC = () => {
       const result = await axios.patch("user/info/edit", formData, config);
 
       console.log("data", result);
+      window.location.replace("/Mypage");
     } catch (error: any) {
       console.log("error", error.response);
       setProfileError(error.response.data?.message);
@@ -166,7 +169,6 @@ const ImgUpload = styled.div`
   justify-content: center;
   align-items: center;
   img {
-    background-color: gray;
     width: 150px;
     height: 150px;
     border-radius: 50%;
