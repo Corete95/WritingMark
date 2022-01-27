@@ -1,8 +1,10 @@
 import React, { FC, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 interface Props {
   id: number;
+  writerId: string;
   img: string;
   comment: string;
   name: string;
@@ -16,6 +18,7 @@ interface Props {
 }
 const Comment: FC<Props> = ({
   id,
+  writerId,
   img,
   comment,
   name,
@@ -23,9 +26,10 @@ const Comment: FC<Props> = ({
   editComment,
   deleteComment,
 }) => {
+  const { user } = useSelector((state: any) => state.user);
   const [editState, setEditState] = useState(false);
   const [editComments, setEditComments] = useState(comment);
-  const max_length = 5;
+  const max_length = 50;
 
   const chatLimit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     let text = e.currentTarget.value;
@@ -46,37 +50,54 @@ const Comment: FC<Props> = ({
           src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${img}`}
         />
       </UserImg>
-      <UserComment>
-        <UserCommentTop>
-          <NameCreatedAt>
-            <p>{name}</p> <span>{time.slice(0, 16)}</span>
-          </NameCreatedAt>
-          <EditDelete>
-            <span className="edit" onClick={() => setEditState(true)}>
-              수정
-            </span>
-            <span onClick={() => deleteComment(id)}>삭제</span>
-          </EditDelete>
-        </UserCommentTop>
-        <CommentTitle>
-          {editState ? (
-            <>
-              <textarea
-                value={editComments}
-                onKeyUp={chatLimit}
-                onChange={(e) => setEditComments(e.target.value)}
-              />
-              <button
-                onClick={() => editComment(id, editComments, setEditState)}
-              >
-                123
-              </button>
-            </>
-          ) : (
-            <pre> {comment}</pre>
-          )}
-        </CommentTitle>
-      </UserComment>
+      {editState ? (
+        <UserComment>
+          <UserCommentTop>
+            <NameCreatedAt>
+              <p>{name}</p> <span>{time.slice(0, 16)}</span>
+            </NameCreatedAt>
+          </UserCommentTop>
+          <CommentTitle>
+            <textarea
+              value={editComments}
+              onKeyUp={chatLimit}
+              onChange={(e) => setEditComments(e.target.value)}
+            />
+            <ButtonORValue>
+              <EditButton>
+                <button
+                  onClick={() => editComment(id, editComments, setEditState)}
+                >
+                  수정
+                </button>
+                <button onClick={() => setEditState(false)}>취소</button>
+              </EditButton>
+              <p>
+                {editComments.length}/<span>{max_length}</span>
+              </p>
+            </ButtonORValue>
+          </CommentTitle>
+        </UserComment>
+      ) : (
+        <UserComment>
+          <UserCommentTop>
+            <NameCreatedAt>
+              <p>{name}</p> <span>{time.slice(0, 16)}</span>
+            </NameCreatedAt>
+            {writerId === user?._id && (
+              <EditDelete>
+                <span className="edit" onClick={() => setEditState(true)}>
+                  수정
+                </span>
+                <span onClick={() => deleteComment(id)}>삭제</span>
+              </EditDelete>
+            )}
+          </UserCommentTop>
+          <CommentTitle>
+            <pre>{comment}</pre>
+          </CommentTitle>
+        </UserComment>
+      )}
     </CommentDiv>
   );
 };
@@ -84,10 +105,12 @@ const Comment: FC<Props> = ({
 const CommentDiv = styled.div`
   display: flex;
   padding: 20px 0px;
-  border-bottom: 1px solid gray;
 `;
 const UserImg = styled.div`
   flex: 1;
+  ${({ theme }) => theme.media.mobile`
+      flex: 1.8;
+  `}
   img {
     width: 50px;
     height: 50px;
@@ -106,7 +129,11 @@ const NameCreatedAt = styled.div`
   p {
     font-size: 18px;
     font-weight: bold;
-    margin-right: 20px;
+    margin-right: 17px;
+  }
+  span {
+    padding-top: 2px;
+    font-size: 14px;
   }
 `;
 const EditDelete = styled.div`
@@ -127,10 +154,37 @@ const CommentTitle = styled.div`
   }
   textarea {
     width: 100%;
-    height: 100px;
+    height: 64px;
     resize: none;
-    padding: 5px 5px;
-    font-size: 16px;
+    padding: 8px 8px;
+    font-size: 14px;
+    border: none;
+    background-color: #efecec;
+    border-radius: 24px 24px;
+  }
+  textarea:focus {
+    outline: none;
+  }
+`;
+const ButtonORValue = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  p {
+    margin-right: 15px;
+    font-size: 12px;
+  }
+`;
+const EditButton = styled.div`
+  margin-left: 11px;
+  button {
+    height: 21px;
+    border: 1px solid #dedfe0;
+    border-radius: 8px;
+    color: #535353;
+    margin-right: 5px;
+    padding: 0 16px;
+    cursor: pointer;
   }
 `;
 export default Comment;

@@ -92,12 +92,7 @@ const ProfileEdit: FC = () => {
       formData.append("email", email);
       formData.append("nickname", test);
       formData.append("user_profile", profileImg);
-      for (const hihi of formData.values()) {
-        console.log("정보", hihi); // 이미지 객체의 정보
-      }
       const result = await axios.patch("user/info/edit", formData, config);
-
-      console.log("data", result);
       window.location.replace("/Mypage");
     } catch (error: any) {
       console.log("error", error.response);

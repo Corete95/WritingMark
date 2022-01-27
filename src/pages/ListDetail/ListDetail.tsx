@@ -33,9 +33,10 @@ const ListDetail = () => {
         setDetailData(result.data.result);
         setCommentCount(result.data.result.count.comment);
         setLike(result.data.result.count.bookmark);
-        if (
-          result.data.result.userBookmark == localStorage.getItem("user_id")
-        ) {
+        const writerId = result.data.result.userBookmark.find(
+          (e: string) => e == localStorage.getItem("user_id"),
+        );
+        if (writerId == localStorage.getItem("user_id")) {
           setBookMarkState(true);
         }
       } catch (error: any) {
@@ -63,8 +64,8 @@ const ListDetail = () => {
       const result = await axios.post(`user/bookmark/${id.id}`, {}, config);
       setLike((preData: number) => preData + 1);
       setBookMarkState(true);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.log(err.response);
     }
   };
 
@@ -169,7 +170,7 @@ const ListDetail = () => {
   if (error) {
     return <Container>{error}</Container>;
   }
-
+  console.log("DATA", commentData);
   return (
     <Container>
       <ListTop>
@@ -181,7 +182,7 @@ const ListDetail = () => {
           </div>
           <div className="nameDiv">
             <p>{detailData.writer?.nickname}</p>
-            <p>{detailData.createdAt}</p>
+            <p>{detailData.createdAt?.slice(0, 16)}</p>
           </div>
         </ImgName>
         {detailData.writer?._id === user?._id && (
@@ -239,13 +240,14 @@ const ListDetail = () => {
               {commentValue.length}/<span>{max_length}</span>
             </p>
           </TextareaORValue>
-          <button onClick={addComment}> 댓글 입력</button>
+          <button onClick={addComment}>등록</button>
         </CommentInputButton>
         {commentData.map((comment: any) => {
           return (
             <Comment
               key={comment._id}
               id={comment._id}
+              writerId={comment.writer._id}
               name={comment.writer?.nickname}
               time={comment.createdAt}
               img={comment.writer?.profileImage}
@@ -326,7 +328,6 @@ const EditDelete = styled.div`
 const ListCenter = styled.div`
   margin-top: 20px;
   min-height: 400px;
-  border: 1px solid gray;
   padding: 20px 20px;
 
   img {
@@ -390,20 +391,31 @@ const CommentInputButton = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
+  border-radius: 24px 24px;
+  background-color: #efecec;
 
   button {
-    background-color: white;
+    padding-right: 20px;
+    background-color: transparent;
     border: none;
     cursor: pointer;
   }
 `;
 const TextareaORValue = styled.div`
   width: 90%;
+  ${({ theme }) => theme.media.mobile`
+    width: 85%;
+  `}
   textarea {
     padding: 8px 8px;
     font-size: 14px;
     width: 100%;
     resize: none;
+    background-color: transparent;
+    border: none;
+  }
+  textarea:focus {
+    outline: none;
   }
   p {
     font-size: 12px;
