@@ -16,8 +16,17 @@ const MyPage = () => {
 
   const LogOut = () => {
     localStorage.removeItem("token");
-    history.push("/");
-    window.location.reload();
+    localStorage.removeItem("user_id");
+    if (window.Kakao.Auth.getAccessToken()) {
+      console.log("카카오 인증 엑세스 토큰 존재");
+      window.Kakao.Auth.logout(() => {
+        console.log("카카오 로그아웃 완료");
+      });
+    }
+    setTimeout(() => {
+      history.push("/");
+      window.location.reload();
+    }, 500);
   };
   return (
     <Container>

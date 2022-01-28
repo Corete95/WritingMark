@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { NAV_CATEGORY } from "Config";
@@ -6,29 +6,85 @@ import { useDispatch, useSelector } from "react-redux";
 import { POSTS_LOADING_REQUEST } from "redux/postTypes";
 import ListBox from "components/ListBox/ListBox";
 import { IListBox } from "typings/db";
+import axios from "axios";
 
 const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const [payloadCategory, setPayloadCategory] = useState("new");
-  const { posts } = useSelector((state: any) => state.post);
+  const [count, setCount] = useState(0);
+  // const { count } = useSelector((state: any) => state.post);
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const elementRef = useRef<HTMLInputElement>(null);
+  const endElementRef = useRef(false);
+  const [posts, setPosts] = useState<IListBox[]>([]);
+  const [loading, setLoading] = useState<boolean | null>(null);
 
   const handleCategory = (cateory: string, path: string, payload: string) => {
     setIsActivatedCategory(cateory);
     setPayloadCategory(payload);
     history.push(path);
   };
+  // useEffect(() => {
+  //   dispatch({
+  //     type: POSTS_LOADING_REQUEST,
+  //     payload: { payloadCategory, token },
+  //   });
+  // }, [dispatch, payloadCategory]);
 
   useEffect(() => {
-    dispatch({
-      type: POSTS_LOADING_REQUEST,
-      payload: { payloadCategory, token },
-    });
-  }, [dispatch, payloadCategory]);
+    if (payloadCategory === "new") {
+      axios.get(`posts?tab=${payloadCategory}`).then((res) => {
+        console.log("DATA", res.data.result),
+          setPosts(res.data.result),
+          setCount(res.data.count);
+      });
+    }
+    if (payloadCategory === "hot") {
+      axios.get(`posts?tab=${payloadCategory}`).then((res) => {
+        console.log("HOT_DATA", res.data.result),
+          setPosts(res.data.result),
+          setCount(res.data.count);
+      });
+    }
+  }, [payloadCategory]);
+  // const loaderMorePosts = useCallback(() => {
+  //   if (posts.length === 0) return;
+  //   const last = posts[posts.length - 1]?._id;
+  //   if (posts.length < count)
+  //     dispatch({
+  //       type: POSTS_LOADING_REQUEST,
+  //       payload: { payloadCategory, token, last },
+  //     });
+  // }, [posts]);
+  const loaderMorePosts = () => {
+    if (posts.length === 0 || posts.length === count) return;
+    const lastId = posts[posts.length - 1]?._id;
+    if (posts.length < count) {
+      console.log("포스트", posts.length);
+      console.log("카운트", count);
+      axios
+        .get(`posts?tab=${payloadCategory}&lastId=${lastId}`)
+        .then((res) => {
+          console.log("무한스크롤DATA", res.data.result),
+            setPosts((pre) => [...pre, ...res.data.result]);
+        })
+        .catch((err: any) => console.log(err.response.data));
+    }
+  };
 
-  console.log(posts);
+  useEffect(() => {
+    if (!elementRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) loaderMorePosts();
+    });
+    observer.observe(elementRef.current);
+    return () => observer.disconnect();
+  }, [loaderMorePosts]);
+
+  // console.log(posts?.length);
+  // console.log("갯수", posts.length);
   return (
     <ContainerNavTab>
       <BottomNav>
@@ -49,7 +105,7 @@ const NavTab = () => {
         })}
       </BottomNav>
       <PostContainer>
-        {posts?.map((list: IListBox) => {
+        {posts?.map((list: IListBox, index: number) => {
           return (
             <ListBox
               key={list._id}
@@ -63,10 +119,19 @@ const NavTab = () => {
               bookmark={list.count.bookmark}
               comments={list.count.comment}
               userbookmark={list?.userBookmark}
+              elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );
         })}
       </PostContainer>
+      {endElementRef ? (
+        <>
+          <EndPosts>더 이상의 게시물이 없습니다.</EndPosts>
+          <button onClick={() => window.scrollTo({ top: 0 })}>위로</button>
+        </>
+      ) : (
+        ""
+      )}
     </ContainerNavTab>
   );
 };
@@ -100,5 +165,11 @@ const PostContainer = styled.div`
   ${({ theme }) => theme.media.mobile`
     margin:50px 16px 0px 16px;
   `}
+`;
+
+const EndPosts = styled.div`
+  text-align: center;
+  font-size: 18px;
+  margin: 50px 0px;
 `;
 export default NavTab;

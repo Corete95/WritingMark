@@ -17,6 +17,7 @@ interface Props {
   comments: number;
   userbookmark?: any;
   writerId?: string;
+  elementRef?: React.RefObject<HTMLInputElement> | undefined;
 }
 const ListBox: FC<Props> = ({
   id,
@@ -29,6 +30,7 @@ const ListBox: FC<Props> = ({
   comments,
   userbookmark,
   writerId,
+  elementRef,
 }) => {
   const { user } = useSelector((state: any) => state.user);
   const liked = userbookmark?.find((v: number) => v == user?._id);
@@ -70,9 +72,8 @@ const ListBox: FC<Props> = ({
       payload: { id, token },
     });
   };
-
   return (
-    <ListBoxContainer key={id}>
+    <ListBoxContainer key={id} ref={elementRef}>
       <TopBottom>
         <ImgName>
           <div className="imgDiv">

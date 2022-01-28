@@ -38,6 +38,7 @@ type State = {
   isAuthenticated: string | null;
   loading: boolean;
   posts: PostType[];
+  count: number;
   postDetail: PostType[];
   error: any;
 };
@@ -45,6 +46,7 @@ const initialState = {
   isAuthenticated: null,
   loading: false,
   posts: [],
+  count: 0,
   postDetail: [],
   error: "",
 };
@@ -74,9 +76,12 @@ export default function (
     case POSTS_CATEGORY_SUCCESS:
     case POSTS_MYWRITE_SUCCESS:
     case POSTS_MYLIKE_SUCCESS:
+      // console.log("state", ...state.posts);
+      // console.log("action", action.payload.result);
       return {
         ...state,
         posts: [...state.posts, ...action.payload.result],
+        count: action.payload.count,
         loading: false,
       };
     case POSTS_LOADING_FAILURE:

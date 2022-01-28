@@ -55,7 +55,7 @@ const ContainerNav = styled.header`
   min-width: 320px;
   background-color: #fff;
   ${({ theme }) => theme.media.mobile`
-    margin:0px 16px;
+    margin:0px 10px;
   `}
 `;
 const TopNav = styled.div`

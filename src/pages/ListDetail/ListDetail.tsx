@@ -229,19 +229,39 @@ const ListDetail = () => {
         </p>
       </BookmarkComments>
       <CommentCantainer>
-        <CommentInputButton>
-          <TextareaORValue>
-            <textarea
-              value={commentValue}
-              onKeyUp={chatLimit}
-              onChange={commentValueChange}
-            />
-            <p>
-              {commentValue.length}/<span>{max_length}</span>
-            </p>
-          </TextareaORValue>
-          <button onClick={addComment}>등록</button>
-        </CommentInputButton>
+        {user?._id ? (
+          <CommentInputButton>
+            <TextareaORValue>
+              <textarea
+                value={commentValue}
+                onKeyUp={chatLimit}
+                onChange={commentValueChange}
+              />
+              <p>
+                {commentValue.length}/<span>{max_length}</span>
+              </p>
+            </TextareaORValue>
+            <button onClick={addComment}>등록</button>
+          </CommentInputButton>
+        ) : (
+          <CommentInputButton>
+            <TextareaORValue>
+              <textarea
+                value={commentValue}
+                onKeyUp={chatLimit}
+                onChange={commentValueChange}
+                disabled
+                placeholder="로그인 후 이용 가능합니다."
+              />
+              <p>
+                {commentValue.length}/<span>{max_length}</span>
+              </p>
+            </TextareaORValue>
+            <button onClick={addComment} disabled>
+              등록
+            </button>
+          </CommentInputButton>
+        )}
         {commentData.map((comment: any) => {
           return (
             <Comment

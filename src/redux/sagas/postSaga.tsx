@@ -38,7 +38,14 @@ const loadPostAPI = (payload: any) => {
   if (token) {
     config.headers["authorization"] = token;
   }
-  return axios.get(`posts?tab=${payload.payloadCategory}`, config);
+  console.log("payloadLast", payload);
+  return payload.last
+    ? axios.get(
+        `posts?tab=${payload.payloadCategory}&lastId=${payload.last}`,
+        config,
+      )
+    : axios.get(`posts?tab=${payload.payloadCategory}`, config);
+  // return axios.get(`posts?tab=${payload.payloadCategory}`, config);
 };
 
 function* loadPosts(action: any) {
