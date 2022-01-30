@@ -427,7 +427,7 @@ const TextareaORValue = styled.div`
     width: 85%;
   `}
   textarea {
-    padding: 8px 8px;
+    padding: 10px 25px;
     font-size: 14px;
     width: 100%;
     resize: none;

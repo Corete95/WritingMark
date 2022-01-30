@@ -1,29 +1,74 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
 import ListBox from "components/ListBox/ListBox";
 import { POSTS_CATEGORY_REQUEST } from "redux/postTypes";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 const Category: FC<IListBox> = () => {
   const params = useParams<Record<string, string | undefined>>();
-  const { posts } = useSelector((state: any) => state.post);
+  // const { posts } = useSelector((state: any) => state.post);
   const dispatch = useDispatch();
+  const [posts, setPosts] = useState<IListBox[]>([]);
+  const [count, setCount] = useState(0);
+  const elementRef = useRef<HTMLInputElement>(null);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: POSTS_CATEGORY_REQUEST,
+  //     payload: params,
+  //   });
+  // }, [params]);
 
   useEffect(() => {
-    dispatch({
-      type: POSTS_CATEGORY_REQUEST,
-      payload: params,
-    });
+    const categoryPost = async () => {
+      try {
+        const result = await axios.get(
+          `posts/category?categoryname=${params.path}`,
+        );
+        console.log("result", result);
+        setPosts(result.data.result);
+        setCount(result.data.count);
+      } catch (error: any) {
+        console.log(error.response);
+      }
+    };
+    categoryPost();
   }, [params]);
+
+  const loaderMorePosts = () => {
+    if (posts.length === 0 || posts.length === count) return;
+    const lastId = posts[posts.length - 1]?._id;
+    if (posts.length < count) {
+      console.log("포스트", posts.length);
+      console.log("카운트", count);
+      console.log("라스트", lastId);
+      axios
+        .get(`posts/category?categoryname=${params.path}&lastId=${lastId}`)
+        .then((res) => {
+          console.log("무한스크롤DATA", res.data.result),
+            setPosts((pre) => [...pre, ...res.data.result]);
+        })
+        .catch((err: any) => console.log(err.response.data));
+    }
+  };
+
+  useEffect(() => {
+    if (!elementRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) loaderMorePosts();
+    });
+    observer.observe(elementRef.current);
+    return () => observer.disconnect();
+  }, [loaderMorePosts]);
 
   return (
     <Container>
       {params.path}
       <WritingButton to="/Writing">글쓰기</WritingButton>
       <ListContainer>
-        {posts?.map((list: IListBox) => {
+        {posts?.map((list, index: number) => {
           return (
             <ListBox
               key={list._id}
@@ -36,6 +81,7 @@ const Category: FC<IListBox> = () => {
               bookmark={list.count.bookmark}
               comments={list.count.comment}
               userbookmark={list?.userBookmark}
+              elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );
         })}

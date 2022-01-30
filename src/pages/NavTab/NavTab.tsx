@@ -42,11 +42,16 @@ const NavTab = () => {
       });
     }
     if (payloadCategory === "hot") {
-      axios.get(`posts?tab=${payloadCategory}`).then((res) => {
-        console.log("HOT_DATA", res.data.result),
-          setPosts(res.data.result),
-          setCount(res.data.count);
-      });
+      axios
+        .get(`posts?tab=${payloadCategory}`)
+        .then((res) => {
+          console.log("HOT_DATA", res.data.result),
+            setPosts(res.data.result),
+            setCount(res.data.count);
+        })
+        .catch((err: any) => {
+          console.log(err.response);
+        });
     }
   }, [payloadCategory]);
   // const loaderMorePosts = useCallback(() => {
@@ -105,7 +110,7 @@ const NavTab = () => {
         })}
       </BottomNav>
       <PostContainer>
-        {posts?.map((list: IListBox, index: number) => {
+        {posts?.map((list, index: number) => {
           return (
             <ListBox
               key={list._id}

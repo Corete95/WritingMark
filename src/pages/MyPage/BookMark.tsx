@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { BOOKMARK_CATEGORY } from "Config";
 import axios from "axios";
@@ -9,9 +9,20 @@ import { POSTS_MYWRITE_REQUEST, POSTS_MYLIKE_REQUEST } from "redux/postTypes";
 
 const BookMark: FC = () => {
   const [bookMarkCategory, setBookMarkCategory] = useState("내가 쓴 글");
-  const { posts } = useSelector((state: any) => state.post);
+  // const { posts } = useSelector((state: any) => state.post);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const [posts, setPosts] = useState<any[]>([]);
+  const [count, setCount] = useState(0);
+  const elementRef = useRef<HTMLInputElement>(null);
+  const config: any = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (token) {
+    config.headers["authorization"] = token;
+  }
 
   const handleCategory = (cateory: string, queryString: string) => {
     setBookMarkCategory(cateory);
@@ -19,18 +30,62 @@ const BookMark: FC = () => {
 
   useEffect(() => {
     if (bookMarkCategory === "내가 쓴 글") {
-      dispatch({
-        type: POSTS_MYWRITE_REQUEST,
-        payload: token,
-      });
+      axios
+        .get("user/posts", config)
+        .then((res) => {
+          console.log("DATA", res.data),
+            setPosts(res.data.result),
+            setCount(res.data.count);
+        })
+        .catch((err: any) => {
+          console.log(err.response?.data);
+        });
     }
     if (bookMarkCategory === "내 찜목록") {
-      dispatch({
-        type: POSTS_MYLIKE_REQUEST,
-        payload: token,
-      });
+      axios
+        .get("user/bookmarks", config)
+        .then((res) => {
+          console.log("DATA", res.data), console.log("asd", res.data.count);
+          setPosts(res.data.result), setCount(res.data.count);
+        })
+        .catch((err: any) => {
+          console.log(err.response?.data);
+        });
     }
-  }, [dispatch, bookMarkCategory]);
+  }, [bookMarkCategory]);
+  const loaderMorePosts = () => {
+    if (posts.length === 0 || posts.length === count) return;
+    const lastId = posts[posts.length - 1]?._id;
+    if (posts.length < count) {
+      {
+        bookMarkCategory === "내가 쓴 글"
+          ? axios
+              .get(`user/posts?lastId=${lastId}`, config)
+              .then((res) => {
+                console.log("내가 쓴글 무한스크롤", res.data.result),
+                  setPosts((pre) => [...pre, ...res.data.result]);
+              })
+              .catch((err: any) => console.log(err.response.data))
+          : axios
+              .get(`user/bookmarks?lastId=${lastId}`, config)
+              .then((res) => {
+                console.log("내 찜목록 무한스크롤", res.data.result),
+                  setPosts((pre) => [...pre, ...res.data.result]);
+              })
+              .catch((err: any) => console.log(err.response.data));
+      }
+    }
+  };
+  console.log("카운트", count);
+
+  useEffect(() => {
+    if (!elementRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) loaderMorePosts();
+    });
+    observer.observe(elementRef.current);
+    return () => observer.disconnect();
+  }, [loaderMorePosts]);
 
   return (
     <>
@@ -49,10 +104,11 @@ const BookMark: FC = () => {
           );
         })}
       </BookMarkContainer>
+      <TotalPosts>총 게시글 수 : {count} 개</TotalPosts>
       <ListBoxContainer>
         {posts.length === 0 && <NoPosts>게시글이 없습니다.</NoPosts>}
 
-        {posts?.map((list: IListBox) => {
+        {posts?.map((list, index: number) => {
           return (
             <ListBox
               key={list._id}
@@ -66,6 +122,7 @@ const BookMark: FC = () => {
               bookmark={list.count.bookmark}
               comments={list.count.comment}
               userbookmark={list?.userBookmark}
+              elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );
         })}
@@ -96,6 +153,11 @@ const BookMarkContainer = styled.div`
   }
 `;
 
+const TotalPosts = styled.p`
+  font-size: 17px;
+  margin: 20px 0px;
+  font-weight: bold;
+`;
 const ListBoxContainer = styled.div`
   margin-top: 25px;
 `;
@@ -105,4 +167,5 @@ const NoPosts = styled.div`
   font-size: 20px;
   margin-top: 80px;
 `;
+
 export default BookMark;
