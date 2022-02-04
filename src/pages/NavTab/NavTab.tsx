@@ -20,6 +20,12 @@ const NavTab = () => {
   const endElementRef = useRef(false);
   const [posts, setPosts] = useState<IListBox[]>([]);
   const [loading, setLoading] = useState<boolean | null>(null);
+  const config: any = {
+    headers: {},
+  };
+  if (token) {
+    config.headers["authorization"] = token;
+  }
 
   const handleCategory = (cateory: string, path: string, payload: string) => {
     setIsActivatedCategory(cateory);
@@ -35,15 +41,20 @@ const NavTab = () => {
 
   useEffect(() => {
     if (payloadCategory === "new") {
-      axios.get(`posts?tab=${payloadCategory}`).then((res) => {
-        console.log("DATA", res.data.result),
-          setPosts(res.data.result),
-          setCount(res.data.count);
-      });
+      axios
+        .get(`posts?tab=${payloadCategory}`, config)
+        .then((res) => {
+          console.log("DATA", res.data.result),
+            setPosts(res.data.result),
+            setCount(res.data.count);
+        })
+        .catch((err: any) => {
+          console.log(err.response);
+        });
     }
     if (payloadCategory === "hot") {
       axios
-        .get(`posts?tab=${payloadCategory}`)
+        .get(`posts?tab=${payloadCategory}`, config)
         .then((res) => {
           console.log("HOT_DATA", res.data.result),
             setPosts(res.data.result),
@@ -70,7 +81,7 @@ const NavTab = () => {
       console.log("포스트", posts.length);
       console.log("카운트", count);
       axios
-        .get(`posts?tab=${payloadCategory}&lastId=${lastId}`)
+        .get(`posts?tab=${payloadCategory}&lastId=${lastId}`, config)
         .then((res) => {
           console.log("무한스크롤DATA", res.data.result),
             setPosts((pre) => [...pre, ...res.data.result]);
@@ -123,7 +134,7 @@ const NavTab = () => {
               contents_img={list.image?.info_image}
               bookmark={list.count.bookmark}
               comments={list.count.comment}
-              userbookmark={list?.userBookmark}
+              bookmarkState={list.bookmarkState}
               elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );

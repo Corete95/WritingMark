@@ -14,6 +14,13 @@ const Category: FC<IListBox> = () => {
   const [posts, setPosts] = useState<IListBox[]>([]);
   const [count, setCount] = useState(0);
   const elementRef = useRef<HTMLInputElement>(null);
+  const token = localStorage.getItem("token");
+  const config: any = {
+    headers: {},
+  };
+  if (token) {
+    config.headers["authorization"] = token;
+  }
   // useEffect(() => {
   //   dispatch({
   //     type: POSTS_CATEGORY_REQUEST,
@@ -26,6 +33,7 @@ const Category: FC<IListBox> = () => {
       try {
         const result = await axios.get(
           `posts/category?categoryname=${params.path}`,
+          config,
         );
         console.log("result", result);
         setPosts(result.data.result);
@@ -45,7 +53,10 @@ const Category: FC<IListBox> = () => {
       console.log("카운트", count);
       console.log("라스트", lastId);
       axios
-        .get(`posts/category?categoryname=${params.path}&lastId=${lastId}`)
+        .get(
+          `posts/category?categoryname=${params.path}&lastId=${lastId}`,
+          config,
+        )
         .then((res) => {
           console.log("무한스크롤DATA", res.data.result),
             setPosts((pre) => [...pre, ...res.data.result]);
@@ -80,7 +91,7 @@ const Category: FC<IListBox> = () => {
               contents_img={list.image?.info_image}
               bookmark={list.count.bookmark}
               comments={list.count.comment}
-              userbookmark={list?.userBookmark}
+              bookmarkState={list.bookmarkState}
               elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );

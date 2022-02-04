@@ -15,7 +15,7 @@ interface Props {
   contents_img: string;
   bookmark: number;
   comments: number;
-  userbookmark?: any;
+  bookmarkState?: any;
   writerId?: string;
   elementRef?: React.RefObject<HTMLInputElement> | undefined;
 }
@@ -28,14 +28,13 @@ const ListBox: FC<Props> = ({
   contents_img,
   bookmark,
   comments,
-  userbookmark,
+  bookmarkState,
   writerId,
   elementRef,
 }) => {
   const { user } = useSelector((state: any) => state.user);
-  const liked = userbookmark?.find((v: number) => v == user?._id);
   const [like, setLike] = useState(bookmark);
-  const [bookMarkState, setBookMarkState] = useState(liked);
+  const [bookMarkState, setBookMarkState] = useState(bookmarkState);
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -50,9 +49,10 @@ const ListBox: FC<Props> = ({
     try {
       const result = await axios.post(`user/bookmark/${id}`, {}, config);
       setLike((preData) => preData + 1);
-      setBookMarkState(result.data.result.userBookmark);
-    } catch (err) {
-      console.log(err);
+      console.log("123123", result);
+      setBookMarkState(true);
+    } catch (err: any) {
+      console.log(err.response);
     }
   };
 
@@ -60,7 +60,7 @@ const ListBox: FC<Props> = ({
     try {
       const result = await axios.delete(`user/bookmark/${id}`, config);
       setLike((preData) => preData - 1);
-      setBookMarkState(null);
+      setBookMarkState(false);
     } catch (err) {
       console.log(err);
     }
@@ -72,6 +72,7 @@ const ListBox: FC<Props> = ({
       payload: { id, token },
     });
   };
+
   return (
     <ListBoxContainer key={id} ref={elementRef}>
       <TopBottom>

@@ -45,7 +45,7 @@ const BookMark: FC = () => {
       axios
         .get("user/bookmarks", config)
         .then((res) => {
-          console.log("DATA", res.data), console.log("asd", res.data.count);
+          console.log("bookmarks", res), console.log("asd", res.data.count);
           setPosts(res.data.result), setCount(res.data.count);
         })
         .catch((err: any) => {
@@ -76,7 +76,7 @@ const BookMark: FC = () => {
       }
     }
   };
-  console.log("카운트", count);
+  console.log("카운트", posts);
 
   useEffect(() => {
     if (!elementRef.current) return;
@@ -107,8 +107,7 @@ const BookMark: FC = () => {
       <TotalPosts>총 게시글 수 : {count} 개</TotalPosts>
       <ListBoxContainer>
         {posts.length === 0 && <NoPosts>게시글이 없습니다.</NoPosts>}
-
-        {posts?.map((list, index: number) => {
+        {/* {posts?.map((list, index: number) => {
           return (
             <ListBox
               key={list._id}
@@ -119,13 +118,54 @@ const BookMark: FC = () => {
               time={list.createdAt}
               contents={list.content}
               contents_img={list.image?.info_image}
-              bookmark={list.count.bookmark}
-              comments={list.count.comment}
-              userbookmark={list?.userBookmark}
+              bookmark={list.count?.bookmark}
+              comments={list.count?.comment}
+              bookmarkState={list.bookmarkState}
               elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );
-        })}
+        })} */}
+        {bookMarkCategory === "내가 쓴 글"
+          ? posts?.map((list, index: number) => {
+              return (
+                <ListBox
+                  key={list._id}
+                  id={list.postId}
+                  name={list.writer?.nickname}
+                  img={list.writer?.profileImage}
+                  writerId={list.writer?._id}
+                  time={list.createdAt}
+                  contents={list.content}
+                  contents_img={list.image?.info_image}
+                  bookmark={list.count?.bookmark}
+                  comments={list.count?.comment}
+                  bookmarkState={list.bookmarkState}
+                  elementRef={
+                    index + 1 === posts.length ? elementRef : undefined
+                  }
+                />
+              );
+            })
+          : posts?.map((list, index: number) => {
+              return (
+                <ListBox
+                  key={list._id}
+                  id={list.postId}
+                  name={list.post_id?.writer.nickname}
+                  img={list.post_id?.writer.profileImage}
+                  writerId={list.post_id?.writer._id}
+                  time={list.post_id?.createdAt}
+                  contents={list.post_id?.content}
+                  contents_img={list.post_id?.image?.info_image}
+                  bookmark={list.post_id?.count.bookmark}
+                  comments={list.post_id?.count.comment}
+                  bookmarkState={list.bookmarkState}
+                  elementRef={
+                    index + 1 === posts.length ? elementRef : undefined
+                  }
+                />
+              );
+            })}
       </ListBoxContainer>
     </>
   );

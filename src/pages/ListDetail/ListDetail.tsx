@@ -33,12 +33,14 @@ const ListDetail = () => {
         setDetailData(result.data.result);
         setCommentCount(result.data.result.count.comment);
         setLike(result.data.result.count.bookmark);
-        const writerId = result.data.result.userBookmark.find(
-          (e: string) => e == localStorage.getItem("user_id"),
-        );
-        if (writerId == localStorage.getItem("user_id")) {
-          setBookMarkState(true);
-        }
+        // const writerId = result.data.result.userBookmark.find(
+        //   (e: string) => e == localStorage.getItem("user_id"),
+        // );
+        // if (writerId == localStorage.getItem("user_id")) {
+        //   setBookMarkState(true);
+        // }
+        console.log("123", result);
+        setBookMarkState(result.data.result.bookmarkState);
       } catch (error: any) {
         console.log(error.response);
         setError(error.response?.data?.message);
@@ -114,7 +116,7 @@ const ListDetail = () => {
       const addData = [...commentData];
       addData.unshift(result.data.result);
       setCommentData([...addData]);
-      setCommentCount((pre) => pre + 1);
+      setCommentCount((preData) => preData + 1);
       setCommentValue("");
     } catch (error: any) {
       console.log(error.response);
@@ -158,7 +160,7 @@ const ListDetail = () => {
         config,
       );
       console.log(result);
-      setCommentCount((pre) => pre - 1);
+      setCommentCount((preData) => preData - 1);
       setCommentData(
         commentData.filter((comment: any) => comment._id !== writerId),
       );
@@ -170,7 +172,7 @@ const ListDetail = () => {
   if (error) {
     return <Container>{error}</Container>;
   }
-  console.log("DATA", commentData);
+
   return (
     <Container>
       <ListTop>
@@ -237,9 +239,11 @@ const ListDetail = () => {
                 onKeyUp={chatLimit}
                 onChange={commentValueChange}
               />
-              <p>
-                {commentValue.length}/<span>{max_length}</span>
-              </p>
+              {commentValue.length >= 1 && (
+                <p>
+                  {commentValue.length}/<span>{max_length}</span>
+                </p>
+              )}
             </TextareaORValue>
             <button onClick={addComment}>등록</button>
           </CommentInputButton>
@@ -253,9 +257,11 @@ const ListDetail = () => {
                 disabled
                 placeholder="로그인 후 이용 가능합니다."
               />
-              <p>
-                {commentValue.length}/<span>{max_length}</span>
-              </p>
+              {commentValue.length >= 1 && (
+                <p>
+                  {commentValue.length}/<span>{max_length}</span>
+                </p>
+              )}
             </TextareaORValue>
             <button onClick={addComment} disabled>
               등록
@@ -301,12 +307,13 @@ const ImgName = styled.div`
   .imgDiv {
     width: 50px;
     height: 50px;
-    border-radius: 70%;
+    border-radius: 50%;
     overflow: hidden;
 
     img {
       width: 100%;
       height: auto;
+      object-fit: cover;
       image-rendering: -webkit-optimize-contrast;
     }
   }
