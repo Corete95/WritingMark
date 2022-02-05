@@ -2,8 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import ProfileEdit from "./ProfileEdit";
 import PasswordEdit from "./PasswordEdit";
+import axios from "axios";
 
 const EditInformation = () => {
+  const token = localStorage.getItem("token");
+
+  const secession = async () => {
+    try {
+      const config: any = {
+        headers: {},
+      };
+      if (token) {
+        config.headers["authorization"] = token;
+      }
+      const result = await axios.get("user/withdrawal", config);
+      console.log(result);
+    } catch (err: any) {
+      console.log(err.response);
+    }
+  };
   return (
     <Container>
       <InformationContaniner>
@@ -15,7 +32,7 @@ const EditInformation = () => {
         <MemberSecession>
           <h2 className="secessionText">회원 탈퇴</h2>
           <p>탈퇴 시 회원정보가 삭제되며 복구되지 않습니다.</p>
-          <button>탈퇴하기</button>
+          <button onClick={secession}>탈퇴하기</button>
         </MemberSecession>
       </InformationContaniner>
     </Container>

@@ -7,6 +7,7 @@ import { POSTS_LOADING_REQUEST } from "redux/postTypes";
 import ListBox from "components/ListBox/ListBox";
 import { IListBox } from "typings/db";
 import axios from "axios";
+import FeedListBox from "components/FeedListBox/FeedListBox";
 
 const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
@@ -121,6 +122,7 @@ const NavTab = () => {
         })}
       </BottomNav>
       <PostContainer>
+        <FeedListBox />
         {posts?.map((list, index: number) => {
           return (
             <ListBox
@@ -177,8 +179,12 @@ const BottomNav = styled.div`
   }
 `;
 const PostContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   margin-top: 50px;
   ${({ theme }) => theme.media.mobile`
+    display: block;
     margin:50px 16px 0px 16px;
   `}
 `;
