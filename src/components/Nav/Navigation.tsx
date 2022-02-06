@@ -22,8 +22,16 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
 
   const LogOut = () => {
     localStorage.removeItem("token");
-    history.push("/");
-    window.location.reload();
+    if (window.Kakao.Auth.getAccessToken()) {
+      console.log("카카오 인증 엑세스 토큰 존재");
+      window.Kakao.Auth.logout(() => {
+        console.log("카카오 로그아웃 완료");
+      });
+    }
+    setTimeout(() => {
+      history.push("/");
+      window.location.reload();
+    }, 500);
   };
 
   if (!show) {
@@ -34,21 +42,32 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
     <NavigationModal onClick={onCloseModal}>
       <Container onClick={stopPropagation}>
         <Logo>
-          <span>로고</span>
+          <img src="/images/writingMark.png" />
         </Logo>
+        <img className="lineBasic" src="/images/lineBasic.png" />
         <Login>
           {user?._id ? (
-            <span>
-              <em
-                onClick={() => {
-                  history.push("/MyPage");
-                  onCloseModal();
-                }}
-              >
-                {user.nickname}
-              </em>
-              님 반갑습니다!
-            </span>
+            <>
+              <span>
+                <em
+                  onClick={() => {
+                    history.push("/MyPage");
+                    onCloseModal();
+                  }}
+                >
+                  {user.nickname}
+                </em>
+                님 반갑습니다!
+              </span>
+              <UserButton>
+                <WritingBtn to="/Writing" onClick={onCloseModal}>
+                  글쓰기
+                </WritingBtn>
+                <WritingBtn to="/" onClick={LogOut}>
+                  로그아웃
+                </WritingBtn>
+              </UserButton>
+            </>
           ) : (
             <span>
               <em
@@ -63,6 +82,7 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
             </span>
           )}
         </Login>
+        <img className="lineClip" src="/images/lineClip1.png" />
         <NavigationCategory>
           {NAVIGATION_CATEGORY?.map((category) => {
             return (
@@ -72,18 +92,7 @@ const Navigation: FC<Props> = ({ show, onCloseModal }) => {
             );
           })}
         </NavigationCategory>
-        {user?._id ? (
-          <>
-            <WritingBtn to="/Writing" onClick={onCloseModal}>
-              글쓰기
-            </WritingBtn>
-            <WritingBtn to="/" onClick={LogOut}>
-              로그아웃
-            </WritingBtn>
-          </>
-        ) : (
-          ""
-        )}
+        <img className="test1" src="/images/lineBasic.png" />
       </Container>
     </NavigationModal>
   );
@@ -94,6 +103,13 @@ const NavigationModal = styled.div`
   inset: 0px;
   z-index: 1022;
   background: rgba(0, 0, 0, 0.4);
+  .lineClip {
+    width: 100%;
+    height: 55px;
+  }
+  .lineBasic {
+    width: 100%;
+  }
 `;
 
 const Container = styled.div`
@@ -134,17 +150,17 @@ const Container = styled.div`
 `;
 
 const Logo = styled.div`
-  border-bottom: 1px solid #e3e5e8;
   text-align: center;
-  span {
-    font-size: 20px;
-    line-height: 40px;
+  img {
+    width: 100px;
   }
 `;
 const Login = styled.div`
-  border-bottom: 1px solid #e3e5e8;
-  padding: 8px 0px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0px;
   span {
+    padding-left: 15px;
     font-weight: bold;
     font-size: 20px;
     line-height: 40px;
@@ -158,11 +174,11 @@ const Login = styled.div`
 const NavigationCategory = styled.div`
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid #e3e5e8;
-  padding: 0px 0px 20px 0px;
+  padding: 0px 0px 20px 15px;
   a {
     margin: 14px 0px;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 700;
   }
   a:link {
     color: black;
@@ -174,14 +190,22 @@ const NavigationCategory = styled.div`
     color: black;
   }
 `;
-
-const WritingBtn = styled(Link)`
+const UserButton = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  width: 100%;
-  height: 30px;
-  background-color: red;
-  margin-top: 20px;
+  margin-top: 10px;
+`;
+const WritingBtn = styled(Link)`
+  background-color: black;
+  text-align: center;
+  height: 32px;
+  width: 150px;
+  border-radius: 24px 24px;
+  color: white;
+  padding-top: 9px;
+  ${({ theme }) => theme.media.mobile`
+    width:100px;
+  `}
 `;
 export default Navigation;

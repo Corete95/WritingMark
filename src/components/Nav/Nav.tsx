@@ -24,7 +24,9 @@ const Nav: FC = () => {
           <IconMenu onClick={onClickNavigation}>
             <img src="/images/menu.png" />
           </IconMenu>
-          <Logo onClick={goToMain}>글갈피</Logo>
+          <Logo onClick={goToMain}>
+            <img src="/images/writingMark.png" />
+          </Logo>
           <IconMenu>
             {user?._id ? (
               <Link to="/MyPage">
@@ -73,6 +75,9 @@ const IconMenu = styled.div`
 const Logo = styled.span`
   font-size: 20px;
   cursor: pointer;
+  img {
+    width: 100px;
+  }
 `;
 
 export default Nav;

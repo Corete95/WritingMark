@@ -122,21 +122,21 @@ const NavTab = () => {
         })}
       </BottomNav>
       <PostContainer>
-        {/* <FeedListBox /> */}
-        {posts?.map((list, index: number) => {
+        {posts?.map((post, index: number) => {
           return (
-            <ListBox
-              key={list._id}
-              id={list.postId}
-              name={list.writer?.nickname}
-              img={list.writer?.profileImage}
-              writerId={list.writer?._id}
-              time={list.createdAt}
-              contents={list.content}
-              contents_img={list.image?.info_image}
-              bookmark={list.count.bookmark}
-              comments={list.count.comment}
-              bookmarkState={list.bookmarkState}
+            <FeedListBox
+              key={post._id}
+              id={post.postId}
+              name={post.writer.nickname}
+              img={post.writer.profileImage}
+              time={post.createdAt}
+              contents={post.content}
+              contents_img={post.image?.info_image}
+              bookmark={post.count.bookmark}
+              comments={post.count.comment}
+              categoryLabel={post.categoryLabel}
+              categoryValue={post.categoryValue}
+              bookmarkState={post.bookmarkState}
               elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );
@@ -157,7 +157,7 @@ const ContainerNavTab = styled.div`
   margin: 0 auto;
   max-width: 640px;
   min-width: 320px;
-  padding-top: 31px;
+  padding-top: 53px;
 `;
 const BottomNav = styled.div`
   display: flex;

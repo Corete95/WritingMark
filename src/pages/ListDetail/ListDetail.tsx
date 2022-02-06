@@ -207,18 +207,39 @@ const ListDetail = () => {
         )}
       </ListCenter>
       <ListBottom>
-        <WarningIcon>
-          <img src="/images/warning.png" />
-          <IconText>
-            소설 / 제목 : <span> {detailData.info_title}</span>
-          </IconText>
-        </WarningIcon>
-        <UrlIcon>
-          <img src="/images/url.png" />
-          <IconText>
-            아이콘 클릭시 컨텐츠와 관련된 사이트로 이동합니다.
-          </IconText>
-        </UrlIcon>
+        # 에세이
+        {detailData.info_title !== "" ? (
+          <InformationIcon>
+            <img src="/images/claim.png" />
+            <IconText>
+              제목 : <span>{detailData.info_title}</span>
+            </IconText>
+          </InformationIcon>
+        ) : (
+          <InformationIcon>
+            <img src="/images/close.png" />
+            <IconText>추가 정보가 없습니다.</IconText>
+          </InformationIcon>
+        )}
+        {detailData.info_url !== "" ? (
+          <InformationIcon>
+            <a
+              href={`https://${detailData.info_url}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/images/website.png" />
+            </a>
+            <IconText>
+              아이콘 클릭시 컨텐츠와 관련된 사이트로 이동합니다.
+            </IconText>
+          </InformationIcon>
+        ) : (
+          <InformationIcon>
+            <img src="/images/close.png" />
+            <IconText>추가 정보가 없습니다.</IconText>
+          </InformationIcon>
+        )}
       </ListBottom>
       <BookmarkComments>
         {bookMarkState ? (
@@ -370,26 +391,14 @@ const ListBottom = styled.div`
   font-size: 14px;
 `;
 
-const WarningIcon = styled.div`
-  display: flex;
-  align-items: center;
-  img {
-    width: 20px;
-    height: 20px;
-    border: 1px solid black;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-`;
-const UrlIcon = styled.div`
+const InformationIcon = styled.div`
   display: flex;
   align-items: center;
   margin-top: 10px;
+  font-size: 12px;
   img {
-    width: 20px;
-    height: 20px;
-    border: 1px solid black;
-    border-radius: 50%;
+    width: 25px;
+    height: 25px;
     cursor: pointer;
   }
 `;
@@ -401,7 +410,7 @@ const IconText = styled.p`
 const BookmarkComments = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 33px;
   font-size: 14px;
   img {
     width: 20px;
@@ -412,7 +421,7 @@ const BookmarkComments = styled.div`
   }
 `;
 const CommentCantainer = styled.div`
-  margin-top: 30px;
+  margin-top: 15px;
 `;
 const CommentInputButton = styled.div`
   display: flex;

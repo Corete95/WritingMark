@@ -36,7 +36,6 @@ const Category: FC<IListBox> = () => {
           `posts/category?categoryname=${params.path}`,
           config,
         );
-        console.log("result", result);
         setPosts(result.data.result);
         setCount(result.data.count);
       } catch (error: any) {
@@ -75,28 +74,14 @@ const Category: FC<IListBox> = () => {
     return () => observer.disconnect();
   }, [loaderMorePosts]);
 
+  console.log(posts);
   return (
     <Container>
-      {params.path}
-      <WritingButton to="/Writing">글쓰기</WritingButton>
+      <CategoryTop>
+        <span># {posts[0]?.categoryLabel}</span>
+        <WritingButton to="/Writing">글쓰기</WritingButton>
+      </CategoryTop>
       <ListContainer>
-        {/* {posts?.map((list, index: number) => {
-          return (
-            <ListBox
-              key={list._id}
-              id={list.postId}
-              name={list.writer.nickname}
-              img={list.writer.profileImage}
-              time={list.createdAt}
-              contents={list.content}
-              contents_img={list.image?.info_image}
-              bookmark={list.count.bookmark}
-              comments={list.count.comment}
-              bookmarkState={list.bookmarkState}
-              elementRef={index + 1 === posts.length ? elementRef : undefined}
-            />
-          );
-        })} */}
         {posts?.map((post, index: number) => {
           return (
             <FeedListBox
@@ -130,16 +115,25 @@ const Container = styled.div`
   margin:0px 16px;
   `}
 `;
+const CategoryTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  span {
+    font-size: 23px;
+    font-weight: bold;
+  }
+`;
 
 const WritingButton = styled(Link)`
-  float: right;
-  width: 100px;
+  border-radius: 24px 24px;
+  font-size: 14px;
+  width: 80px;
   height: 30px;
   color: white;
+  background-color: black;
   text-align: center;
-  padding-top: 7px;
-  background-color: red;
-  border: 1px solid red;
+  padding-top: 8px;
   cursor: pointer;
 `;
 
@@ -147,7 +141,7 @@ const ListContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin-top: 50px;
+  margin-top: 25px;
   ${({ theme }) => theme.media.mobile`
     display: block;
     margin:50px 16px 0px 16px;

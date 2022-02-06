@@ -58,7 +58,7 @@ const FeedListBox: FC<Props> = ({
       console.log(err.response);
     }
   };
-  console.log("like", like);
+
   const bookMarkCancel = async () => {
     try {
       const result = await axios.delete(`user/bookmark/${id}`, config);
@@ -135,7 +135,7 @@ const FeedListBox: FC<Props> = ({
           </UserInfo>
           <BookMarks>
             {bookMarkState ? (
-              <img src="/images/bookmarkfull.png" onClick={bookMarkCancel} />
+              <img src="/images/bookmarkFull.png" onClick={bookMarkCancel} />
             ) : (
               <img src="/images/bookmark.png" onClick={bookMarkLike} />
             )}
