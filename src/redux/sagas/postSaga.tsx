@@ -102,7 +102,7 @@ function* uploadPosts(action: any) {
     yield put(postWriteSuccess(result.data.result));
     yield put(push(`/ListDetail/${result.data.result.postId}`));
   } catch (error: any) {
-    yield put(postWriteFailure(error.response.data));
+    yield put(postWriteFailure(error.response));
   }
 }
 

@@ -6,6 +6,7 @@ import ListBox from "components/ListBox/ListBox";
 import { POSTS_CATEGORY_REQUEST } from "redux/postTypes";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import FeedListBox from "components/FeedListBox/FeedListBox";
 
 const Category: FC<IListBox> = () => {
   const params = useParams<Record<string, string | undefined>>();
@@ -79,7 +80,7 @@ const Category: FC<IListBox> = () => {
       {params.path}
       <WritingButton to="/Writing">글쓰기</WritingButton>
       <ListContainer>
-        {posts?.map((list, index: number) => {
+        {/* {posts?.map((list, index: number) => {
           return (
             <ListBox
               key={list._id}
@@ -92,6 +93,25 @@ const Category: FC<IListBox> = () => {
               bookmark={list.count.bookmark}
               comments={list.count.comment}
               bookmarkState={list.bookmarkState}
+              elementRef={index + 1 === posts.length ? elementRef : undefined}
+            />
+          );
+        })} */}
+        {posts?.map((post, index: number) => {
+          return (
+            <FeedListBox
+              key={post._id}
+              id={post.postId}
+              name={post.writer.nickname}
+              img={post.writer.profileImage}
+              time={post.createdAt}
+              contents={post.content}
+              contents_img={post.image?.info_image}
+              bookmark={post.count.bookmark}
+              comments={post.count.comment}
+              categoryLabel={post.categoryLabel}
+              categoryValue={post.categoryValue}
+              bookmarkState={post.bookmarkState}
               elementRef={index + 1 === posts.length ? elementRef : undefined}
             />
           );
@@ -124,6 +144,13 @@ const WritingButton = styled(Link)`
 `;
 
 const ListContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   margin-top: 50px;
+  ${({ theme }) => theme.media.mobile`
+    display: block;
+    margin:50px 16px 0px 16px;
+  `}
 `;
 export default Category;

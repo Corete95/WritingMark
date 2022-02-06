@@ -21,6 +21,7 @@ const EditInformation = () => {
       console.log(err.response);
     }
   };
+
   return (
     <Container>
       <InformationContaniner>

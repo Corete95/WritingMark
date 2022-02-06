@@ -122,7 +122,7 @@ const NavTab = () => {
         })}
       </BottomNav>
       <PostContainer>
-        <FeedListBox />
+        {/* <FeedListBox /> */}
         {posts?.map((list, index: number) => {
           return (
             <ListBox

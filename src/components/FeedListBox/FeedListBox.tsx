@@ -1,37 +1,148 @@
-import React from "react";
+import axios from "axios";
+import React, { FC, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
-const FeedListBox = () => {
+interface Props {
+  id: number;
+  name: string;
+  img: string;
+  time: string;
+  contents: string;
+  contents_img: string;
+  bookmark: number;
+  comments: number;
+  categoryLabel: string;
+  categoryValue: string;
+  bookmarkState?: any;
+  writerId?: string;
+  elementRef?: React.RefObject<HTMLInputElement> | undefined;
+}
+
+const FeedListBox: FC<Props> = ({
+  id,
+  name,
+  img,
+  time,
+  contents,
+  contents_img,
+  bookmark,
+  comments,
+  categoryLabel,
+  categoryValue,
+  bookmarkState,
+  writerId,
+  elementRef,
+}) => {
+  const { user } = useSelector((state: any) => state.user);
+  const [like, setLike] = useState(bookmark);
+  const [bookMarkState, setBookMarkState] = useState(bookmarkState);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+  const config: any = {
+    headers: {},
+  };
+  if (token) {
+    config.headers["authorization"] = token;
+  }
+
+  const bookMarkLike = async () => {
+    try {
+      const result = await axios.post(`user/bookmark/${id}`, {}, config);
+      setLike((preData) => preData + 1);
+      console.log("123123", result);
+      setBookMarkState(true);
+    } catch (err: any) {
+      console.log(err.response);
+    }
+  };
+  console.log("like", like);
+  const bookMarkCancel = async () => {
+    try {
+      const result = await axios.delete(`user/bookmark/${id}`, config);
+      setLike((preData) => preData - 1);
+      setBookMarkState(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const timeForToday = (value: string) => {
+    const today = new Date();
+    const timeValue = new Date(value);
+
+    const betweenTime = Math.floor(
+      (today.getTime() - timeValue.getTime()) / 1000 / 60,
+    );
+    if (betweenTime < 1) return "방금전";
+    if (betweenTime < 60) {
+      return `${betweenTime}분전`;
+    }
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+      return `${betweenTimeHour}시간전`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+    if (betweenTimeDay < 7) {
+      return `${betweenTimeDay}일전`;
+    }
+    const returnValue = value.slice(0, 11);
+    return `${returnValue}`;
+  };
+
+  const goToCategory = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    path: string,
+  ) => {
+    e.stopPropagation();
+    history.push(`/Category/${path}`);
+  };
+
   return (
     <>
-      <FeedContainer>
-        <FeedHeader>
-          <img src="/5.png" />
-        </FeedHeader>
-        <FeedCenter>
-          <p className="feedContent">
-            새로운 글 등록 입니다! 새로운 글 등록 입니다! 새로운 글 등록 입니다!
-            새로운 글 등록 입니다! 새로운 글 등록 입니다!새로운 글 등록
-            입니다!새로운 글 등록 입니다!새로운 글 등록 입니다!새로운 글 등록
-          </p>
-          <p className="category"># 소설</p>
-          <p className="createdAt">
-            2022.02.1 <span>·</span> 1개 댓글
-          </p>
-        </FeedCenter>
+      <FeedContainer ref={elementRef}>
+        <FeedClickDiv onClick={() => history.push(`/ListDetail/${id}`)}>
+          <FeedHeader>
+            <img
+              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${contents_img}`}
+            />
+          </FeedHeader>
+          <FeedCenter>
+            <p className="feedContent">{contents}</p>
+            <p
+              className="category"
+              onClick={(e) => goToCategory(e, categoryValue)}
+            >
+              # {categoryLabel}
+            </p>
+            <p className="createdAt">
+              {timeForToday(time)}
+              <span>·</span>
+              {comments}개 댓글
+            </p>
+          </FeedCenter>
+        </FeedClickDiv>
         <FeedBottom>
           <UserInfo>
-            <img src="/5.png" />
-            <span>김정현</span>
+            <img
+              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/user/${img}`}
+            />
+            <span>{name}</span>
           </UserInfo>
           <BookMarks>
-            <img src="/images/bookmarkfull.png" />
+            {bookMarkState ? (
+              <img src="/images/bookmarkfull.png" onClick={bookMarkCancel} />
+            ) : (
+              <img src="/images/bookmark.png" onClick={bookMarkLike} />
+            )}
+            <span>{like}</span>
           </BookMarks>
         </FeedBottom>
       </FeedContainer>
-
-      <FeedContainer>123</FeedContainer>
-      <FeedContainer>123</FeedContainer>
     </>
   );
 };
@@ -46,7 +157,9 @@ const FeedContainer = styled.div`
    max-width:none;
   `}
 `;
-
+const FeedClickDiv = styled.div`
+  cursor: pointer;
+`;
 const FeedHeader = styled.div`
   img {
     width: 100%;
@@ -73,15 +186,25 @@ const FeedCenter = styled.div`
     margin-bottom: 30px;
   }
   .category {
+    display: inline-block;
     font-size: 12px;
     font-weight: 600;
     opacity: 0.8;
+    cursor: pointer;
+  }
+  .category:hover {
+    font-size: 13px;
+    /* transform: scale(1.03); */
+    transition: transform 0.3s;
   }
   .createdAt {
     font-size: 12px;
     margin-top: 10px;
     font-weight: 400;
     opacity: 0.8;
+    span {
+      margin: 0px 4px;
+    }
   }
 `;
 const FeedBottom = styled.div`
@@ -105,9 +228,16 @@ const UserInfo = styled.div`
   }
 `;
 const BookMarks = styled.div`
+  display: flex;
+  align-items: center;
   img {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  span {
+    font-size: 14px;
+    margin-left: 4px;
   }
 `;
 export default FeedListBox;
