@@ -116,10 +116,10 @@ const Register = () => {
           <ButtonDiv>
             <Button type="submit">가입하기</Button>
           </ButtonDiv>
-          <ButtonDiv>
-            <SocialKakao />
-          </ButtonDiv>
         </RegisterForm>
+        <ButtonDiv>
+          <SocialKakao />
+        </ButtonDiv>
       </RegisterContainer>
     </Container>
   );
@@ -165,6 +165,9 @@ const Input = styled.input`
   height: 45px;
   border: 1px solid #ddd;
   padding: 10px 15px;
+  :focus {
+    outline: none;
+  }
 `;
 const ButtonDiv = styled.div`
   text-align: center;
@@ -179,8 +182,8 @@ const Button = styled.button`
   max-width: 190px;
   font-size: 14px;
   color: white;
-  background: red;
-  border: 1px solid red;
+  background: black;
+  border: 1px solid black;
   cursor: pointer;
 `;
 const Error = styled.span`

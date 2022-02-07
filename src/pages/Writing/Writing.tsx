@@ -169,6 +169,9 @@ const Contents = styled.div`
     font-size: 14px;
     resize: none;
   }
+  textarea:focus {
+    outline: none;
+  }
 `;
 
 const ImgUpload = styled.div`

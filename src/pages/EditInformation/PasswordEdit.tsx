@@ -110,14 +110,18 @@ const Input = styled.input`
   height: 45px;
   border: 1px solid #ddd;
   padding: 10px 15px;
+  :focus {
+    outline: none;
+  }
 `;
 
 const Button = styled.button`
   width: 100%;
   height: 30px;
-  background-color: red;
-  border: 1px solid red;
+  background-color: black;
+  border: 1px solid black;
   color: white;
+  border-radius: 24px 24px;
   cursor: pointer;
 `;
 

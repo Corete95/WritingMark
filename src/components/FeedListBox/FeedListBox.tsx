@@ -3,6 +3,11 @@ import React, { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 interface Props {
   id: number;
@@ -41,6 +46,7 @@ const FeedListBox: FC<Props> = ({
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const MySwal = withReactContent(Swal);
   const config: any = {
     headers: {},
   };
@@ -48,8 +54,22 @@ const FeedListBox: FC<Props> = ({
     config.headers["authorization"] = token;
   }
 
+  const userCheck = async () => {
+    const userId = user?._id ? false : true;
+    await userId;
+    return userId;
+  };
+
   const bookMarkLike = async () => {
     try {
+      const user = await userCheck();
+      if (user) {
+        return MySwal.fire({
+          confirmButtonColor: "black",
+          title: <SwalCss>로그인 후 이용가능합니다!</SwalCss>,
+          timer: 1000,
+        });
+      }
       const result = await axios.post(`user/bookmark/${id}`, {}, config);
       setLike((preData) => preData + 1);
       console.log("123123", result);
@@ -101,15 +121,21 @@ const FeedListBox: FC<Props> = ({
     e.stopPropagation();
     history.push(`/Category/${path}`);
   };
-
+  console.log(contents_img);
   return (
     <>
       <FeedContainer ref={elementRef}>
         <FeedClickDiv onClick={() => history.push(`/ListDetail/${id}`)}>
           <FeedHeader>
-            <img
-              src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${contents_img}`}
-            />
+            {contents_img === undefined ? (
+              <img
+                src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/bgBasic.png`}
+              />
+            ) : (
+              <img
+                src={`https://writingmark.s3.ap-northeast-2.amazonaws.com/post/${contents_img}`}
+              />
+            )}
           </FeedHeader>
           <FeedCenter>
             <p className="feedContent">{contents}</p>
@@ -143,6 +169,7 @@ const FeedListBox: FC<Props> = ({
           </BookMarks>
         </FeedBottom>
       </FeedContainer>
+      <ToastContainer />
     </>
   );
 };
@@ -239,5 +266,9 @@ const BookMarks = styled.div`
     font-size: 14px;
     margin-left: 4px;
   }
+`;
+const SwalCss = styled.p`
+  font-size: 20px;
+  font-weight: 800;
 `;
 export default FeedListBox;

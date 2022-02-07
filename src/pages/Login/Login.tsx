@@ -69,16 +69,21 @@ const Login = () => {
           </InputDiv>
           {localMsg ? <Error>{localMsg}</Error> : null}
           <ButtonDiv>
-            <Button type="submit" color="white" background="red" border="red">
+            <Button
+              type="submit"
+              color="white"
+              background="black"
+              border="black"
+            >
               로그인하기
             </Button>
           </ButtonDiv>
           <ButtonDiv>
             <ButtonLink
               to="/register"
-              color="red"
-              background="white"
-              border="red"
+              color="white"
+              background="gray"
+              border="gray"
             >
               회원가입 하기
             </ButtonLink>
@@ -133,6 +138,9 @@ const Input = styled.input`
   height: 45px;
   border: 1px solid #ddd;
   padding: 10px 15px;
+  :focus {
+    outline: none;
+  }
 `;
 const SaveBtnDiv = styled.div`
   display: flex;

@@ -3,23 +3,64 @@ import styled from "styled-components";
 import ProfileEdit from "./ProfileEdit";
 import PasswordEdit from "./PasswordEdit";
 import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { useHistory } from "react-router-dom";
 
 const EditInformation = () => {
+  const MySwal = withReactContent(Swal);
+  const history = useHistory();
   const token = localStorage.getItem("token");
+  const config: any = {
+    headers: {},
+  };
+  if (token) {
+    config.headers["authorization"] = token;
+  }
 
-  const secession = async () => {
-    try {
-      const config: any = {
-        headers: {},
-      };
-      if (token) {
-        config.headers["authorization"] = token;
+  const secession = () => {
+    MySwal.fire({
+      confirmButtonColor: "black",
+      title: "비밀번호를 입력해주세요",
+      input: "password",
+      showCancelButton: true,
+      confirmButtonText: "탈퇴",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post("user/withdrawal", { password: result.value }, config)
+          .then((res) => {
+            MySwal.fire({
+              confirmButtonColor: "black",
+              title: "탈퇴 완료",
+              confirmButtonText: "확인",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.removeItem("token");
+                if (window.Kakao.Auth.getAccessToken()) {
+                  console.log("카카오 인증 엑세스 토큰 존재");
+                  window.Kakao.Auth.logout(() => {
+                    console.log("카카오 로그아웃 완료");
+                  });
+                }
+                setTimeout(() => {
+                  history.push("/");
+                  window.location.reload();
+                }, 500);
+              }
+            });
+          })
+          .catch((err: any) => {
+            console.log(err.response);
+            MySwal.fire({
+              confirmButtonColor: "black",
+              title: `${err.response.data.message}`,
+              confirmButtonText: "확인",
+            });
+          });
       }
-      const result = await axios.get("user/withdrawal", config);
-      console.log(result);
-    } catch (err: any) {
-      console.log(err.response);
-    }
+    });
   };
 
   return (
@@ -89,8 +130,9 @@ const MemberSecession = styled.div`
     width: 100px;
     height: 30px;
     color: white;
-    background-color: red;
-    border: 1px solid red;
+    background-color: black;
+    border: 1px solid black;
+    border-radius: 24px 24px;
     cursor: pointer;
   }
 `;

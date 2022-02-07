@@ -106,5 +106,8 @@ const Input = styled.input`
   height: 30px;
   border: 1px solid black;
   padding: 10px 15px;
+  :focus {
+    outline: none;
+  }
 `;
 export default TextInformation;

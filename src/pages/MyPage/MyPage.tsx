@@ -16,7 +16,6 @@ const MyPage = () => {
 
   const LogOut = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user_id");
     if (window.Kakao.Auth.getAccessToken()) {
       console.log("카카오 인증 엑세스 토큰 존재");
       window.Kakao.Auth.logout(() => {
@@ -45,15 +44,15 @@ const MyPage = () => {
           <span>반갑습니다</span>
           <EditBtn>
             <Link to="EditInformation">
-              <Button color="white" background="red" border="red">
+              <Button color="white" background="black" border="black">
                 회원정보 수정
               </Button>
             </Link>
             <Button
               onClick={LogOut}
-              color="black"
-              background="yellow"
-              border="yellow"
+              color="white"
+              background="black"
+              border="black"
             >
               로그아웃
             </Button>
@@ -151,6 +150,7 @@ const Button = styled.button<Props>`
   color: ${(props) => props.color};
   background: ${(props) => props.background};
   border: 1px solid ${(props) => props.border};
+  border-radius: 24px 24px;
   cursor: pointer;
   ${({ theme }) => theme.media.mobile`
   margin-bottom:10px;

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
 import ListBox from "components/ListBox/ListBox";
@@ -7,13 +7,18 @@ import { POSTS_CATEGORY_REQUEST } from "redux/postTypes";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import FeedListBox from "components/FeedListBox/FeedListBox";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const Category: FC<IListBox> = () => {
   const params = useParams<Record<string, string | undefined>>();
   // const { posts } = useSelector((state: any) => state.post);
   const dispatch = useDispatch();
+  const { user } = useSelector((state: any) => state.user);
   const [posts, setPosts] = useState<IListBox[]>([]);
   const [count, setCount] = useState(0);
+  const MySwal = withReactContent(Swal);
+  const history = useHistory();
   const elementRef = useRef<HTMLInputElement>(null);
   const token = localStorage.getItem("token");
   const config: any = {
@@ -75,11 +80,22 @@ const Category: FC<IListBox> = () => {
   }, [loaderMorePosts]);
 
   console.log(posts);
+
+  const goWriting = () => {
+    if (!user?._id) {
+      return MySwal.fire({
+        confirmButtonColor: "black",
+        title: <SwalCss>로그인 후 이용가능합니다!</SwalCss>,
+        timer: 1000,
+      });
+    }
+    history.push("/Writing");
+  };
   return (
     <Container>
       <CategoryTop>
         <span># {posts[0]?.categoryLabel}</span>
-        <WritingButton to="/Writing">글쓰기</WritingButton>
+        <WritingButton onClick={goWriting}>글쓰기</WritingButton>
       </CategoryTop>
       <ListContainer>
         {posts?.map((post, index: number) => {
@@ -125,7 +141,7 @@ const CategoryTop = styled.div`
   }
 `;
 
-const WritingButton = styled(Link)`
+const WritingButton = styled.button`
   border-radius: 24px 24px;
   font-size: 14px;
   width: 80px;
@@ -133,7 +149,7 @@ const WritingButton = styled(Link)`
   color: white;
   background-color: black;
   text-align: center;
-  padding-top: 8px;
+  border: none;
   cursor: pointer;
 `;
 
@@ -147,4 +163,9 @@ const ListContainer = styled.div`
     margin:50px 16px 0px 16px;
   `}
 `;
+const SwalCss = styled.p`
+  font-size: 20px;
+  font-weight: 800;
+`;
+
 export default Category;

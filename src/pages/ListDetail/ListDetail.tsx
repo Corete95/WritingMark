@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import axios, { AxiosError } from "axios";
 import { POSTS_DELETE_REQUEST, POSTS_DETAIL_REQUEST } from "redux/postTypes";
 import Comment from "components/Comment/Comment";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 const ListDetail = () => {
   const { user } = useSelector((state: any) => state.user);
   const [detailData, setDetailData] = useState<any>([]);
@@ -18,7 +21,8 @@ const ListDetail = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const max_length = 50;
-  localStorage.setItem("user_id", user?._id);
+  const MySwal = withReactContent(Swal);
+
   const config: any = {
     headers: {},
   };
@@ -63,6 +67,15 @@ const ListDetail = () => {
 
   const bookMarkLike = async () => {
     try {
+      const user = await userCheck();
+      if (user) {
+        return MySwal.fire({
+          confirmButtonColor: "black",
+          title: <SwalCss>로그인 후 이용가능합니다!</SwalCss>,
+          timer: 1000,
+        });
+      }
+
       const result = await axios.post(`user/bookmark/${id.id}`, {}, config);
       setLike((preData: number) => preData + 1);
       setBookMarkState(true);
@@ -107,7 +120,13 @@ const ListDetail = () => {
 
   const addComment = async () => {
     try {
-      if (commentValue === "") return alert("댓글을 입력해주세요!");
+      if (commentValue === "")
+        return MySwal.fire({
+          confirmButtonColor: "black",
+          title: <SwalCss>댓글을 입력해주세요.</SwalCss>,
+          confirmButtonText: "확인",
+          // timer: 1000,
+        });
       const result = await axios.post(
         `post/${id.id}/comment`,
         { content: commentValue },
@@ -129,6 +148,13 @@ const ListDetail = () => {
     editState: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
     try {
+      if (editComment === "")
+        return MySwal.fire({
+          confirmButtonColor: "black",
+          title: <SwalCss>댓글을 입력해주세요.</SwalCss>,
+          confirmButtonText: "확인",
+          timer: 1000,
+        });
       const result = await axios.patch(
         `post/${id.id}/comment/${writerId}`,
         { content: editComment },
@@ -153,24 +179,42 @@ const ListDetail = () => {
     }
   };
 
+  const userCheck = async () => {
+    const userId = user?._id ? false : true;
+    await userId;
+    return userId;
+  };
+
   const deleteComment = async (writerId: number) => {
     try {
-      const result = await axios.delete(
-        `post/${id.id}/comment/${writerId}`,
-        config,
-      );
-      console.log(result);
-      setCommentCount((preData) => preData - 1);
-      setCommentData(
-        commentData.filter((comment: any) => comment._id !== writerId),
-      );
+      const result = await MySwal.fire({
+        confirmButtonColor: "black",
+        title: <SwalCss>댓글을 삭제하시겠습니까?</SwalCss>,
+        text: "삭제된 댓글은 복구가 불가능합니다.",
+        showCancelButton: true,
+        confirmButtonText: "삭제",
+        cancelButtonText: "취소",
+      }).then((success) => {
+        if (success.isConfirmed) {
+          axios.delete(`post/${id.id}/comment/${writerId}`, config);
+          setCommentCount((preData) => preData - 1);
+          setCommentData(
+            commentData.filter((comment: any) => comment._id !== writerId),
+          );
+        }
+      });
+      return result;
     } catch (error) {
       console.log(error);
     }
   };
 
   if (error) {
-    return <Container>{error}</Container>;
+    return (
+      <ErrorContainer>
+        <img src="/images/404page.png" />
+      </ErrorContainer>
+    );
   }
 
   return (
@@ -209,20 +253,20 @@ const ListDetail = () => {
       <ListBottom>
         # 에세이
         {detailData.info_title !== "" ? (
-          <InformationIcon>
+          <InformationIcon large={true}>
             <img src="/images/claim.png" />
             <IconText>
               제목 : <span>{detailData.info_title}</span>
             </IconText>
           </InformationIcon>
         ) : (
-          <InformationIcon>
+          <InformationIcon large={false}>
             <img src="/images/close.png" />
             <IconText>추가 정보가 없습니다.</IconText>
           </InformationIcon>
         )}
         {detailData.info_url !== "" ? (
-          <InformationIcon>
+          <InformationIcon large={true}>
             <a
               href={`https://${detailData.info_url}`}
               target="_blank"
@@ -235,7 +279,7 @@ const ListDetail = () => {
             </IconText>
           </InformationIcon>
         ) : (
-          <InformationIcon>
+          <InformationIcon large={false}>
             <img src="/images/close.png" />
             <IconText>추가 정보가 없습니다.</IconText>
           </InformationIcon>
@@ -317,7 +361,16 @@ const Container = styled.div`
   margin:0px 16px;
   `}
 `;
-
+const ErrorContainer = styled.div`
+  margin: 0 auto;
+  max-width: 640px;
+  min-width: 320px;
+  padding-top: 100px;
+  text-align: center;
+  ${({ theme }) => theme.media.mobile`
+  margin:0px 16px;
+  `}
+`;
 const ListTop = styled.div`
   display: flex;
   justify-content: space-between;
@@ -391,15 +444,23 @@ const ListBottom = styled.div`
   font-size: 14px;
 `;
 
-const InformationIcon = styled.div`
+const InformationIcon = styled.div<{ large: boolean }>`
   display: flex;
   align-items: center;
   margin-top: 10px;
   font-size: 12px;
   img {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
+    ${(props) =>
+      props.large
+        ? css`
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+          `
+        : css`
+            width: 15px;
+            height: 15px;
+          `}
   }
 `;
 
@@ -457,5 +518,9 @@ const TextareaORValue = styled.div`
     font-size: 12px;
     float: right;
   }
+`;
+const SwalCss = styled.p`
+  font-size: 28px;
+  font-weight: 800;
 `;
 export default ListDetail;
