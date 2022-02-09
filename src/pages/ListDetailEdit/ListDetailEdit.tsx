@@ -5,12 +5,11 @@ import { CATEGORY_OPTIONS } from "Config";
 import TextInformation from "pages/Writing/TextInformation";
 import useInput from "hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  POSTS_DETAIL_EDIT_REQUEST,
-  POSTS_DETAIL_REQUEST,
-} from "../../redux/postTypes";
+import { POSTS_DETAIL_EDIT_REQUEST } from "../../redux/postTypes";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 interface SelectProps {
   value: string;
@@ -26,9 +25,10 @@ const ListDetailEdit = () => {
   const [title, onChangeTitle, setTitle] = useInput("");
   const [url, onChangeUrl, setUrl] = useInput("");
   const [imgUrl, setImgUrl] = useState<string>("");
-  const [informationCheck, setInformationCheck] = useState(true);
+  const [informationCheck, setInformationCheck] = useState(false);
   const ImgInput = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
   const id = useParams<any>();
   const token = localStorage.getItem("token");
 
@@ -87,11 +87,19 @@ const ListDetailEdit = () => {
   };
 
   const deleteImg = () => {
-    const check = confirm("이미지를 삭제 하시겠습니까?");
-    if (check === true) {
-      setImgUrl("");
-      setImage("");
-    }
+    MySwal.fire({
+      confirmButtonColor: "black",
+      imageUrl: `${imgUrl}`,
+      imageHeight: 200,
+      title: "이미지를 삭제 하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setImgUrl("");
+      }
+    });
   };
 
   const informationCheckHandler = () => {
@@ -99,8 +107,18 @@ const ListDetailEdit = () => {
   };
 
   const upLoad = () => {
-    if (select === null) return alert("카테고리를 설정 해주세요!");
-    if (contents === "") return alert("내용을 입력 해주세요!");
+    if (select === null)
+      return MySwal.fire({
+        confirmButtonColor: "black",
+        title: "카테고리를 설정해주세요.",
+        timer: 1000,
+      });
+    if (contents === "")
+      return MySwal.fire({
+        confirmButtonColor: "black",
+        title: "내용을 입력해주세요.",
+        timer: 1000,
+      });
     const formData = new FormData();
     formData.append("category_value", select.value);
     formData.append("category_label", select.label);
@@ -115,27 +133,29 @@ const ListDetailEdit = () => {
       payload: { body, token },
     });
   };
-  // console.log("select", select);
-  // console.log("contents", contents);
-  // console.log("title", title);
-  // console.log("url", url);
-  // console.log("image", image);
+
   return (
     <Container>
       <Category>
-        <h1>카테고리</h1>
         <Select
-          defaultValue={select}
           options={CATEGORY_OPTIONS}
           onChange={selectHandleChange}
           value={select}
           placeholder="카테고리를 정해주세요."
           className="selectStyles"
-          styles={{ menu: (provided) => ({ ...provided, zIndex: 999 }) }}
+          classNamePrefix="selectStyles"
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 0,
+            colors: {
+              ...theme.colors,
+              primary25: "gray",
+              primary: "black",
+            },
+          })}
         />
       </Category>
       <Contents>
-        <h1>내용</h1>
         <textarea value={contents} onChange={onChangeContents}></textarea>
         <ImgUpload>
           <img src="/images/camera.png" onClick={imageUploadBtn} />
@@ -160,7 +180,10 @@ const ListDetailEdit = () => {
         url={url}
         onChangeUrl={onChangeUrl}
       />
-      <Button onClick={upLoad}>수정하기</Button>
+      <ButtonDiv>
+        <Button onClick={upLoad}>수정</Button>
+        <Button onClick={() => history.back()}>취소</Button>
+      </ButtonDiv>
     </Container>
   );
 };
@@ -178,13 +201,9 @@ const Container = styled.div`
 const Category = styled.div`
   display: flex;
   align-items: center;
-  h1 {
-    width: 22%;
-    font-size: 20px;
-    font-weight: bold;
-  }
+
   .selectStyles {
-    width: 78%;
+    width: 100%;
     text-align: center;
     font-size: 18px;
     ${({ theme }) => theme.media.mobile`
@@ -195,18 +214,18 @@ const Category = styled.div`
 
 const Contents = styled.div`
   margin-top: 40px;
-  h1 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
 
   textarea {
     width: 100%;
     height: 300px;
     padding: 20px 20px;
     font-size: 14px;
+    border-right: none;
+    border-left: none;
     resize: none;
+  }
+  textarea:focus {
+    outline: none;
   }
 `;
 
@@ -242,15 +261,20 @@ const DeleteImg = styled.div<{ img: string }>`
     cursor: pointer;
   }
 `;
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  float: right;
+`;
 
 const Button = styled.button`
-  float: right;
   margin-top: 30px;
+  margin-left: 15px;
   width: 100px;
   height: 30px;
   color: white;
-  background-color: red;
-  border: 1px solid red;
+  background-color: black;
+  border: 1px solid black;
   cursor: pointer;
 `;
 export default ListDetailEdit;

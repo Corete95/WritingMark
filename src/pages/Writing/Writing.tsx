@@ -6,6 +6,8 @@ import TextInformation from "./TextInformation";
 import useInput from "hooks/useInput";
 import { useDispatch } from "react-redux";
 import { POSTS_WRITE_REQUEST } from "../../redux/postTypes";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 interface SelectProps {
   id: number;
@@ -23,6 +25,7 @@ const Writing = () => {
   const [imgUrl, setImgUrl] = useState<string>("");
   const [informationCheck, setInformationCheck] = useState(false);
   const ImgInput = useRef<HTMLInputElement>(null);
+  const MySwal = withReactContent(Swal);
   const dispatch = useDispatch();
 
   const selectHandleChange = (selectedOption: SelectValue) => {
@@ -50,10 +53,19 @@ const Writing = () => {
   };
 
   const deleteImg = () => {
-    const check = confirm("이미지를 삭제 하시겠습니까?");
-    if (check == true) {
-      setImgUrl("");
-    }
+    MySwal.fire({
+      confirmButtonColor: "black",
+      imageUrl: `${imgUrl}`,
+      imageHeight: 200,
+      title: "이미지를 삭제 하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setImgUrl("");
+      }
+    });
   };
 
   const informationCheckHandler = () => {
@@ -61,8 +73,18 @@ const Writing = () => {
   };
 
   const upLoad = () => {
-    if (select === null) return alert("카테고리를 설정 해주세요!");
-    if (contents === "") return alert("내용을 입력 해주세요!");
+    if (select === null)
+      return MySwal.fire({
+        confirmButtonColor: "black",
+        title: "카테고리를 설정해주세요.",
+        timer: 1000,
+      });
+    if (contents === "")
+      return MySwal.fire({
+        confirmButtonColor: "black",
+        title: "내용을 입력해주세요.",
+        timer: 1000,
+      });
     const formData = new FormData();
     formData.append("category_value", select.value);
     formData.append("category_label", select.label);
@@ -81,22 +103,29 @@ const Writing = () => {
   return (
     <Container>
       <Category>
-        <h1>카테고리</h1>
         <Select
           options={CATEGORY_OPTIONS}
           onChange={selectHandleChange}
           value={select}
           placeholder="카테고리를 정해주세요."
           className="selectStyles"
-          styles={{ menu: (provided) => ({ ...provided, zIndex: 999 }) }}
+          classNamePrefix="selectStyles"
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 0,
+            colors: {
+              ...theme.colors,
+              primary25: "gray",
+              primary: "black",
+            },
+          })}
         />
       </Category>
       <Contents>
-        <h1>내용</h1>
         <textarea
-          // wrap="hard"
           value={contents}
           onChange={onChangeContents}
+          placeholder="내용을 입력해주세요!"
         ></textarea>
         <ImgUpload>
           <img src="/images/camera.png" onClick={imageUploadBtn} />
@@ -121,7 +150,10 @@ const Writing = () => {
         url={url}
         onChangeUrl={onChangeUrl}
       />
-      <Button onClick={upLoad}>글쓰기</Button>
+      <ButtonDiv>
+        <Button onClick={upLoad}>작성</Button>
+        <Button onClick={() => history.back()}>취소</Button>
+      </ButtonDiv>
     </Container>
   );
 };
@@ -130,7 +162,7 @@ const Container = styled.div`
   margin: 0 auto;
   max-width: 640px;
   min-width: 320px;
-  padding-top: 80px;
+  padding-top: 100px;
   ${({ theme }) => theme.media.mobile`
   margin:0px 15px;
   `}
@@ -139,34 +171,41 @@ const Container = styled.div`
 const Category = styled.div`
   display: flex;
   align-items: center;
-  h1 {
-    width: 22%;
-    font-size: 20px;
-    font-weight: bold;
-  }
+
   .selectStyles {
-    width: 78%;
+    width: 100%;
     text-align: center;
     font-size: 18px;
     ${({ theme }) => theme.media.mobile`
       margin-left:20px;
-  `}
+  `} .selectStyles__control {
+      height: 25px;
+      min-height: 25px;
+      border-radius: 15px 15px;
+      .selectStyles__value-container {
+        display: block;
+      }
+      .selectStyles__indicators {
+        height: 25px;
+      }
+    }
+    .selectStyles__menu {
+      font-size: 14px;
+      margin-top: 2px;
+    }
   }
 `;
 
 const Contents = styled.div`
   margin-top: 40px;
-  h1 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
 
   textarea {
     width: 100%;
     height: 300px;
     padding: 20px 20px;
     font-size: 14px;
+    border-right: none;
+    border-left: none;
     resize: none;
   }
   textarea:focus {
@@ -183,6 +222,7 @@ const ImgUpload = styled.div`
     margin-right: 20px;
     cursor: pointer;
   }
+
   input {
     display: none;
   }
@@ -206,15 +246,19 @@ const DeleteImg = styled.div<{ img: string }>`
     cursor: pointer;
   }
 `;
-
-const Button = styled.button`
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
   float: right;
+`;
+const Button = styled.button`
+  margin-left: 15px;
   margin-top: 30px;
   width: 100px;
   height: 30px;
   color: white;
-  background-color: red;
-  border: 1px solid red;
+  background-color: black;
+  border: 1px solid black;
   cursor: pointer;
 `;
 export default Writing;

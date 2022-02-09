@@ -20,33 +20,10 @@ const TextInformation: FC<Props> = ({
     <Information>
       {!informationCheck ? (
         <>
-          <TextDiv>
-            <TextIcon onClick={informationCheckHandler}>
-              <h1>글 정보</h1>
-              <img src={"/images/up-arrow.png"} />
-            </TextIcon>
-            <Text>
-              <p>글과 관련된 정보를 입력하는 칸 입니다.</p>
-              <p>
-                글 정보를 입력해주시면 보다 더 많은 사용자들에게 도움이 됩니다:)
-              </p>
-            </Text>
-          </TextDiv>
-        </>
-      ) : (
-        <>
-          <TextDiv>
-            <TextIcon onClick={informationCheckHandler}>
-              <h1>글 정보</h1>
-              <img src={"/images/down-arrow.png"} />
-            </TextIcon>
-            <Text>
-              <p>글과 관련된 정보를 입력하는 칸 입니다.</p>
-              <p>
-                글 정보를 입력해주시면 보다 더 많은 사용자들에게 도움이 됩니다:)
-              </p>
-            </Text>
-          </TextDiv>
+          <div className="informationText" onClick={informationCheckHandler}>
+            추가 정보 ▼
+          </div>
+          <div className="line"></div>
           <InputDiv>
             <Label>제목</Label>
             <Input type="text" value={title} onChange={onChangeTitle} />
@@ -56,40 +33,34 @@ const TextInformation: FC<Props> = ({
             <Input type="text" value={url} onChange={onChangeUrl} />
           </InputDiv>
         </>
+      ) : (
+        <>
+          <div className="informationText" onClick={informationCheckHandler}>
+            추가 정보 ▲
+          </div>
+          <div className="line"></div>
+        </>
       )}
     </Information>
   );
 };
 const Information = styled.div`
-  margin-top: 40px;
-`;
-const TextDiv = styled.div`
-  display: flex;
-  margin-bottom: 30px;
-`;
-const TextIcon = styled.div`
-  display: flex;
-  align-items: center;
-  width: 160px;
-  cursor: pointer;
-  h1 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-right: 15px;
+  margin-top: 30px;
+  .informationText {
+    width: 100px;
+    height: 30px;
+    border: 1px solid black;
+    padding-top: 7px;
+    text-align: center;
+    cursor: pointer;
   }
-  img {
-    width: 20px;
-    height: 20px;
+  .line {
+    margin-top: -1px;
+    border: 1px solid black;
+    margin-bottom: 30px;
   }
 `;
-const Text = styled.div`
-  margin-left: 40px;
-  font-size: 14px;
-  line-height: 15px;
-  ${({ theme }) => theme.media.mobile`
-  margin-left: 25px;
-  `}
-`;
+
 const InputDiv = styled.div`
   display: flex;
   flex-direction: column;
