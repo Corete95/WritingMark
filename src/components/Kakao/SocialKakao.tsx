@@ -56,7 +56,7 @@ const KakaoBtn = styled.button`
   .kakaoImg {
     display: inline-block;
     float: left;
-    width: 32px;
+    width: 28px;
     height: 28px;
     background-size: 21px;
     background-image: url(https://static.sixshop.com/resources/images/kakao/login-kakao.png);
