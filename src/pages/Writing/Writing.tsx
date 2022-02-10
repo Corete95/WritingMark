@@ -178,21 +178,21 @@ const Category = styled.div`
     font-size: 18px;
     ${({ theme }) => theme.media.mobile`
       margin-left:20px;
-  `} .selectStyles__control {
-      height: 25px;
-      min-height: 25px;
+  `}/* .selectStyles__control {
+      height: 30px;
+      min-height: 30px;
       border-radius: 15px 15px;
       .selectStyles__value-container {
         display: block;
       }
       .selectStyles__indicators {
-        height: 25px;
+        height: 30px;
       }
     }
     .selectStyles__menu {
       font-size: 14px;
       margin-top: 2px;
-    }
+    } */
   }
 `;
 

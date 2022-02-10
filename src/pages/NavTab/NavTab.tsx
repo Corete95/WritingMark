@@ -145,7 +145,7 @@ const NavTab = () => {
       {endElementRef ? (
         <>
           <EndPosts>더 이상의 게시물이 없습니다.</EndPosts>
-          <button onClick={() => window.scrollTo({ top: 0 })}>위로</button>
+          {/* <button onClick={() => window.scrollTo({ top: 0 })}>위로</button> */}
         </>
       ) : (
         ""

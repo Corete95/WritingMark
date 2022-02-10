@@ -67,7 +67,7 @@ const KakaoBtn = styled.button`
     display: inline-block;
     border-left: 1px solid;
     border-color: rgba(0, 0, 0, 0.1);
-    width: 143px;
+    width: 140px;
     line-height: 28px;
     text-align: center;
     float: right;

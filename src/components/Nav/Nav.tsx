@@ -57,14 +57,14 @@ const ContainerNav = styled.header`
   min-width: 320px;
   background-color: #fff;
   ${({ theme }) => theme.media.mobile`
-    margin:0px 10px;
+    padding:0px 10px;
   `}
 `;
 const TopNav = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 6px 0px;
+  padding: 6px 0px;
 `;
 const IconMenu = styled.div`
   cursor: pointer;
