@@ -62,6 +62,11 @@ const KakaoBtn = styled.button`
     background-image: url(https://static.sixshop.com/resources/images/kakao/login-kakao.png);
     background-repeat: no-repeat;
     background-position: center;
+    ${({ theme }) => theme.media.mobile`
+    width: 22px;
+    height: 22px;
+    background-size: 24px;
+  `}
   }
   .text {
     display: inline-block;
@@ -71,6 +76,10 @@ const KakaoBtn = styled.button`
     line-height: 28px;
     text-align: center;
     float: right;
+    ${({ theme }) => theme.media.mobile`
+     width: 137px;
+    line-height: 22px;
+  `}
   }
 `;
 export default SocialKakao;

@@ -18,9 +18,7 @@ const NavTab = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const elementRef = useRef<HTMLInputElement>(null);
-  const endElementRef = useRef(false);
   const [posts, setPosts] = useState<IListBox[]>([]);
-  const [loading, setLoading] = useState<boolean | null>(null);
   const config: any = {
     headers: {},
   };
@@ -142,14 +140,6 @@ const NavTab = () => {
           );
         })}
       </PostContainer>
-      {endElementRef ? (
-        <>
-          <EndPosts>더 이상의 게시물이 없습니다.</EndPosts>
-          {/* <button onClick={() => window.scrollTo({ top: 0 })}>위로</button> */}
-        </>
-      ) : (
-        ""
-      )}
     </ContainerNavTab>
   );
 };
