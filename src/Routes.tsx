@@ -4,6 +4,7 @@ import loadable from "@loadable/component";
 import { GlobalStyle } from "./styles/global-style";
 import theme from "./styles/theme";
 import { ThemeProvider } from "./styles/themed-components";
+import Analytics from "components/Analytics/Analytics";
 
 const Nav = loadable(() => import("./components/Nav/Nav"));
 const NavTab = loadable(() => import("./pages/NavTab/NavTab"));
@@ -36,6 +37,7 @@ const Routes = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <Router>
+          <Analytics />
           <Nav />
           <Switch>
             <Route exact path="/" component={NavTab} />

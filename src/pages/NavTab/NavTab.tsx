@@ -8,6 +8,8 @@ import ListBox from "components/ListBox/ListBox";
 import { IListBox } from "typings/db";
 import axios from "axios";
 import FeedListBox from "components/FeedListBox/FeedListBox";
+import MetaTag from "components/MetaTag/MetaTag";
+import { Helmet } from "react-helmet-async";
 
 const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
@@ -102,6 +104,12 @@ const NavTab = () => {
   // console.log("갯수", posts.length);
   return (
     <ContainerNavTab>
+      {/* <Helmet>
+        <title>Misinterpriter</title>
+        <meta charSet="utf-8" />
+        <meta name="description" content="번역글 공유 사이트" />
+      </Helmet> */}
+      <MetaTag />
       <BottomNav>
         {NAV_CATEGORY.map((category) => {
           return (
