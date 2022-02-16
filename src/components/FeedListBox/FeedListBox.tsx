@@ -211,6 +211,7 @@ const FeedCenter = styled.div`
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     margin-bottom: 30px;
+    padding-top: 1px;
   }
   .category {
     display: inline-block;

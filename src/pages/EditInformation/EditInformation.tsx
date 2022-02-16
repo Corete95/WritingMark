@@ -5,9 +5,11 @@ import PasswordEdit from "./PasswordEdit";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const EditInformation = () => {
+  const { user } = useSelector((state: any) => state.user);
   const MySwal = withReactContent(Swal);
   const history = useHistory();
   const token = localStorage.getItem("token");
@@ -62,6 +64,9 @@ const EditInformation = () => {
       }
     });
   };
+  if (!user?._id) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Container>

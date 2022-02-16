@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import BookMark from "./BookMark";
 
@@ -27,6 +27,9 @@ const MyPage = () => {
       window.location.reload();
     }, 500);
   };
+  if (!user?._id) {
+    return <Redirect to="/" />;
+  }
   return (
     <Container>
       <h1>회원 정보</h1>

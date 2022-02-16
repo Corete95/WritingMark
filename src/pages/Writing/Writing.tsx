@@ -4,10 +4,11 @@ import Select from "react-select";
 import { CATEGORY_OPTIONS } from "Config";
 import TextInformation from "./TextInformation";
 import useInput from "hooks/useInput";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { POSTS_WRITE_REQUEST } from "../../redux/postTypes";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { Redirect } from "react-router-dom";
 
 interface SelectProps {
   id: number;
@@ -17,6 +18,7 @@ interface SelectProps {
 type SelectValue = SelectProps | SelectProps[] | null | undefined;
 
 const Writing = () => {
+  const { user } = useSelector((state: any) => state.user);
   const [select, setSelect] = useState<any>(null);
   const [image, setImage] = useState("");
   const [contents, onChangeContents] = useInput("");
@@ -100,6 +102,9 @@ const Writing = () => {
     });
   };
 
+  if (!user?._id) {
+    return <Redirect to="/" />;
+  }
   return (
     <Container>
       <Category>

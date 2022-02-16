@@ -6,7 +6,7 @@ import TextInformation from "pages/Writing/TextInformation";
 import useInput from "hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
 import { POSTS_DETAIL_EDIT_REQUEST } from "../../redux/postTypes";
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -18,6 +18,7 @@ interface SelectProps {
 type SelectValue = SelectProps | SelectProps[] | null | undefined;
 
 const ListDetailEdit = () => {
+  const { user } = useSelector((state: any) => state.user);
   const { postDetail } = useSelector((state: any) => state.post);
   const [select, setSelect] = useState<any>({ label: "", value: "" });
   const [image, setImage] = useState("");
@@ -134,6 +135,9 @@ const ListDetailEdit = () => {
     });
   };
 
+  if (!user?._id) {
+    return <Redirect to="/" />;
+  }
   return (
     <Container>
       <Category>

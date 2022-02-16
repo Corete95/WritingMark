@@ -95,10 +95,21 @@ const ListDetail = () => {
   };
 
   const postDelete = () => {
-    const id = detailData.postId;
-    dispatch({
-      type: POSTS_DELETE_REQUEST,
-      payload: { id, token },
+    MySwal.fire({
+      confirmButtonColor: "black",
+      title: <SwalCss>게시글을 삭제하시겠습니까?</SwalCss>,
+      text: "삭제된 게시글은 복구가 불가능합니다.",
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    }).then((success) => {
+      if (success.isConfirmed) {
+        const id = detailData.postId;
+        dispatch({
+          type: POSTS_DELETE_REQUEST,
+          payload: { id, token },
+        });
+      }
     });
   };
 
@@ -212,6 +223,9 @@ const ListDetail = () => {
   if (error) {
     return (
       <ErrorContainer>
+        <div className="goHome">
+          <Link to="/">목록 돌아가기</Link>
+        </div>
         <img src="/images/404page.png" />
       </ErrorContainer>
     );
@@ -367,6 +381,24 @@ const ErrorContainer = styled.div`
   min-width: 320px;
   padding-top: 100px;
   text-align: center;
+
+  .goHome {
+    display: flex;
+    justify-content: center;
+    a {
+      background-color: black;
+      text-align: center;
+      height: 32px;
+      width: 150px;
+      border-radius: 24px 24px;
+      color: white;
+      padding-top: 9px;
+    }
+  }
+  img {
+    width: 100%;
+    height: 590px;
+  }
   ${({ theme }) => theme.media.mobile`
   margin:0px 16px;
   `}
@@ -431,6 +463,11 @@ const ListCenter = styled.div`
   min-height: 400px;
   padding: 20px 20px;
 
+  pre {
+    overflow: hidden;
+    white-space: normal;
+    line-height: 1.2;
+  }
   img {
     margin-top: 40px;
     width: 100%;

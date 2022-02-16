@@ -177,7 +177,7 @@ const NavigationCategory = styled.div`
   padding: 0px 0px 20px 15px;
   a {
     margin: 14px 0px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
   }
   a:link {

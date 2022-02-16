@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { IListBox } from "typings/db";
 import axios, { AxiosRequestConfig } from "axios";
 import { POSTS_DELETE_REQUEST } from "redux/postTypes";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 interface Props {
   id: number;
@@ -38,6 +40,7 @@ const ListBox: FC<Props> = ({
   const history = useHistory();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const MySwal = withReactContent(Swal);
   const config: any = {
     headers: {},
   };
@@ -67,9 +70,20 @@ const ListBox: FC<Props> = ({
   };
 
   const postDelete = () => {
-    dispatch({
-      type: POSTS_DELETE_REQUEST,
-      payload: { id, token },
+    MySwal.fire({
+      confirmButtonColor: "black",
+      title: <SwalCss>게시글을 삭제하시겠습니까?</SwalCss>,
+      text: "삭제된 게시글은 복구가 불가능합니다.",
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    }).then((success) => {
+      if (success.isConfirmed) {
+        dispatch({
+          type: POSTS_DELETE_REQUEST,
+          payload: { id, token },
+        });
+      }
     });
   };
 
@@ -225,6 +239,11 @@ const ContentsText = styled.div<{ width: string }>`
   ${({ theme }) => theme.media.mobile`
    margin: 8px 14px;
   `}
+`;
+
+const SwalCss = styled.p`
+  font-size: 28px;
+  font-weight: 800;
 `;
 
 export default ListBox;
