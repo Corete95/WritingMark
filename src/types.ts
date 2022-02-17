@@ -57,3 +57,5 @@ export type Count = {
   bookmark: number;
   comment: number;
 };
+
+// REACT_APP_BASIC_SERVER_URL="https://3.38.234.81:8080"

@@ -38,7 +38,7 @@ const Category: FC<IListBox> = () => {
     const categoryPost = async () => {
       try {
         const result = await axios.get(
-          `posts/category?categoryname=${params.path}`,
+          `/posts/category?categoryname=${params.path}`,
           config,
         );
         setPosts(result.data.result);
@@ -59,7 +59,7 @@ const Category: FC<IListBox> = () => {
       console.log("라스트", lastId);
       axios
         .get(
-          `posts/category?categoryname=${params.path}&lastId=${lastId}`,
+          `/posts/category?categoryname=${params.path}&lastId=${lastId}`,
           config,
         )
         .then((res) => {

@@ -33,7 +33,7 @@ const ListDetail = () => {
   useEffect(() => {
     const postDetail = async () => {
       try {
-        const result = await axios.get(`posts/${id.id}`, config);
+        const result = await axios.get(`/posts/${id.id}`, config);
         setDetailData(result.data.result);
         setCommentCount(result.data.result.count.comment);
         setLike(result.data.result.count.bookmark);
