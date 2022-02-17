@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { put, call, takeEvery, all, fork } from "redux-saga/effects";
+import { put, call, takeEvery, all, fork, delay } from "redux-saga/effects";
 import {
   LOGIN_REQUEST,
   loginSuccess,
@@ -15,7 +15,7 @@ import {
   clearErrorFailure,
 } from "../types";
 import { push } from "connected-react-router";
-
+import { ToastContainer, toast } from "react-toastify";
 //Login
 const loginUserAPI = (loginData: string) => {
   const config = {
@@ -30,6 +30,8 @@ function* loginUser(action: any) {
   try {
     const result: AxiosResponse = yield call(loginUserAPI, action.payload);
     yield put(loginSuccess(result.data));
+    yield toast("로그인 완료", { autoClose: 1000, position: "bottom-center" });
+    yield delay(1000);
     yield put(push("/"));
   } catch (error: any) {
     yield put(loginFailure(error.response.data));
@@ -79,6 +81,11 @@ function* registerUser(action: any) {
   try {
     const result: AxiosResponse = yield call(registerUserAPI, action.payload);
     yield put(registerSuccess(result.data.result));
+    yield toast("회원가입 완료", {
+      autoClose: 1000,
+      position: "bottom-center",
+    });
+    yield delay(1000);
     yield put(push("/Login"));
   } catch (error: any) {
     yield put(registerFailure(error.response.data));

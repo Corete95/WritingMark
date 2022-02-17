@@ -166,6 +166,7 @@ const Login = styled.div`
     line-height: 40px;
 
     em {
+      padding-bottom: 1px;
       border-bottom: 1px solid black;
       cursor: pointer;
     }

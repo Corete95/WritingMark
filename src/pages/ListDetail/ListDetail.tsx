@@ -254,6 +254,7 @@ const ListDetail = () => {
           </EditDelete>
         )}
       </ListTop>
+      <p className="category"># 에세이</p>
       <ListCenter>
         <pre>{detailData.content}</pre>
         {detailData?.image ? (
@@ -265,7 +266,6 @@ const ListDetail = () => {
         )}
       </ListCenter>
       <ListBottom>
-        # 에세이
         {detailData.info_title !== "" ? (
           <InformationIcon large={true}>
             <img src="/images/claim.png" />
@@ -374,6 +374,17 @@ const Container = styled.div`
   ${({ theme }) => theme.media.mobile`
   margin:0px 16px;
   `}
+  .category {
+    margin: 15px 0px;
+    display: inline-flex;
+    border: 1px solid #e6e1e1;
+    font-size: 13px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    height: 2rem;
+    border-radius: 1rem;
+    align-items: center;
+  }
 `;
 const ErrorContainer = styled.div`
   margin: 0 auto;
@@ -459,9 +470,8 @@ const EditDelete = styled.div`
 `;
 
 const ListCenter = styled.div`
-  margin-top: 20px;
   min-height: 400px;
-  padding: 20px 20px;
+  padding: 20px 0px;
 
   pre {
     overflow: hidden;
@@ -519,7 +529,7 @@ const BookmarkComments = styled.div`
   }
 `;
 const CommentCantainer = styled.div`
-  margin-top: 15px;
+  margin-top: 20px;
 `;
 const CommentInputButton = styled.div`
   display: flex;
@@ -533,6 +543,9 @@ const CommentInputButton = styled.div`
     background-color: transparent;
     border: none;
     cursor: pointer;
+    ${({ theme }) => theme.media.mobile`
+    font-size:12px;
+  `}
   }
 `;
 const TextareaORValue = styled.div`

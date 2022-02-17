@@ -59,4 +59,4 @@ export type Count = {
 };
 
 // REACT_APP_BASIC_SERVER_URL="https://3.38.234.81:8080"
-// "proxy": "http://3.38.234.81:8080"
+//  "proxy": "https://www.writingmark.com"

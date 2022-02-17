@@ -77,8 +77,6 @@ const NavTab = () => {
     if (posts.length === 0 || posts.length === count) return;
     const lastId = posts[posts.length - 1]?._id;
     if (posts.length < count) {
-      console.log("포스트", posts.length);
-      console.log("카운트", count);
       axios
         .get(`posts?tab=${payloadCategory}&lastId=${lastId}`, config)
         .then((res) => {

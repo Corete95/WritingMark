@@ -92,7 +92,8 @@ const FeedListBox: FC<Props> = ({
   const timeForToday = (value: string) => {
     const today = new Date();
     const timeValue = new Date(value);
-
+    console.log("today", today);
+    console.log("Value", timeValue);
     const betweenTime = Math.floor(
       (today.getTime() - timeValue.getTime()) / 1000 / 60,
     );
@@ -121,7 +122,7 @@ const FeedListBox: FC<Props> = ({
     e.stopPropagation();
     history.push(`/Category/${path}`);
   };
-  console.log(contents_img);
+
   return (
     <>
       <FeedContainer ref={elementRef}>

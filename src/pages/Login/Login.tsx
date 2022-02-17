@@ -5,6 +5,8 @@ import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN_REQUEST, CLEAR_ERROR_REQUEST } from "redux/types";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
   color: string;
@@ -51,49 +53,56 @@ const Login = () => {
   }
 
   return (
-    <Container>
-      <LoginContainer>
-        <h1>로그인</h1>
-        <LoginForm onSubmit={loginHandler}>
-          <InputDiv>
-            <Label>이메일</Label>
-            <Input type="email" value={email} onChange={onChangeEmail}></Input>
-          </InputDiv>
-          <InputDiv>
-            <Label>비밀번호</Label>
-            <Input
-              type="password"
-              value={password}
-              onChange={onChangePassword}
-            ></Input>
-          </InputDiv>
-          {localMsg ? <Error>{localMsg}</Error> : null}
+    <>
+      <Container>
+        <LoginContainer>
+          <h1>로그인</h1>
+          <LoginForm onSubmit={loginHandler}>
+            <InputDiv>
+              <Label>이메일</Label>
+              <Input
+                type="email"
+                value={email}
+                onChange={onChangeEmail}
+              ></Input>
+            </InputDiv>
+            <InputDiv>
+              <Label>비밀번호</Label>
+              <Input
+                type="password"
+                value={password}
+                onChange={onChangePassword}
+              ></Input>
+            </InputDiv>
+            {localMsg ? <Error>{localMsg}</Error> : null}
+            <ButtonDiv>
+              <Button
+                type="submit"
+                color="white"
+                background="black"
+                border="black"
+              >
+                로그인하기
+              </Button>
+            </ButtonDiv>
+            <ButtonDiv>
+              <ButtonLink
+                to="/register"
+                color="white"
+                background="gray"
+                border="gray"
+              >
+                회원가입 하기
+              </ButtonLink>
+            </ButtonDiv>
+          </LoginForm>
           <ButtonDiv>
-            <Button
-              type="submit"
-              color="white"
-              background="black"
-              border="black"
-            >
-              로그인하기
-            </Button>
+            <SocialKakao />
           </ButtonDiv>
-          <ButtonDiv>
-            <ButtonLink
-              to="/register"
-              color="white"
-              background="gray"
-              border="gray"
-            >
-              회원가입 하기
-            </ButtonLink>
-          </ButtonDiv>
-        </LoginForm>
-        <ButtonDiv>
-          <SocialKakao />
-        </ButtonDiv>
-      </LoginContainer>
-    </Container>
+        </LoginContainer>
+      </Container>
+      <ToastContainer />
+    </>
   );
 };
 

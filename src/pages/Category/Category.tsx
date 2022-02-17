@@ -127,9 +127,6 @@ const Container = styled.div`
   max-width: 640px;
   min-width: 320px;
   padding-top: 80px;
-  ${({ theme }) => theme.media.mobile`
-  margin:0px 16px;
-  `}
 `;
 const CategoryTop = styled.div`
   display: flex;
@@ -139,6 +136,9 @@ const CategoryTop = styled.div`
     font-size: 23px;
     font-weight: bold;
   }
+  ${({ theme }) => theme.media.mobile`
+  margin:0px 16px;
+  `}
 `;
 
 const WritingButton = styled.button`
