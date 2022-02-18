@@ -20,6 +20,7 @@ export const GlobalStyle = createGlobalStyle`
       font-family: 'Pretendard-Regular';
 
   }
+
     a{
       text-decoration: none;
     }

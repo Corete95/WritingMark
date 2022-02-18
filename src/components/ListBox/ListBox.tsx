@@ -242,7 +242,7 @@ const ContentsText = styled.div<{ width: string }>`
 `;
 
 const SwalCss = styled.p`
-  font-size: 28px;
+  font-size: 25px;
   font-weight: 800;
 `;
 

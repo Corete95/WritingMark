@@ -56,7 +56,7 @@ const ListDetail = () => {
   useEffect(() => {
     const commentData = async () => {
       try {
-        const result = await axios.get(`post/${id.id}/comments`, config);
+        const result = await axios.get(`/post/${id.id}/comments`, config);
         setCommentData(result.data.result);
       } catch (error: any) {
         console.log(error.response);
@@ -72,6 +72,7 @@ const ListDetail = () => {
         return MySwal.fire({
           confirmButtonColor: "black",
           title: <SwalCss>로그인 후 이용가능합니다!</SwalCss>,
+          confirmButtonText: "확인",
           timer: 1000,
         });
       }
@@ -118,7 +119,13 @@ const ListDetail = () => {
     const text_length = text.length;
 
     if (text_length > max_length) {
-      alert(max_length + "이상 입력 불가능합니다!");
+      MySwal.fire({
+        confirmButtonColor: "black",
+        title: <SwalCss>{max_length}자 이상 입력 불가능합니다. </SwalCss>,
+        confirmButtonText: "확인",
+
+        // timer: 1000,
+      });
       text = text.substr(0, max_length);
       e.currentTarget.value = text;
       setCommentValue(e.currentTarget.value);
@@ -136,10 +143,10 @@ const ListDetail = () => {
           confirmButtonColor: "black",
           title: <SwalCss>댓글을 입력해주세요.</SwalCss>,
           confirmButtonText: "확인",
-          // timer: 1000,
+          timer: 1000,
         });
       const result = await axios.post(
-        `post/${id.id}/comment`,
+        `/post/${id.id}/comment`,
         { content: commentValue },
         config,
       );
@@ -167,7 +174,7 @@ const ListDetail = () => {
           timer: 1000,
         });
       const result = await axios.patch(
-        `post/${id.id}/comment/${writerId}`,
+        `/post/${id.id}/comment/${writerId}`,
         { content: editComment },
         config,
       );
@@ -545,13 +552,14 @@ const CommentInputButton = styled.div`
     cursor: pointer;
     ${({ theme }) => theme.media.mobile`
     font-size:12px;
+    width: 60px;
   `}
   }
 `;
 const TextareaORValue = styled.div`
   width: 90%;
   ${({ theme }) => theme.media.mobile`
-    width: 85%;
+    width: 82%;
   `}
   textarea {
     padding: 10px 25px;
@@ -570,7 +578,7 @@ const TextareaORValue = styled.div`
   }
 `;
 const SwalCss = styled.p`
-  font-size: 28px;
+  font-size: 25px;
   font-weight: 800;
 `;
 export default ListDetail;

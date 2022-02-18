@@ -17,7 +17,7 @@ const userLoadingAPI = (token: string) => {
   if (token) {
     config.headers["authorization"] = token;
   }
-  return axios.get("user", config);
+  return axios.get("/user", config);
 };
 
 function* userLoading(action: any) {

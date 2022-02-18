@@ -31,7 +31,7 @@ const EditInformation = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .post("user/withdrawal", { password: result.value }, config)
+          .post("/user/withdrawal", { password: result.value }, config)
           .then((res) => {
             MySwal.fire({
               confirmButtonColor: "black",

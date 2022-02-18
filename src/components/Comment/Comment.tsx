@@ -1,6 +1,8 @@
 import React, { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 interface Props {
   id: number;
@@ -29,6 +31,7 @@ const Comment: FC<Props> = ({
   const { user } = useSelector((state: any) => state.user);
   const [editState, setEditState] = useState(false);
   const [editComments, setEditComments] = useState(comment);
+  const MySwal = withReactContent(Swal);
   const max_length = 50;
 
   const chatLimit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -36,7 +39,12 @@ const Comment: FC<Props> = ({
     const text_length = text.length;
 
     if (text_length - 1 > max_length) {
-      alert(max_length + "이상 입력 불가능합니다!");
+      MySwal.fire({
+        confirmButtonColor: "black",
+        title: <SwalCss>{max_length}자 이상 입력 불가능합니다. </SwalCss>,
+        confirmButtonText: "확인",
+        timer: 1000,
+      });
       text = text.substr(0, max_length);
       e.currentTarget.value = text;
       setEditComments(e.currentTarget.value);
@@ -188,4 +196,10 @@ const EditButton = styled.div`
     cursor: pointer;
   }
 `;
+
+const SwalCss = styled.p`
+  font-size: 25px;
+  font-weight: 800;
+`;
+
 export default Comment;

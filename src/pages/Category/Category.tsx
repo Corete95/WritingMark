@@ -86,6 +86,7 @@ const Category: FC<IListBox> = () => {
       return MySwal.fire({
         confirmButtonColor: "black",
         title: <SwalCss>로그인 후 이용가능합니다!</SwalCss>,
+        confirmButtonText: "확인",
         timer: 1000,
       });
     }
