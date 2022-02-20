@@ -57,7 +57,7 @@ const EditInformation = () => {
             console.log(err.response);
             MySwal.fire({
               confirmButtonColor: "black",
-              title: `${err.response.data.message}`,
+              title: "비밀번호가 틀렸습니다.",
               confirmButtonText: "확인",
             });
           });

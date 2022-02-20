@@ -281,10 +281,7 @@ const ListDetail = () => {
             </IconText>
           </InformationIcon>
         ) : (
-          <InformationIcon large={false}>
-            <img src="/images/close.png" />
-            <IconText>추가 정보가 없습니다.</IconText>
-          </InformationIcon>
+          ""
         )}
         {detailData.info_url !== "" ? (
           <InformationIcon large={true}>
@@ -300,10 +297,7 @@ const ListDetail = () => {
             </IconText>
           </InformationIcon>
         ) : (
-          <InformationIcon large={false}>
-            <img src="/images/close.png" />
-            <IconText>추가 정보가 없습니다.</IconText>
-          </InformationIcon>
+          ""
         )}
       </ListBottom>
       <BookmarkComments>
@@ -578,7 +572,7 @@ const TextareaORValue = styled.div`
   }
 `;
 const SwalCss = styled.p`
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 800;
 `;
 export default ListDetail;

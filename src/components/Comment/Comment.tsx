@@ -146,6 +146,8 @@ const NameCreatedAt = styled.div`
   }
 `;
 const EditDelete = styled.div`
+  display: inline-flex;
+  align-items: center;
   font-size: 12px;
   color: gray;
   span {
@@ -153,6 +155,9 @@ const EditDelete = styled.div`
   }
   .edit {
     margin-right: 10px;
+    ${({ theme }) => theme.media.mobile`
+     margin-right: 5px;
+  `}
   }
 `;
 const CommentTitle = styled.div`
@@ -160,6 +165,7 @@ const CommentTitle = styled.div`
   margin-top: 15px;
   pre {
     white-space: break-spaces;
+    word-break: break-all;
   }
   textarea {
     width: 100%;
