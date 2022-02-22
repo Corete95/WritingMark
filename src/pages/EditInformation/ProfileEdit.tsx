@@ -94,7 +94,7 @@ const ProfileEdit: FC = () => {
       formData.append("user_profile", profileImg);
       const result = await axios.patch("user/info/edit", formData, config);
       console.log("123", result);
-      // window.location.replace("/Mypage");
+      window.location.replace("/Mypage");
     } catch (error: any) {
       console.log("error", error.response);
       setProfileError(error.response.data?.message);

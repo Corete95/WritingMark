@@ -30,7 +30,12 @@ const TextInformation: FC<Props> = ({
           </InputDiv>
           <InputDiv>
             <Label>관련 URL</Label>
-            <Input type="text" value={url} onChange={onChangeUrl} />
+            <Input
+              type="text"
+              value={url}
+              onChange={onChangeUrl}
+              placeholder="https://naver.com ❌ naver.com ⭕️ "
+            />
           </InputDiv>
         </>
       ) : (

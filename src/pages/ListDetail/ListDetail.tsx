@@ -474,7 +474,7 @@ const ListCenter = styled.div`
 
   pre {
     overflow: hidden;
-    white-space: normal;
+    white-space: break-spaces;
     line-height: 1.2;
   }
   img {
