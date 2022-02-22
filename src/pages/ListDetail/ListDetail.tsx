@@ -261,7 +261,7 @@ const ListDetail = () => {
           </EditDelete>
         )}
       </ListTop>
-      <p className="category"># 에세이</p>
+      <p className="category">{detailData.categoryLabel}</p>
       <ListCenter>
         <pre>{detailData.content}</pre>
         {detailData?.image ? (
@@ -423,14 +423,12 @@ const ListTop = styled.div`
 const ImgName = styled.div`
   display: flex;
   .imgDiv {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
     overflow: hidden;
 
     img {
-      width: 100%;
-      height: auto;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
       object-fit: cover;
       image-rendering: -webkit-optimize-contrast;
     }

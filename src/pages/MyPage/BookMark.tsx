@@ -24,7 +24,7 @@ const BookMark: FC = () => {
     config.headers["authorization"] = token;
   }
 
-  const handleCategory = (cateory: string, queryString: string) => {
+  const handleCategory = (cateory: string) => {
     setBookMarkCategory(cateory);
   };
 
@@ -96,7 +96,7 @@ const BookMark: FC = () => {
               key={bookmark.id}
               className={bookMarkCategory === bookmark.name ? "activeOn" : ""}
               onClick={() => {
-                handleCategory(bookmark.name, bookmark.queryString);
+                handleCategory(bookmark.name);
               }}
             >
               {bookmark.name}

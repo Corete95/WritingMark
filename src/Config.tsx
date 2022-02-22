@@ -22,12 +22,12 @@ export const NAVIGATION_CATEGORY = [
   { id: 3, name: "소설", path: "/Category/novel" },
   { id: 4, name: "시", path: "/Category/poetry" },
   { id: 5, name: "지식", path: "/Category/knowledge" },
-  { id: 6, name: "깍두기", path: "/Category/etc" },
+  { id: 6, name: "미디어", path: "/Category/media" },
 ];
 
 export const BOOKMARK_CATEGORY = [
-  { id: 1, name: "내가 쓴 글", queryString: "test.json" },
-  { id: 2, name: "내 찜목록", queryString: "test1.json" },
+  { id: 1, name: "내가 쓴 글" },
+  { id: 2, name: "내 찜목록" },
 ];
 
 export const CATEGORY_OPTIONS = [
@@ -36,5 +36,5 @@ export const CATEGORY_OPTIONS = [
   { value: "novel", label: "소설" },
   { value: "poetry", label: "시" },
   { value: "knowledge", label: "지식" },
-  { value: "etc", label: "깍두기" },
+  { value: "media", label: "미디어" },
 ];

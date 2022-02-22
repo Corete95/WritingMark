@@ -42,7 +42,7 @@ const ListDetailEdit = () => {
     }
     const postDetail = async () => {
       try {
-        const result = await axios.get(`posts/${id.id}`, config);
+        const result = await axios.get(`/posts/${id.id}`, config);
         setSelect({
           label: result.data.result.categoryLabel,
           value: result.data.result.categoryValue,
