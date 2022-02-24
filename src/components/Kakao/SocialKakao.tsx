@@ -1,7 +1,6 @@
 import React from "react";
 import { KAKAO_KEY } from "Config";
 import styled from "styled-components";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { KAKAO_LOGIN_REQUEST } from "redux/types";
 const { Kakao } = window;
@@ -13,22 +12,6 @@ const SocialKakao = () => {
     Kakao.isInitialized();
     window.Kakao.Auth.login({
       success: function (authObj: any) {
-        console.log("authObj", authObj);
-        // fetch(`${KAKAO_KEY}`, {
-        //   method: "GET",
-        //   headers: { Authorization: authObj.access_token },
-        // })
-        //   .then((res) => res.json())
-        //   .then((res) => {
-        //     console.log(res);
-        //   });
-
-        // axios
-        //   .get("/user/kakao", {
-        //     headers: { Authorization: authObj.access_token },
-        //   })
-        //   .then((res) => console.log(res))
-        //   .catch((error) => console.log(error.response));
         dispatch({
           type: KAKAO_LOGIN_REQUEST,
           payload: authObj.access_token,

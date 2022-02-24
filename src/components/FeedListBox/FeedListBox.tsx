@@ -44,7 +44,6 @@ const FeedListBox: FC<Props> = ({
   const [like, setLike] = useState(bookmark);
   const [bookMarkState, setBookMarkState] = useState(bookmarkState);
   const history = useHistory();
-  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const MySwal = withReactContent(Swal);
   const config: any = {
@@ -71,9 +70,9 @@ const FeedListBox: FC<Props> = ({
           timer: 1000,
         });
       }
-      const result = await axios.post(`user/bookmark/${id}`, {}, config);
+      const result = await axios.post(`/user/bookmark/${id}`, {}, config);
+      console.log("좋아요", result);
       setLike((preData) => preData + 1);
-      console.log("123123", result);
       setBookMarkState(true);
     } catch (err: any) {
       console.log(err.response);
@@ -82,11 +81,12 @@ const FeedListBox: FC<Props> = ({
 
   const bookMarkCancel = async () => {
     try {
-      const result = await axios.delete(`user/bookmark/${id}`, config);
+      const result = await axios.delete(`/user/bookmark/${id}`, config);
+      console.log("좋아요 취소", result);
       setLike((preData) => preData - 1);
       setBookMarkState(false);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.log(err.response);
     }
   };
 
@@ -222,7 +222,6 @@ const FeedCenter = styled.div`
   }
   .category:hover {
     font-size: 13px;
-    /* transform: scale(1.03); */
     transition: transform 0.3s;
   }
   .createdAt {
@@ -272,4 +271,5 @@ const SwalCss = styled.p`
   font-size: 20px;
   font-weight: 800;
 `;
+
 export default FeedListBox;

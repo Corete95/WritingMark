@@ -52,7 +52,6 @@ const ListBox: FC<Props> = ({
     try {
       const result = await axios.post(`user/bookmark/${id}`, {}, config);
       setLike((preData) => preData + 1);
-      console.log("123123", result);
       setBookMarkState(true);
     } catch (err: any) {
       console.log(err.response);
