@@ -66,7 +66,6 @@ const authReducer = (
     case REGISTER_SUCCESS:
     case KAKAO_LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
-      console.log("SUCCESS", action.payload);
       return {
         ...state,
         ...action.payload,
@@ -82,7 +81,6 @@ const authReducer = (
     case LOGIN_FAILURE:
     case REGISTER_FAILURE:
     case KAKAO_LOGIN_FAILURE:
-      console.log("err", action.payload.message);
       localStorage.removeItem("token");
       return {
         ...state,

@@ -1,9 +1,8 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { IListBox } from "typings/db";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { POSTS_DELETE_REQUEST } from "redux/postTypes";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -234,7 +233,7 @@ const ContentsText = styled.div<{ width: string }>`
   margin: 20px 23px;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 23px;
+  line-height: 22px;
   ${({ theme }) => theme.media.mobile`
    margin: 8px 14px;
   `}

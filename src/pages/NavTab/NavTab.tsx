@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { NAV_CATEGORY } from "Config";
-import { useDispatch, useSelector } from "react-redux";
-import { POSTS_LOADING_REQUEST } from "redux/postTypes";
-import ListBox from "components/ListBox/ListBox";
+import { useDispatch } from "react-redux";
 import { IListBox } from "typings/db";
 import axios from "axios";
 import FeedListBox from "components/FeedListBox/FeedListBox";
@@ -13,9 +11,7 @@ const NavTab = () => {
   const [isActivatedCategory, setIsActivatedCategory] = useState("신규");
   const [payloadCategory, setPayloadCategory] = useState("new");
   const [count, setCount] = useState(0);
-  // const { count } = useSelector((state: any) => state.post);
   const history = useHistory();
-  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const elementRef = useRef<HTMLInputElement>(null);
   const [posts, setPosts] = useState<IListBox[]>([]);
@@ -31,21 +27,13 @@ const NavTab = () => {
     setPayloadCategory(payload);
     history.push(path);
   };
-  // useEffect(() => {
-  //   dispatch({
-  //     type: POSTS_LOADING_REQUEST,
-  //     payload: { payloadCategory, token },
-  //   });
-  // }, [dispatch, payloadCategory]);
 
   useEffect(() => {
     if (payloadCategory === "new") {
       axios
         .get(`posts?tab=${payloadCategory}`, config)
         .then((res) => {
-          console.log("DATA", res.data.result),
-            setPosts(res.data.result),
-            setCount(res.data.count);
+          setPosts(res.data.result), setCount(res.data.count);
         })
         .catch((err: any) => {
           console.log(err.response);
@@ -55,33 +43,23 @@ const NavTab = () => {
       axios
         .get(`posts?tab=${payloadCategory}`, config)
         .then((res) => {
-          console.log("HOT_DATA", res.data.result),
-            setPosts(res.data.result),
-            setCount(res.data.count);
+          setPosts(res.data.result), setCount(res.data.count);
         })
         .catch((err: any) => {
           console.log(err.response);
         });
     }
   }, [payloadCategory]);
-  // const loaderMorePosts = useCallback(() => {
-  //   if (posts.length === 0) return;
-  //   const last = posts[posts.length - 1]?._id;
-  //   if (posts.length < count)
-  //     dispatch({
-  //       type: POSTS_LOADING_REQUEST,
-  //       payload: { payloadCategory, token, last },
-  //     });
-  // }, [posts]);
+
   const loaderMorePosts = () => {
     if (posts.length === 0 || posts.length === count) return;
+
     const lastId = posts[posts.length - 1]?._id;
     if (posts.length < count) {
       axios
         .get(`posts?tab=${payloadCategory}&lastId=${lastId}`, config)
         .then((res) => {
-          console.log("무한스크롤DATA", res.data.result),
-            setPosts((pre) => [...pre, ...res.data.result]);
+          setPosts((pre) => [...pre, ...res.data.result]);
         })
         .catch((err: any) => console.log(err.response.data));
     }
@@ -96,15 +74,8 @@ const NavTab = () => {
     return () => observer.disconnect();
   }, [loaderMorePosts]);
 
-  // console.log(posts?.length);
-  // console.log("갯수", posts.length);
   return (
     <ContainerNavTab>
-      {/* <Helmet>
-        <title>Misinterpriter</title>
-        <meta charSet="utf-8" />
-        <meta name="description" content="번역글 공유 사이트" />
-      </Helmet> */}
       <BottomNav>
         {NAV_CATEGORY.map((category) => {
           return (
@@ -182,9 +153,4 @@ const PostContainer = styled.div`
   `}
 `;
 
-const EndPosts = styled.div`
-  text-align: center;
-  font-size: 18px;
-  margin: 50px 0px;
-`;
 export default NavTab;

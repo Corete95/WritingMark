@@ -5,7 +5,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { REGISTER_REQUEST, CLEAR_ERROR_REQUEST } from "redux/types";
-import { RootReducerType } from "redux/reducers";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,7 +23,6 @@ const Register = () => {
     formState: { errors },
     watch,
   } = useForm<Formvalues>();
-  const history = useHistory();
   const dispatch = useDispatch();
   const [localMsg, setLocalMsg] = useState("");
   const { message } = useSelector((state: any) => state.auth);
@@ -56,6 +54,7 @@ const Register = () => {
   if (user?._id) {
     return <Redirect to="/" />;
   }
+
   return (
     <>
       <Container>

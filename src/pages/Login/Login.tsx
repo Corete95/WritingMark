@@ -1,6 +1,6 @@
 import useInput from "hooks/useInput";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import styled from "styled-components";
 import SocialKakao from "components/Kakao/SocialKakao";
 import { useDispatch, useSelector } from "react-redux";

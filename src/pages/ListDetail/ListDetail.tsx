@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
-import axios, { AxiosError } from "axios";
-import { POSTS_DELETE_REQUEST, POSTS_DETAIL_REQUEST } from "redux/postTypes";
+import axios from "axios";
+import { POSTS_DELETE_REQUEST } from "redux/postTypes";
 import Comment from "components/Comment/Comment";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -37,16 +37,8 @@ const ListDetail = () => {
         setDetailData(result.data.result);
         setCommentCount(result.data.result.count.comment);
         setLike(result.data.result.count.bookmark);
-        // const writerId = result.data.result.userBookmark.find(
-        //   (e: string) => e == localStorage.getItem("user_id"),
-        // );
-        // if (writerId == localStorage.getItem("user_id")) {
-        //   setBookMarkState(true);
-        // }
-        console.log("123", result);
         setBookMarkState(result.data.result.bookmarkState);
       } catch (error: any) {
-        console.log(error.response);
         setError(error.response?.data?.message);
       }
     };
@@ -76,7 +68,6 @@ const ListDetail = () => {
           timer: 1000,
         });
       }
-
       const result = await axios.post(`user/bookmark/${id.id}`, {}, config);
       setLike((preData: number) => preData + 1);
       setBookMarkState(true);
@@ -123,8 +114,7 @@ const ListDetail = () => {
         confirmButtonColor: "black",
         title: <SwalCss>{max_length}자 이상 입력 불가능합니다. </SwalCss>,
         confirmButtonText: "확인",
-
-        // timer: 1000,
+        timer: 1000,
       });
       text = text.substr(0, max_length);
       e.currentTarget.value = text;
@@ -178,7 +168,6 @@ const ListDetail = () => {
         { content: editComment },
         config,
       );
-      console.log(result);
       setCommentData(
         commentData.map((comment: any) => {
           if (comment._id === writerId) {

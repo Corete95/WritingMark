@@ -24,7 +24,6 @@ const ProfileEdit: FC = () => {
   const [profileImg, setProfileImg] = useState("");
   const ImgInput = useRef<HTMLInputElement>(null);
   const [profileError, setProfileError] = useState("");
-  const history = useHistory();
   const token = localStorage.getItem("token");
   const config: any = {
     headers: {},
@@ -93,10 +92,8 @@ const ProfileEdit: FC = () => {
       formData.append("nickname", test);
       formData.append("user_profile", profileImg);
       const result = await axios.patch("user/info/edit", formData, config);
-      console.log("123", result);
       window.location.replace("/Mypage");
     } catch (error: any) {
-      console.log("error", error.response);
       setProfileError(error.response.data?.message);
     }
   };

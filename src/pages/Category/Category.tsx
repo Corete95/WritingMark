@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IListBox } from "typings/db";
-import ListBox from "components/ListBox/ListBox";
-import { POSTS_CATEGORY_REQUEST } from "redux/postTypes";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import FeedListBox from "components/FeedListBox/FeedListBox";
 import Swal from "sweetalert2";
@@ -12,8 +10,6 @@ import withReactContent from "sweetalert2-react-content";
 
 const Category: FC<IListBox> = () => {
   const params = useParams<Record<string, string | undefined>>();
-  // const { posts } = useSelector((state: any) => state.post);
-  const dispatch = useDispatch();
   const { user } = useSelector((state: any) => state.user);
   const [posts, setPosts] = useState<IListBox[]>([]);
   const [count, setCount] = useState(0);
@@ -27,12 +23,6 @@ const Category: FC<IListBox> = () => {
   if (token) {
     config.headers["authorization"] = token;
   }
-  // useEffect(() => {
-  //   dispatch({
-  //     type: POSTS_CATEGORY_REQUEST,
-  //     payload: params,
-  //   });
-  // }, [params]);
 
   useEffect(() => {
     const categoryPost = async () => {
@@ -54,17 +44,13 @@ const Category: FC<IListBox> = () => {
     if (posts.length === 0 || posts.length === count) return;
     const lastId = posts[posts.length - 1]?._id;
     if (posts.length < count) {
-      console.log("포스트", posts.length);
-      console.log("카운트", count);
-      console.log("라스트", lastId);
       axios
         .get(
           `/posts/category?categoryname=${params.path}&lastId=${lastId}`,
           config,
         )
         .then((res) => {
-          console.log("무한스크롤DATA", res.data.result),
-            setPosts((pre) => [...pre, ...res.data.result]);
+          setPosts((pre) => [...pre, ...res.data.result]);
         })
         .catch((err: any) => console.log(err.response.data));
     }
@@ -78,8 +64,6 @@ const Category: FC<IListBox> = () => {
     observer.observe(elementRef.current);
     return () => observer.disconnect();
   }, [loaderMorePosts]);
-
-  console.log(posts);
 
   const goWriting = () => {
     if (!user?._id) {

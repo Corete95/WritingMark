@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { put, call, takeEvery, all, fork, delay } from "redux-saga/effects";
 import {
   LOGIN_REQUEST,
@@ -16,6 +16,7 @@ import {
 } from "../types";
 import { push } from "connected-react-router";
 import { ToastContainer, toast } from "react-toastify";
+
 //Login
 const loginUserAPI = (loginData: string) => {
   const config = {

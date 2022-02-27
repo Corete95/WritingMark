@@ -9,11 +9,6 @@ export const NAV_CATEGORY = [
     path: "/hot",
     payload: "hot",
   },
-  // {
-  //   id: 3,
-  //   name: "글갈피 소개",
-  //   path: "/Introduction",
-  // },
 ];
 
 export const NAVIGATION_CATEGORY = [

@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
 import { push } from "connected-react-router";
 import {
@@ -38,14 +38,13 @@ const loadPostAPI = (payload: any) => {
   if (token) {
     config.headers["authorization"] = token;
   }
-  console.log("payloadLast", payload);
+
   return payload.last
     ? axios.get(
         `posts?tab=${payload.payloadCategory}&lastId=${payload.last}`,
         config,
       )
     : axios.get(`posts?tab=${payload.payloadCategory}`, config);
-  // return axios.get(`posts?tab=${payload.payloadCategory}`, config);
 };
 
 function* loadPosts(action: any) {
@@ -64,14 +63,12 @@ function* watchLoadPosts() {
 // Post Category
 
 const categoryPostAPI = (payload: any) => {
-  console.log(payload);
   return axios.get(`posts/category/${payload.path}`);
 };
 
 function* categoryPosts(action: any) {
   try {
     const result: AxiosResponse = yield call(categoryPostAPI, action.payload);
-    console.log("result", result);
     yield put(postCategorySuccess(result.data));
   } catch (error) {
     yield put(postCategoryFailure(error));
@@ -129,7 +126,6 @@ function* MyWritePosts(action: any) {
     const result: AxiosResponse = yield call(MyWritePostAPI, action.payload);
     yield put(postMyWriteSuccess(result.data));
   } catch (error: any) {
-    console.log(error.response);
     yield put(postMyWriteFailure(error?.response?.data));
   }
 }
@@ -157,7 +153,6 @@ function* MyLikePosts(action: any) {
     const result: AxiosResponse = yield call(MyLikePostAPI, action.payload);
     yield put(postMyLikeSuccess(result.data));
   } catch (error: any) {
-    console.log(error.response);
     yield put(postMyLikeFailure(error?.response?.data));
   }
 }
@@ -228,7 +223,7 @@ const DetailEditPostAPI = (payload: any) => {
   if (token) {
     config.headers["authorization"] = token;
   }
-  console.log("pay", payload);
+
   return axios.patch(
     `posts/${payload.body.id.id}`,
     payload.body.formData,
@@ -238,9 +233,7 @@ const DetailEditPostAPI = (payload: any) => {
 
 function* DetailEditPosts(action: any) {
   try {
-    console.log("edit action", action);
     const result: AxiosResponse = yield call(DetailEditPostAPI, action.payload);
-    console.log("edit Result", result);
     yield put(postDetailEditSuccess(result.data.result));
     yield put(push(`/ListDetail/${result.data.postId}`));
   } catch (error: any) {

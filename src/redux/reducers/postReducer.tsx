@@ -42,6 +42,7 @@ type State = {
   postDetail: PostType[];
   error: any;
 };
+
 const initialState = {
   isAuthenticated: null,
   loading: false,
@@ -50,6 +51,7 @@ const initialState = {
   postDetail: [],
   error: "",
 };
+
 export default function (
   state: State = initialState,
   action:
@@ -76,8 +78,6 @@ export default function (
     case POSTS_CATEGORY_SUCCESS:
     case POSTS_MYWRITE_SUCCESS:
     case POSTS_MYLIKE_SUCCESS:
-      // console.log("state", ...state.posts);
-      // console.log("action", action.payload.result);
       return {
         ...state,
         posts: [...state.posts, ...action.payload.result],
@@ -88,7 +88,6 @@ export default function (
     case POSTS_CATEGORY_FAILURE:
     case POSTS_MYWRITE_FAILURE:
     case POSTS_MYLIKE_FAILURE:
-      console.log("err", action);
       return {
         ...state,
         loading: false,
@@ -98,7 +97,6 @@ export default function (
     case POSTS_DETAIL_EDIT_REQUEST:
       return {
         ...state,
-        // posts: [],
         loading: true,
       };
     case POSTS_WRITE_SUCCESS:
@@ -122,7 +120,6 @@ export default function (
         loading: true,
       };
     case POSTS_DETAIL_SUCCESS:
-      console.log("saga", action);
       return {
         ...state,
         postDetail: action.payload,

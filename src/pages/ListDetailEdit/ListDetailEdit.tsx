@@ -19,7 +19,6 @@ type SelectValue = SelectProps | SelectProps[] | null | undefined;
 
 const ListDetailEdit = () => {
   const { user } = useSelector((state: any) => state.user);
-  const { postDetail } = useSelector((state: any) => state.post);
   const [select, setSelect] = useState<any>({ label: "", value: "" });
   const [image, setImage] = useState("");
   const [contents, onChangeContents, setContetns] = useInput("");

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { FC, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
@@ -71,7 +71,6 @@ const FeedListBox: FC<Props> = ({
         });
       }
       const result = await axios.post(`/user/bookmark/${id}`, {}, config);
-      console.log("좋아요", result);
       setLike((preData) => preData + 1);
       setBookMarkState(true);
     } catch (err: any) {
@@ -82,7 +81,6 @@ const FeedListBox: FC<Props> = ({
   const bookMarkCancel = async () => {
     try {
       const result = await axios.delete(`/user/bookmark/${id}`, config);
-      console.log("좋아요 취소", result);
       setLike((preData) => preData - 1);
       setBookMarkState(false);
     } catch (err: any) {
@@ -196,7 +194,6 @@ const FeedHeader = styled.div`
   }
 `;
 const FeedCenter = styled.div`
-  /* max-height: 100px; */
   padding: 15px;
   .feedContent {
     font-size: 14px;

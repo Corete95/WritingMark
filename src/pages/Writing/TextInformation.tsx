@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+
 interface Props {
   informationCheck: boolean;
   informationCheckHandler: () => void;
@@ -8,6 +9,7 @@ interface Props {
   url: string;
   onChangeUrl: () => void;
 }
+
 const TextInformation: FC<Props> = ({
   informationCheckHandler,
   informationCheck,
@@ -49,6 +51,7 @@ const TextInformation: FC<Props> = ({
     </Information>
   );
 };
+
 const Information = styled.div`
   margin-top: 30px;
   .informationText {

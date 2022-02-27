@@ -15,8 +15,6 @@ const PasswordEdit = () => {
     handleSubmit,
     getValues,
     formState: { errors },
-    watch,
-    reset,
   } = useForm<Formvalues>();
   const [passwordError, setPasswordError] = useState("");
   const token = localStorage.getItem("token");
@@ -33,7 +31,6 @@ const PasswordEdit = () => {
       const result = await axios.patch("user/info/password", data, config);
       window.location.replace("/Mypage");
     } catch (error: any) {
-      console.log("패스워드 Error", error.response);
       setPasswordError(error.response?.data?.message);
     }
   };

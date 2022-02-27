@@ -1,5 +1,4 @@
 import React from "react";
-import { KAKAO_KEY } from "Config";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { KAKAO_LOGIN_REQUEST } from "redux/types";

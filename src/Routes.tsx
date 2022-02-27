@@ -24,9 +24,6 @@ const EditInformation = loadable(
 const FindPassword = loadable(
   () => import("./pages/FindPassword/FindPassword"),
 );
-const Introduction = loadable(
-  () => import("./pages/Introduction/Introduction"),
-);
 const PageNotFound = loadable(
   () => import("./pages/PageNotFound/PageNotFound"),
 );
@@ -52,7 +49,6 @@ const Routes = () => {
             <Route path="/Register" component={Register} />
             <Route path="/Search" component={Search} />
             <Route path="/Writing" component={Writing} />
-            <Route path="/Introduction" component={Introduction} />
             <Route component={PageNotFound} />
           </Switch>
         </Router>

@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
 import {
   USER_LOADING_REQUEST,
@@ -46,9 +46,7 @@ const userInfoEditAPI = (token: string) => {
 
 function* userInfoEdit(action: any) {
   try {
-    console.log("전송전:", action);
     const result: AxiosResponse = yield call(userInfoEditAPI, action.payload);
-    console.log("전송후:", result);
     yield put(userInfoEditSuccess(result.data));
   } catch (error: any) {
     yield put(userInfoEditFailure(error.response));
