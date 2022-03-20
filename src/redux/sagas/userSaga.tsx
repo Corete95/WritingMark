@@ -25,7 +25,7 @@ function* userLoading(action: any) {
     const result: AxiosResponse = yield call(userLoadingAPI, action.payload);
     yield put(userLoadingSuccess(result.data));
   } catch (error: any) {
-    yield put(userLoadingFailure(error.response));
+    yield put(userLoadingFailure(error.response.data));
   }
 }
 

@@ -43,6 +43,10 @@ const userReducer = (
       };
     case USER_LOADING_FAILURE:
     case USER_INFO_EDIT_FAILURE:
+      if (action.payload.message === "jwt expired") {
+        localStorage.removeItem("token");
+        window.location.reload();
+      }
       return {
         ...state,
         user: null,
