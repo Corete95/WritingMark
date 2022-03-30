@@ -46,7 +46,7 @@
 ## 기술 스택
 
 | JavaScript | TypeScript |  React   |  Redux Saga   |  styled components   |
-| :--------: | :--------: | :------: | :-----------: | :------------------: |
+| :--------: | :--------: | :------: | :------: | :----------: |
 |   ![js]    |   ![ts]    | ![react] | ![redux-saga] | ![styled-components] |
 
 <br/>
